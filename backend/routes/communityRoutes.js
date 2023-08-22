@@ -3,6 +3,13 @@ const router = express.Router();
 const communityController = require("../controllers/communityController");
 const passport = require("passport");
 
+// Create a new community
+router.post(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  communityController.createCommunity
+);
+
 // Get all communities
 router.get("/", communityController.getCommunities);
 
@@ -16,11 +23,39 @@ router.post(
   communityController.joinCommunity
 );
 
+// Accept a join request for a community
+router.put(
+  "/:id/accept-request/:userId",
+  passport.authenticate("jwt", { session: false }),
+  communityController.acceptJoinRequest
+);
+
+// Get members of a community
+router.get("/:id/members", communityController.getCommunityMembers);
+
+// Get trips of a community
+router.get("/:id/trips", communityController.getCommunityTrips);
+
+// Get communities joined by a user
+router.get(
+  "/user/:userId/joined",
+  communityController.getUserJoinedCommunities
+);
+
+// Get communities created by a user
+router.get(
+  "/user/:userId/created",
+  communityController.getUserCreatedCommunities
+);
+
 // Leave a community
-router.post(
+router.delete(
   "/:id/leave",
   passport.authenticate("jwt", { session: false }),
   communityController.leaveCommunity
 );
+
+// Get communities by location
+router.get("/location/:location", communityController.getCommunitiesByLocation);
 
 module.exports = router;

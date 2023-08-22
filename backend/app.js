@@ -8,6 +8,11 @@ const morgan = require("morgan");
 const helmet = require("helmet");
 const passportConfig = require("./config/passport");
 
+const authRoutes = require("./routes/authRoutes");
+const userRoutes = require("./routes/userRoutes");
+const communityRoutes = require("./routes/communityRoutes");
+const tripRoutes = require("./routes/tripRoutes");
+
 // Load environment variables from .env file
 dotenv.config();
 
@@ -26,7 +31,6 @@ mongoose
   .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useCreateIndex: true,
   })
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error(err));
