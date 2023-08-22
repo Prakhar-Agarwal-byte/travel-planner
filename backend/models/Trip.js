@@ -10,11 +10,20 @@ const tripSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  startDate: {
-    type: Date,
+  modeOfTransport: {
+    type: String,
+    enum: ["car", "train", "bus", "ferry", "bike", "flight"],
     required: true,
   },
-  endDate: {
+  fromDestination: {
+    type: String,
+    required: true,
+  },
+  toDestination: {
+    type: String,
+    required: true,
+  },
+  startDate: {
     type: Date,
     required: true,
   },
@@ -23,6 +32,22 @@ const tripSchema = new mongoose.Schema({
     ref: "User", // Reference to the User model
     required: true,
   },
+  community: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Community", // Reference to the Community model
+  },
+  pendingJoinRequests: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User", // Reference to the User model
+    },
+  ],
+  members: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User", // Reference to the User model
+    },
+  ],
   createdAt: {
     type: Date,
     default: Date.now,
