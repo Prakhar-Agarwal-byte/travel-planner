@@ -1,3 +1,8 @@
+const User = require('../models/User')
+const { validationResult } = require("express-validator");
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
 // Register a new user
 exports.registerUser = async (req, res) => {
   // Validate user input
@@ -53,13 +58,13 @@ exports.login = async (req, res) => {
     let user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(400).json({ msg: "Invalid credentials" });
+      return res.status(400).json({ message: "Invalid credentials" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      return res.status(400).json({ msg: "Invalid credentials" });
+      return res.status(400).json({ message: "Invalid credentials" });
     }
 
     // Generate JWT
