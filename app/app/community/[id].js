@@ -5,6 +5,7 @@ import { View, Text, TouchableOpacity, SafeAreaView } from 'react-native';
 import { COLORS, icons, images } from '../../constants'
 import { ScreenHeaderBtn } from '../../components'
 import styles from '../../styles/communitydetails'
+import CommunityMembersList from '../../components/community/memberlist/MemberList';
 
 const CommunityDetails = () => {
     const handleJoinCommunity = () => {
@@ -57,6 +58,7 @@ const CommunityDetails = () => {
                         <Text style={styles.joinButtonText}>Join Now</Text>
                     </TouchableOpacity>
                 </View>
+                <CommunityMembersList />
             </View>
         </SafeAreaView >
     );
