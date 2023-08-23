@@ -24,8 +24,4 @@ router.put(
   userController.changePassword
 );
 
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 module.exports = router;
