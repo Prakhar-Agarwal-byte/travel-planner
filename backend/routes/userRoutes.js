@@ -24,5 +24,4 @@ router.put(
   userController.changePassword
 );
 
-
 module.exports = router;
