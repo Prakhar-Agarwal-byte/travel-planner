@@ -10,4 +10,19 @@ router.get(
   userController.getProfile
 );
 
+// Update user profile
+router.put(
+  "/profile",
+  passport.authenticate("jwt", { session: false }),
+  userController.updateProfile
+);
+
+// Change user password
+router.put(
+  "/change-password",
+  passport.authenticate("jwt", { session: false }),
+  userController.changePassword
+);
+
+
 module.exports = router;
