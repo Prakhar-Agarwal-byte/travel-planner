@@ -24,7 +24,7 @@ const Welcome = ({ welcomeMessage, isHomePage, searchTerm, setSearchTerm, handle
                         style={styles.searchInput}
                         value={searchTerm}
                         onChangeText={(text) => setSearchTerm(text)}
-                        placeholder='Search for communities and trips'
+                        placeholder={`Search for ${activeTab}`}
                     />
                 </View>
                 <TouchableOpacity style={styles.searchBtn} onPress={handleClick}>
