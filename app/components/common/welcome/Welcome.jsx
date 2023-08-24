@@ -1,9 +1,8 @@
-import { useState } from 'react'
 import { View, Text, TextInput, TouchableOpacity, Image, FlatList } from 'react-native'
 import { useRouter } from 'expo-router'
 
 import styles from './welcome.style'
-import { icons, SIZES } from '../../../constants'
+import { icons } from '../../../constants'
 
 const activeTabs = ["Community", "Trip"]
 
@@ -37,9 +36,8 @@ const Welcome = ({ welcomeMessage, isHomePage, searchTerm, setSearchTerm, handle
             </View>}
 
             <View style={styles.tabsContainer}>
-                <FlatList
-                    data={activeTabs}
-                    renderItem={({ item }) => (
+                {activeTabs.map(item => (
+                    <View style={styles.tabsWrapper} >
                         <TouchableOpacity
                             style={styles.tab(activeTab, item)}
                             onPress={() => {
@@ -48,11 +46,8 @@ const Welcome = ({ welcomeMessage, isHomePage, searchTerm, setSearchTerm, handle
                         >
                             <Text style={styles.tabText(activeTab, item)}>{item}</Text>
                         </TouchableOpacity>
-                    )}
-                    keyExtractor={item => item}
-                    contentContainerStyle={{ columnGap: SIZES.small }}
-                    horizontal
-                />
+                    </View>
+                ))}
             </View>
         </View>
     )

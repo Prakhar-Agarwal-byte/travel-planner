@@ -53,19 +53,31 @@ const styles = StyleSheet.create({
         tintColor: COLORS.white,
     },
     tabsContainer: {
-        width: "100%",
+        flexDirection: 'row',
+        justifyContent: 'center',
         marginTop: SIZES.medium,
+        marginBottom: SIZES.medium,
     },
-    tab: (activeJobType, item) => ({
-        paddingVertical: SIZES.small / 2,
-        paddingHorizontal: SIZES.small,
+    tabsWrapper: {
+        flex: 1,
+        backgroundColor: COLORS.white,
+        marginRight: SIZES.small,
         borderRadius: SIZES.medium,
+        height: '100%',
+    },
+    tab: (activeTab, item) => ({
+        paddingVertical: SIZES.small,
+        paddingHorizontal: SIZES.medium,
         borderWidth: 1,
-        borderColor: activeJobType === item ? COLORS.secondary : COLORS.gray2,
+        borderColor: COLORS.gray2,
+        borderRadius: SIZES.medium,
+        alignItems: 'center',
+        backgroundColor: activeTab === item ? COLORS.lightWhite : 'transparent',
+        marginRight: SIZES.small / 4,
     }),
-    tabText: (activeJobType, item) => ({
+    tabText: (activeTab, item) => ({
         fontFamily: FONT.medium,
-        color: activeJobType === item ? COLORS.secondary : COLORS.gray2,
+        color: activeTab === item ? COLORS.secondary : COLORS.gray2,
     }),
 });
 

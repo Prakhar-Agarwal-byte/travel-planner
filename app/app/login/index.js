@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Stack } from "expo-router";
+import { Stack, router } from "expo-router";
 import {
     View,
     Text,
@@ -36,30 +36,32 @@ const Login = () => {
                     ),
                     headerTitle: ""
                 }} />
-            <View style={styles.container}>
-                <Text style={styles.title}>Login</Text>
-                <View style={styles.inputContainer}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Email"
-                        value={email}
-                        onChangeText={setEmail}
-                    />
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Password"
-                        value={password}
-                        onChangeText={setPassword}
-                        secureTextEntry
-                    />
+            <ScrollView showsVerticalScrollIndicator={false}>
+                <View style={styles.container}>
+                    <Text style={styles.title}>Login</Text>
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Email"
+                            value={email}
+                            onChangeText={setEmail}
+                        />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Password"
+                            value={password}
+                            onChangeText={setPassword}
+                            secureTextEntry
+                        />
+                    </View>
+                    <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+                        <Text style={styles.buttonText}>Login</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.signupText}>
+                        Don't have an account? <TouchableOpacity style={styles.signupLink} onPress={() => router.push("/signup")}>Sign Up</TouchableOpacity>
+                    </Text>
                 </View>
-                <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-                    <Text style={styles.buttonText}>Login</Text>
-                </TouchableOpacity>
-                <Text style={styles.signupText}>
-                    Don't have an account? <Text style={styles.signupLink}>Sign Up</Text>
-                </Text>
-            </View>
+            </ScrollView>
         </SafeAreaView >
     );
 };
