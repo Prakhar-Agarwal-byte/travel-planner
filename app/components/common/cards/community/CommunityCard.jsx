@@ -6,11 +6,13 @@ const CommunityCard = ({ community, handleNavigate }) => {
     return (
         <TouchableOpacity
             style={styles.container}
-            onPress={() => handleNavigate}
+            onPress={handleNavigate}
         >
             <TouchableOpacity style={styles.logoContainer}>
                 <Image
-                    source={'https://t3.ftcdn.net/jpg/00/94/74/70/240_F_94747015_w710pojp7hWrRPNTZaY4MgBAMNW7LHq7.jpg'}
+                    source={{
+                        uri: 'https://t3.ftcdn.net/jpg/00/94/74/70/240_F_94747015_w710pojp7hWrRPNTZaY4MgBAMNW7LHq7.jpg'
+                    }}
                     resizeMode='contain'
                     style={styles.logoImage}
                 />

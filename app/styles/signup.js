@@ -39,13 +39,16 @@ const styles = StyleSheet.create({
         fontSize: SIZES.medium,
         fontFamily: FONT.bold,
     },
-    loginLink: {
+    loginText: {
         marginTop: SIZES.medium,
+        fontSize: SIZES.small,
+        fontFamily: FONT.regular,
+        color: COLORS.gray,
     },
-    loginLinkText: {
+    loginLink: {
         color: COLORS.primary,
         fontFamily: FONT.medium,
-        fontSize: SIZES.medium,
+        fontSize: SIZES.small,
         textDecorationLine: "underline",
     },
 });
