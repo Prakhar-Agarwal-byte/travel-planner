@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, SafeAreaView, ScrollView } fro
 import { Stack } from "expo-router";
 import { COLORS, icons, images } from "../../constants";
 import DropDownPicker from "react-native-dropdown-picker";
-import styles from "../../styles/createTrip";
+import styles from "../../styles/createtrip";
 import { ScreenHeaderBtn } from "../../components";
 
 const CreateTrip = () => {

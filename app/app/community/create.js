@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, SafeAreaView, ScrollView } from "react-native";
-import styles from "../../styles/createTrip";
+import styles from "../../styles/createcommunity";
 import { Stack } from "expo-router";
 import { COLORS, icons, images } from "../../constants";
 import { ScreenHeaderBtn } from "../../components";
