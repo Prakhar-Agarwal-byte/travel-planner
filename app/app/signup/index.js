@@ -1,10 +1,15 @@
 import React, { useState } from "react";
+import { COLORS, images, FONT } from "../../constants";
+
+import { Stack } from "expo-router";
+import { ScreenHeaderBtn } from "../../components";
 import {
     View,
     Text,
     TextInput,
     TouchableOpacity,
-} from "react-native";
+    SafeAreaView
+  } from "react-native";
 
 import styles from "../../styles/signup";
 
@@ -19,39 +24,71 @@ const Signup = ({ navigation }) => {
     };
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Sign Up</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Name"
-                value={name}
-                onChangeText={setName}
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="Email"
-                value={email}
-                onChangeText={setEmail}
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="Password"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-            />
-            <TouchableOpacity style={styles.signupButton} onPress={handleSignup}>
-                <Text style={styles.buttonText}>Sign Up</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={styles.loginLink}
-                onPress={() => navigation.navigate("Login")}
+        <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
+      <Stack.Screen
+        options={{
+          headerStyle: { backgroundColor: COLORS.lightWhite },
+          headerShadowVisible: false,
+          headerRight: () => (
+            <ScreenHeaderBtn iconUrl={images.profile} dimension="100%" />
+          ),
+          headerTitle: "",
+        }}
+      />
+      <View style={styles.container}>
+        <Text
+          style={[
+            styles.title,
+            { fontFamily: FONT.bold, color: COLORS.primary },
+          ]}
+        >
+          Sign Up
+        </Text>
+        <TextInput
+          style={[styles.input, { borderColor: COLORS.gray2 }]}
+          placeholder="Name"
+          value={name}
+          onChangeText={setName}
+        />
+        <TextInput
+          style={[styles.input, { borderColor: COLORS.gray2 }]}
+          placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
+        />
+        <TextInput
+          style={[styles.input, { borderColor: COLORS.gray2 }]}
+          placeholder="Password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
+        <TouchableOpacity
+          style={[styles.signupButton, { backgroundColor: COLORS.secondary }]}
+          onPress={handleSignup}
+        >
+          <Text style={[styles.buttonText, { fontFamily: FONT.medium }]}>
+            Sign Up
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.loginLink}
+          onPress={() => navigation.navigate("Login")}
+        >
+          <Text style={[styles.loginText, { fontFamily: FONT.regular }]}>
+            Already have an account?{" "}
+            <Text
+              style={[
+                styles.loginLink,
+                { color: COLORS.primary, fontFamily: FONT.bold },
+              ]}
             >
-                <Text style={styles.loginLinkText}>
-                    Already have an account? Log In
-                </Text>
-            </TouchableOpacity>
-        </View>
+              Log In
+            </Text>
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
     );
 };
 
