@@ -1,6 +1,5 @@
 import { StyleSheet } from "react-native";
-
-import { COLORS, FONT, SIZES, SHADOWS } from "../constants";
+import { COLORS, FONT, SIZES, SHADOWS } from "../constants/theme";
 
 const styles = StyleSheet.create({
   container: {
@@ -27,10 +26,16 @@ const styles = StyleSheet.create({
     fontFamily: FONT.regular,
   },
   buttonContainer: {
-    paddingHorizontal: SIZES.medium,
-    borderRadius: SIZES.medium,
-    ...SHADOWS.medium, // Apply shadow from theme
     backgroundColor: COLORS.tertiary,
+    padding: SIZES.medium,
+    borderRadius: SIZES.medium,
+    width: "100%",
+    alignItems: "center",
+  },
+  buttonText: {
+    color: COLORS.white,
+    fontSize: SIZES.medium,
+    fontFamily: FONT.bold,
   },
 });
 

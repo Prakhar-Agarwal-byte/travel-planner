@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, SafeAreaView } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, SafeAreaView, ScrollView } from "react-native";
 import { Stack } from "expo-router";
 import { COLORS, icons, images } from "../../constants";
 import DropDownPicker from "react-native-dropdown-picker";
-import styles from "../../styles/createTrip";
+import styles from "../../styles/createtrip";
 import { ScreenHeaderBtn } from "../../components";
 
 const CreateTrip = () => {
@@ -41,57 +41,55 @@ const CreateTrip = () => {
           headerTitle: "",
         }}
       />
-      <View style={styles.container}>
-        <Text style={styles.title}>Create Trip</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Name"
-          value={name}
-          onChangeText={setName}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Description"
-          value={description}
-          onChangeText={setDescription}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="From Destination"
-          value={fromDestination}
-          onChangeText={setFromDestination}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="To Destination"
-          value={toDestination}
-          onChangeText={setToDestination}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Start Date and Time"
-          value={startDate}
-          onChangeText={setStartDate}
-        />
-        <DropDownPicker
-          items={community}
-          open={isOpen}
-          setOpen={() => setIsOpen(!isOpen)}
-          value={currentValue}
-          setValue={(val) => setCurrentValue(val)}
-          placeholder="Select Community"
-          maxHeight={100}
-          containerStyle={styles.dropdownContainer}
-          style={styles.dropdownStyle}
-        />
-        <View style={styles.buttonContainer}>
-          <Button
-            title="Create Trip"
-            onPress={handleCreateTrip}
-            color={COLORS.tertiary}
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.container}>
+          <Text style={styles.title}>Create Trip</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Name"
+            value={name}
+            onChangeText={setName}
           />
+          <TextInput
+            style={styles.input}
+            placeholder="Description"
+            value={description}
+            onChangeText={setDescription}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="From Destination"
+            value={fromDestination}
+            onChangeText={setFromDestination}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="To Destination"
+            value={toDestination}
+            onChangeText={setToDestination}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Start Date and Time"
+            value={startDate}
+            onChangeText={setStartDate}
+          />
+          <DropDownPicker
+            items={community}
+            open={isOpen}
+            setOpen={() => setIsOpen(!isOpen)}
+            value={currentValue}
+            setValue={(val) => setCurrentValue(val)}
+            placeholder="Select Community"
+            maxHeight={100}
+            containerStyle={styles.dropdownContainer}
+            style={styles.dropdownStyle}
+          />
+          <TouchableOpacity style={styles.buttonContainer} onPress={handleCreateTrip}>
+            <Text style={styles.buttonText}>Create Trip</Text>
+          </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

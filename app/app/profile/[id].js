@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image, TextInput, FlatList, SafeAreaView, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, Image, TextInput, SafeAreaView, ScrollView } from 'react-native';
 import { Stack } from 'expo-router';
 
 import { COLORS, icons, images } from '../../constants';

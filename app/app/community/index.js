@@ -4,6 +4,7 @@ import { Stack, useRouter } from "expo-router";
 
 import { COLORS, icons, images, SIZES } from '../../constants'
 import { ScreenHeaderBtn, Welcome, CommunityList } from '../../components'
+import CreateButton from "../../components/common/button/create/CreateButton";
 
 const Community = () => {
     const router = useRouter()
@@ -47,6 +48,7 @@ const Community = () => {
                     <CommunityList />
                 </View>
             </ScrollView>
+            <CreateButton activeTab={activeTab} />
         </SafeAreaView>
     )
 }

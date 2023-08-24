@@ -4,6 +4,7 @@ import { Stack, useRouter } from "expo-router";
 
 import { COLORS, icons, images, SIZES } from '../../constants'
 import { ScreenHeaderBtn, Welcome, TripList } from '../../components'
+import CreateButton from "../../components/common/button/create/CreateButton";
 
 const Trip = () => {
     const router = useRouter()
@@ -47,6 +48,7 @@ const Trip = () => {
                     <TripList />
                 </View>
             </ScrollView>
+            <CreateButton activeTab={activeTab} />
         </SafeAreaView>
     )
 }

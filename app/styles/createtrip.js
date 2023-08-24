@@ -1,5 +1,4 @@
 import { StyleSheet } from "react-native";
-
 import { COLORS, FONT, SIZES, SHADOWS } from "../constants/theme";
 
 const styles = StyleSheet.create({
@@ -33,11 +32,16 @@ const styles = StyleSheet.create({
     zIndex: 10000,
   },
   buttonContainer: {
-    paddingHorizontal: SIZES.medium,
-    marginTop: SIZES.small,
-    borderRadius: SIZES.small,
-    ...SHADOWS.medium, // Apply shadow from theme
     backgroundColor: COLORS.tertiary,
+    padding: SIZES.medium,
+    borderRadius: SIZES.medium,
+    width: "100%",
+    alignItems: "center",
+  },
+  buttonText: {
+    color: COLORS.white,
+    fontSize: SIZES.medium,
+    fontFamily: FONT.bold,
   },
 });
 
