@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, SafeAreaView } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, SafeAreaView, ScrollView } from "react-native";
 import styles from "../../styles/createTrip";
 import { Stack } from "expo-router";
-import { COLORS, icons, images, FONT, SIZES, SHADOWS } from "../../constants";
+import { COLORS, icons, images } from "../../constants";
 import { ScreenHeaderBtn } from "../../components";
 const CreateCommunity = () => {
   const [name, setName] = useState("");
@@ -28,37 +28,34 @@ const CreateCommunity = () => {
           headerTitle: "",
         }}
       />
-      <View style={styles.container}>
-        <Text style={styles.title}>Create Community</Text>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Name"
-            value={name}
-            onChangeText={setName}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Community Description"
-            value={description}
-            onChangeText={setDescription}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Location"
-            value={location}
-            onChangeText={setLocation}
-          />
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.container}>
+          <Text style={styles.title}>Create Community</Text>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Name"
+              value={name}
+              onChangeText={setName}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Community Description"
+              value={description}
+              onChangeText={setDescription}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Location"
+              value={location}
+              onChangeText={setLocation}
+            />
+          </View>
+          <TouchableOpacity style={styles.buttonContainer} onPress={handleCreateCommunity}>
+            <Text style={styles.buttonText}>Create Community</Text>
+          </TouchableOpacity>
         </View>
-
-        <View style={styles.buttonContainer}>
-          <Button
-            title="Create Community"
-            onPress={handleCreateCommunity}
-            color={COLORS.tertiary}
-          />
-        </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
