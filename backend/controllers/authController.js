@@ -20,11 +20,14 @@ exports.registerUser = async (req, res) => {
       return res.status(400).json({ msg: "User already exists" });
     }
 
+    const profileImage = `https://www.gravatar.com/avatar/${md5(email)}?s=200`; // Change 's' parameter to set avatar size
+
     // Create a new user
     user = new User({
       name,
       email,
       password,
+      profileImage,
     });
 
     // Hash the password before saving
