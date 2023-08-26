@@ -33,17 +33,21 @@ exports.registerUser = async (req, res) => {
 
     await user.save();
 
-    // Generate JWT
-    const payload = { user: { id: user.id } };
-    jwt.sign(
-      payload,
-      process.env.JWT_SECRET,
-      { expiresIn: 3600 },
-      (err, token) => {
-        if (err) throw err;
-        res.json({ token });
-      }
+    // Generate JWTs
+    const accessTokenPayload = { user: { id: user.id } };
+    const refreshTokenPayload = { user: { id: user.id, refresh: true } };
+
+    const accessToken = jwt.sign(accessTokenPayload, process.env.JWT_SECRET, {
+      expiresIn: 3600,
+    });
+
+    const refreshToken = jwt.sign(
+      refreshTokenPayload,
+      process.env.JWT_REFRESH_SECRET,
+      { expiresIn: 86400 * 30 } // Adjust as needed
     );
+
+    res.json({ accessToken, refreshToken });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
@@ -67,19 +71,60 @@ exports.login = async (req, res) => {
       return res.status(400).json({ msg: "Invalid credentials" });
     }
 
-    // Generate JWT
-    const payload = { user: { id: user.id } };
-    jwt.sign(
-      payload,
-      process.env.JWT_SECRET,
-      { expiresIn: 3600 },
-      (err, token) => {
-        if (err) throw err;
-        res.json({ token });
-      }
+    // Generate JWTs
+    const accessTokenPayload = { user: { id: user.id } };
+    const refreshTokenPayload = { user: { id: user.id, refresh: true } };
+
+    const accessToken = jwt.sign(accessTokenPayload, process.env.JWT_SECRET, {
+      expiresIn: 3600,
+    });
+
+    const refreshToken = jwt.sign(
+      refreshTokenPayload,
+      process.env.JWT_REFRESH_SECRET,
+      { expiresIn: 86400 * 30 } // Adjust as needed
     );
+
+    res.json({ accessToken, refreshToken });
   } catch (err) {
     console.error(err.message);
+    res.status(500).send("Server error");
+  }
+};
+
+// Refresh token
+exports.refreshToken = async (req, res) => {
+  const { refreshToken } = req.body;
+
+  if (!refreshToken) {
+    return res.status(401).json({ msg: "No refresh token provided" });
+  }
+
+  try {
+    // Verify the refresh token
+    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+
+    // Check if the token is valid and has the refresh flag
+    if (!decoded.user || !decoded.user.refresh) {
+      return res.status(401).json({ msg: "Invalid refresh token" });
+    }
+
+    // Find the user by ID
+    const user = await User.findById(decoded.user.id);
+
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    // Generate a new access token
+    const accessTokenPayload = { user: { id: user.id } };
+    const accessToken = jwt.sign(accessTokenPayload, process.env.JWT_SECRET, {
+      expiresIn: 3600,
+    });
+
+    res.json({ accessToken });
+  } catch (error) {
+    console.error(error.message);
     res.status(500).send("Server error");
   }
 };
