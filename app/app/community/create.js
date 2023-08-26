@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, SafeAreaView, ScrollView } from "react-native";
 import styles from "../../styles/createcommunity";
-import { Stack } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import { COLORS, icons, images } from "../../constants";
 import { ScreenHeaderBtn } from "../../components";
 const CreateCommunity = () => {
+  const router = useRouter();
+
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
@@ -20,10 +22,10 @@ const CreateCommunity = () => {
           headerStyle: { backgroundColor: COLORS.lightWhite },
           headerShadowVisible: false,
           headerLeft: () => (
-            <ScreenHeaderBtn iconUrl={icons.menu} dimension="60%" />
+            <ScreenHeaderBtn iconUrl={icons.chevronLeft} dimension="80%" handlePress={() => router.back()} />
           ),
           headerRight: () => (
-            <ScreenHeaderBtn iconUrl={images.profile} dimension="100%" />
+            <ScreenHeaderBtn iconUrl={images.profile} dimension="100%" handlePress={() => router.push("/profile/guv")} />
           ),
           headerTitle: "",
         }}

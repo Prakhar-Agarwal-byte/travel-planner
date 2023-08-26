@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
         fontSize: SIZES.medium,
     },
     signupButton: {
-        backgroundColor: COLORS.tertiary,
+        backgroundColor: COLORS.primary,
         padding: SIZES.medium,
         borderRadius: SIZES.medium,
         width: "100%",
