@@ -1,17 +1,21 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, SafeAreaView, ScrollView } from "react-native";
-import { Stack } from "expo-router";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { Stack, useRouter } from "expo-router";
 import { COLORS, icons, images } from "../../constants";
 import DropDownPicker from "react-native-dropdown-picker";
 import styles from "../../styles/createtrip";
 import { ScreenHeaderBtn } from "../../components";
 
 const CreateTrip = () => {
+  const router = useRouter();
+
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [fromDestination, setFromDestination] = useState("");
   const [toDestination, setToDestination] = useState("");
-  const [startDate, setStartDate] = useState("");
+  const [startDate, setStartDate] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [currentValue, setCurrentValue] = useState("Select Community");
   const community = [
@@ -25,6 +29,9 @@ const CreateTrip = () => {
   const handleCreateTrip = () => {
     // Logic to create the trip using the collected data
   };
+  const hideDatePicker = () => {
+    setShowDatePicker(false);
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
@@ -33,10 +40,10 @@ const CreateTrip = () => {
           headerStyle: { backgroundColor: COLORS.lightWhite },
           headerShadowVisible: false,
           headerLeft: () => (
-            <ScreenHeaderBtn iconUrl={icons.menu} dimension="60%" />
+            <ScreenHeaderBtn iconUrl={icons.chevronLeft} dimension="80%" handlePress={() => router.back()} />
           ),
           headerRight: () => (
-            <ScreenHeaderBtn iconUrl={images.profile} dimension="100%" />
+            <ScreenHeaderBtn iconUrl={images.profile} dimension="100%" handlePress={() => router.push("/profile/guv")} />
           ),
           headerTitle: "",
         }}
@@ -68,12 +75,22 @@ const CreateTrip = () => {
             value={toDestination}
             onChangeText={setToDestination}
           />
-          <TextInput
-            style={styles.input}
-            placeholder="Start Date and Time"
-            value={startDate}
-            onChangeText={setStartDate}
-          />
+          <TouchableOpacity onPress={() => setShowDatePicker(true)}>
+            <Text style={styles.input}>
+              {startDate ? startDate.toISOString().substring(0, 16) : "Select Start Date and Time"}
+            </Text>
+          </TouchableOpacity>
+          {showDatePicker && (
+            <DateTimePickerModal
+              isVisible={showDatePicker}
+              mode="datetime"
+              onConfirm={(selectedDate) => {
+                const currentDate = selectedDate || startDate;
+                setStartDate(currentDate);
+              }}
+              onCancel={hideDatePicker}
+            />
+          )}
           <DropDownPicker
             items={community}
             open={isOpen}
@@ -85,7 +102,10 @@ const CreateTrip = () => {
             containerStyle={styles.dropdownContainer}
             style={styles.dropdownStyle}
           />
-          <TouchableOpacity style={styles.buttonContainer} onPress={handleCreateTrip}>
+          <TouchableOpacity
+            style={styles.buttonContainer}
+            onPress={handleCreateTrip}
+          >
             <Text style={styles.buttonText}>Create Trip</Text>
           </TouchableOpacity>
         </View>

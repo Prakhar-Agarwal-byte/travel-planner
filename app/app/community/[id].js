@@ -1,5 +1,5 @@
 import React from 'react';
-import { Stack } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import { View, Text, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
 
 import { COLORS, icons, images } from '../../constants'
@@ -8,6 +8,7 @@ import styles from '../../styles/communitydetails'
 import CommunityMembersList from '../../components/community/memberlist/MemberList';
 
 const CommunityDetails = () => {
+    const router = useRouter()
     const handleJoinCommunity = () => {
         // Handle the logic for joining the community
         console.log('User joined the community');
@@ -20,10 +21,10 @@ const CommunityDetails = () => {
                     headerStyle: { backgroundColor: COLORS.lightWhite },
                     headerShadowVisible: false,
                     headerLeft: () => (
-                        <ScreenHeaderBtn iconUrl={icons.menu} dimension="60%" />
+                        <ScreenHeaderBtn iconUrl={icons.home} dimension="70%" handlePress={() => router.push("/")} />
                     ),
                     headerRight: () => (
-                        <ScreenHeaderBtn iconUrl={images.profile} dimension="100%" />
+                        <ScreenHeaderBtn iconUrl={images.profile} dimension="100%" handlePress={() => router.push("/profile/guv")} />
                     ),
                     headerTitle: ""
                 }} />

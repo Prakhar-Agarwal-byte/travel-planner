@@ -44,55 +44,51 @@ const Login = () => {
     );
   };
 
-  return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
-      <Stack.Screen
-        options={{
-          headerStyle: { backgroundColor: COLORS.lightWhite },
-          headerShadowVisible: false,
-          //   headerLeft: () => (
-          //     <Text style={styles.headerText}>Travel Planner</Text>
-          //   ),
-          //   headerRight: () => (
-          //     <ScreenHeaderBtn iconUrl={images.profile} dimension="100%" />
-          //   ),
-          headerTitle: "",
-        }}
-      />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.container}>
-          <Text style={styles.title}>Login</Text>
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="Email"
-              value={email}
-              onChangeText={setEmail}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Password"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-            />
-          </View>
-          <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-            <Text style={styles.buttonText}>Login</Text>
-          </TouchableOpacity>
-          <Text style={styles.signupText}>
-            Don't have an account?{" "}
-            <TouchableOpacity
-              style={styles.signupLink}
-              onPress={() => router.push("/signup")}
-            >
-              Sign Up
-            </TouchableOpacity>
-          </Text>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
+    return (
+        <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
+            <Stack.Screen
+                options={{
+                    headerStyle: { backgroundColor: COLORS.lightWhite },
+                    headerShadowVisible: false,
+                    headerLeft: () => (
+                        <ScreenHeaderBtn iconUrl={icons.menu} dimension="60%" />
+                    ),
+                    headerRight: () => (
+                        <ScreenHeaderBtn iconUrl={images.profile} dimension="100%" />
+                    ),
+                    headerTitle: ""
+                }} />
+            <ScrollView showsVerticalScrollIndicator={false}>
+                <View style={styles.container}>
+                    <Text style={styles.title}>Login</Text>
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Email"
+                            value={email}
+                            onChangeText={setEmail}
+                        />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Password"
+                            value={password}
+                            onChangeText={setPassword}
+                            secureTextEntry
+                        />
+                    </View>
+                    <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+                        <Text style={styles.buttonText}>Login</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.signupText}>
+                        Don't have an account?{' '}
+                        <TouchableOpacity onPress={() => router.push("/signup")}>
+                            <Text style={styles.signupLink}>Sign Up</Text>
+                        </TouchableOpacity>
+                    </Text>
+                </View>
+            </ScrollView>
+        </SafeAreaView >
+    );
 };
 
 export default Login;

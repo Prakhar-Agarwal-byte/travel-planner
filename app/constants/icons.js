@@ -1,4 +1,5 @@
 import heart from "../assets/icons/heart.png";
+import home from "../assets/icons/home.png";
 import menu from "../assets/icons/menu.png";
 import search from "../assets/icons/search.png";
 import filter from "../assets/icons/filter.png";
@@ -11,6 +12,7 @@ import chevronRight from '../assets/icons/chevron-right.png'
 
 export default {
   heart,
+  home,
   menu,
   search,
   filter,

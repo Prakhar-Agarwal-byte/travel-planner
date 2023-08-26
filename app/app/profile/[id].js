@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Image, TextInput, SafeAreaView, ScrollView } from 'react-native';
-import { Stack } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
 
 import { COLORS, icons, images } from '../../constants';
 import { CommunityList, ScreenHeaderBtn, TripList } from '../../components';
 import styles from '../../styles/profile';
 
 const Profile = () => {
+    const router = useRouter();
     const activeTabs = ['Trip', 'Community'];
     const [activeTab, setActiveTab] = useState('Trip');
     const [searchText, setSearchText] = useState('');
@@ -29,13 +30,18 @@ const Profile = () => {
         }
     };
 
+    const handleLogout = () => {
+        // Logout logic here
+        router.push('/login');
+    };
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
             <Stack.Screen
                 options={{
                     headerStyle: { backgroundColor: COLORS.lightWhite },
                     headerShadowVisible: false,
-                    headerLeft: () => <ScreenHeaderBtn iconUrl={icons.menu} dimension="60%" />,
+                    headerLeft: () => <ScreenHeaderBtn iconUrl={icons.home} dimension="70%" handlePress={() => router.push("/")} />,
                     headerRight: () => <ScreenHeaderBtn iconUrl={images.profile} dimension="100%" />,
                     headerTitle: '',
                 }}
@@ -45,6 +51,13 @@ const Profile = () => {
                     <Image source={{ uri: user.profileImage }} style={styles.profileImage} />
                     <Text style={styles.userName}>{user.name}</Text>
                     <Text style={styles.userEmail}>{user.email}</Text>
+                    <TouchableOpacity
+                        style={styles.logoutButton}
+                        onPress={handleLogout}
+                    >
+                        <Text style={styles.logoutButtonText}>Logout</Text>
+                    </TouchableOpacity>
+
                     <View>
                         <View style={styles.searchContainer}>
                             <View style={styles.searchWrapper}>

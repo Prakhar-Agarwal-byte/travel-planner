@@ -28,6 +28,19 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         marginBottom: SIZES.medium,
     },
+    logoutButton: {
+        backgroundColor: COLORS.primary,
+        paddingVertical: SIZES.xSmall,
+        paddingHorizontal: SIZES.large,
+        borderRadius: SIZES.xSmall,
+        marginTop: SIZES.xSmall,
+        alignSelf: 'center',
+    },
+    logoutButtonText: {
+        color: COLORS.white,
+        fontSize: SIZES.medium,
+        fontFamily: FONT.bold,
+    },
     tabsContainer: {
         flexDirection: 'row',
         justifyContent: 'center',

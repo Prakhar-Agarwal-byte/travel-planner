@@ -49,59 +49,55 @@ const Signup = ({ navigation }) => {
     );
   };
 
-  return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
-      <Stack.Screen
-        options={{
-          headerStyle: { backgroundColor: COLORS.lightWhite },
-          headerShadowVisible: false,
-          //   headerLeft: () => (
-          //     <Text style={styles.headerText}>Travel Planner</Text>
-          //   ),
-          //   headerRight: () => (
-          //     <ScreenHeaderBtn iconUrl={images.profile} dimension="100%" />
-          //   ),
-          headerTitle: "",
-        }}
-      />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.container}>
-          <Text style={styles.title}>Sign Up</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Name"
-            value={name}
-            onChangeText={setName}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            value={email}
-            onChangeText={setEmail}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
-          <TouchableOpacity style={styles.signupButton} onPress={handleSignup}>
-            <Text style={styles.buttonText}>Sign Up</Text>
-          </TouchableOpacity>
-          <Text style={styles.loginText}>
-            Already have an account?{" "}
-            <TouchableOpacity
-              style={styles.loginLink}
-              onPress={() => router.push("/login")}
-            >
-              Log In
-            </TouchableOpacity>
-          </Text>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
+    return (
+        <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
+            <Stack.Screen
+                options={{
+                    headerStyle: { backgroundColor: COLORS.lightWhite },
+                    headerShadowVisible: false,
+                    headerLeft: () => (
+                        <ScreenHeaderBtn iconUrl={icons.menu} dimension="60%" />
+                    ),
+                    headerRight: () => (
+                        <ScreenHeaderBtn iconUrl={images.profile} dimension="100%" />
+                    ),
+                    headerTitle: ""
+                }} />
+            <ScrollView showsVerticalScrollIndicator={false}>
+                <View style={styles.container}>
+                    <Text style={styles.title}>Sign Up</Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Name"
+                        value={name}
+                        onChangeText={setName}
+                    />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Email"
+                        value={email}
+                        onChangeText={setEmail}
+                    />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Password"
+                        value={password}
+                        onChangeText={setPassword}
+                        secureTextEntry
+                    />
+                    <TouchableOpacity style={styles.signupButton} onPress={handleSignup}>
+                        <Text style={styles.buttonText}>Sign Up</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.loginText}>
+                        Already have an account?{' '}
+                        <TouchableOpacity onPress={() => router.push("/login")} >
+                            <Text style={styles.loginLink}>Log In</Text>
+                        </TouchableOpacity>
+                    </Text>
+                </View>
+            </ScrollView>
+        </SafeAreaView >
+    );
 };
 
 export default Signup;
