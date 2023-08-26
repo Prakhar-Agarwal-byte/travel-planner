@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { View, ScrollView, SafeAreaView } from "react-native";
 import { Stack, useRouter } from "expo-router";
 
@@ -13,10 +13,13 @@ const Trip = () => {
     const [searchTerm, setSearchTerm] = useState("")
     const activeTab = "Trip"
 
-    useEffect(async () => {
-        // Fetch trip data using Axios
-        const response = await axiosInstance.get("/trip");
-        setTrips(response.data);
+    useEffect(() => {
+        async function fetchData() {
+            // Fetch trip data using Axios
+            const response = await axiosInstance.get("/trips");
+            setTrips(response.data);
+        }
+        fetchData();
     }, []);
 
     return (
