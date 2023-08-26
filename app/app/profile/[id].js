@@ -18,10 +18,48 @@ const Profile = () => {
         profileImage: 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50',
     };
 
+    const TripButton = ({ status }) => {
+        return (
+            <TouchableOpacity
+                style={styles.tripContainer}
+                onPress={() => router.push(`/listtrips/${status}`)}
+            >
+                <TouchableOpacity style={styles.logoContainer}>
+                    <Image
+                        source={{
+                            uri: 'https://t3.ftcdn.net/jpg/00/94/74/70/240_F_94747015_w710pojp7hWrRPNTZaY4MgBAMNW7LHq7.jpg'
+                        }}
+                        resizeMode='contain'
+                        style={styles.logoImage}
+                    />
+                </TouchableOpacity>
+
+                <View style={styles.textContainer}>
+                    <Text style={styles.tripStatus}>{status} Trips</Text>
+                </View>
+                <TouchableOpacity
+                    style={styles.logoContainer}
+                    onPress={() => router.push(`/listtrips/${status}`)}
+                >
+                    <Image
+                        source={icons.chevronRight}
+                        resizeMode='contain'
+                        style={styles.logoImage}
+                    />
+                </TouchableOpacity>
+            </TouchableOpacity>
+        )
+    }
+
     const RenderTabContent = () => {
         if (activeTab === 'Trip') {
             return (
-                <TripList />
+                <View>
+                    <TripButton status='active' />
+                    <TripButton status='joined' />
+                    <TripButton status='requested' />
+                    <TripButton status='completed' />
+                </View>
             );
         } else if (activeTab === 'Community') {
             return (
@@ -59,32 +97,6 @@ const Profile = () => {
                     </TouchableOpacity>
 
                     <View>
-                        <View style={styles.searchContainer}>
-                            <View style={styles.searchWrapper}>
-                                <TextInput
-                                    style={styles.searchInput}
-                                    value={searchText}
-                                    onChangeText={(text) => setSearchText(text)}
-                                    placeholder={`Search for ${activeTab}`}
-                                />
-                            </View>
-                            <TouchableOpacity
-                                key={`search-${searchText}`}
-                                style={styles.searchBtn}
-                                onPress={() => {
-                                    if (searchText) {
-                                        router.push(`/trip/${searchText}`);
-                                    }
-                                }}
-                            >
-                                <Image
-                                    source={icons.search}
-                                    resizeMode="contain"
-                                    style={styles.searchBtnImage}
-                                />
-                            </TouchableOpacity>
-                        </View>
-
                         <View style={styles.tabsContainer}>
                             {activeTabs.map(item => (
                                 <View style={styles.tabsWrapper} >

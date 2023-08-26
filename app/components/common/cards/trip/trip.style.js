@@ -1,47 +1,43 @@
 import { StyleSheet } from "react-native";
 
-import { COLORS, SHADOWS, SIZES } from "../../../../constants";
+import { COLORS, SHADOWS, SIZES, FONT } from "../../../../constants";
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
+    container: (selectedTrip, item) => ({
+        width: 250,
+        padding: SIZES.xLarge,
+        backgroundColor: selectedTrip === item.id ? COLORS.primary : "#FFF",
+        borderRadius: SIZES.medium,
         justifyContent: "space-between",
-        alignItems: "center",
-        flexDirection: "row",
-        padding: SIZES.medium,
-        borderRadius: SIZES.small,
-        backgroundColor: "#FFF",
         ...SHADOWS.medium,
         shadowColor: COLORS.white,
-    },
-    logoContainer: {
+    }),
+    logoContainer: (selectedTrip, item) => ({
         width: 50,
         height: 50,
-        backgroundColor: COLORS.white,
+        backgroundColor: selectedTrip === item.id ? "#FFF" : COLORS.white,
         borderRadius: SIZES.medium,
         justifyContent: "center",
         alignItems: "center",
-    },
+    }),
     logoImage: {
         width: "70%",
         height: "70%",
     },
-    textContainer: {
-        flex: 1,
-        marginHorizontal: SIZES.medium,
-    },
     tripName: {
         fontSize: SIZES.medium,
-        fontFamily: "DMBold",
-        color: COLORS.primary,
+        fontFamily: FONT.regular,
+        color: "#B3AEC6",
+        marginTop: SIZES.small / 1.5,
     },
-    tripType: {
-        fontSize: SIZES.small + 2,
-        fontFamily: "DMRegular",
-        color: COLORS.gray,
-        marginTop: 3,
-        textTransform: "capitalize",
+    infoContainer: {
+        marginTop: SIZES.large,
     },
+    tripDesc: (selectedTrip, item) => ({
+        fontSize: SIZES.large,
+        fontFamily: FONT.medium,
+        color: selectedTrip === item.id ? COLORS.white : COLORS.primary,
+    }),
 });
 
 export default styles;

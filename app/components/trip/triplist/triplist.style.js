@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
         fontSize: SIZES.large,
         fontFamily: FONT.medium,
         color: COLORS.primary,
+        textTransform: "capitalize",
     },
     headerBtn: {
         fontSize: SIZES.medium,
