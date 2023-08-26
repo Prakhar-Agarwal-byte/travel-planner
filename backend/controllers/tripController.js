@@ -1,16 +1,28 @@
 const Trip = require("../models/Trip");
 
-// Create a new trip
 exports.createTrip = async (req, res) => {
-  const { title, description, startDate, endDate } = req.body;
+  const {
+    title,
+    description,
+    modeOfTransport,
+    fromDestination,
+    toDestination,
+    startDate,
+    communityId,
+  } = req.body;
 
   try {
     const newTrip = new Trip({
       title,
       description,
+      modeOfTransport,
+      fromDestination,
+      toDestination,
       startDate,
-      endDate,
       createdBy: req.user.id, // Assuming authenticated user's ID is stored in req.user.id
+      community: communityId, // Assuming you're passing the community's ID in the request body
+      pendingJoinRequests: [], // Initialize with an empty array
+      members: [req.user.id], // Assuming the creator is automatically a member
     });
 
     await newTrip.save();
@@ -24,7 +36,7 @@ exports.createTrip = async (req, res) => {
 // Get all trips
 exports.getTrips = async (req, res) => {
   try {
-    const trips = await Trip.find().populate("createdBy", "name");
+    const trips = await Trip.find();
     res.json(trips);
   } catch (err) {
     console.error(err.message);
@@ -35,10 +47,7 @@ exports.getTrips = async (req, res) => {
 // Get a trip by ID
 exports.getTripById = async (req, res) => {
   try {
-    const trip = await Trip.findById(req.params.id).populate(
-      "createdBy",
-      "name"
-    );
+    const trip = await Trip.findById(req.params.id);
     if (!trip) {
       return res.status(404).json({ msg: "Trip not found" });
     }
