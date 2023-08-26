@@ -1,5 +1,5 @@
-import { StyleSheet, Dimensions } from 'react-native';
-import { COLORS, SIZES, FONT } from '../constants';
+import { StyleSheet } from 'react-native';
+import { COLORS, SIZES, FONT, SHADOWS } from '../constants';
 
 const styles = StyleSheet.create({
     container: {
@@ -100,6 +100,39 @@ const styles = StyleSheet.create({
         width: '50%',
         height: '50%',
         tintColor: COLORS.white,
+    },
+    tripContainer: {
+        flex: 1,
+        justifyContent: "space-between",
+        alignItems: "center",
+        flexDirection: "row",
+        padding: SIZES.medium,
+        borderRadius: SIZES.small,
+        backgroundColor: "#FFF",
+        ...SHADOWS.medium,
+        shadowColor: COLORS.white,
+    },
+    logoContainer: {
+        width: 50,
+        height: 50,
+        backgroundColor: COLORS.lightWhite,
+        borderRadius: SIZES.medium,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    logoImage: {
+        width: "70%",
+        height: "70%",
+    },
+    textContainer: {
+        flex: 1,
+        marginHorizontal: SIZES.medium,
+    },
+    tripStatus: {
+        fontSize: SIZES.medium,
+        fontFamily: "DMBold",
+        color: COLORS.primary,
+        textTransform: "capitalize",
     },
 });
 

@@ -1,12 +1,17 @@
-import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native'
+import React, { useState } from 'react'
+import { View, Text, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native'
 import { useRouter } from 'expo-router'
 
 import styles from './triplist.style'
-import { COLORS } from '../../../constants'
+import { COLORS, SIZES } from '../../../constants'
 import TripCard from '../../common/cards/trip/TripCard'
 
-const TripList = () => {
+
+const TripList = ({ status }) => {
     const router = useRouter()
+
+    const [selectedTrip, setSelectedTrip] = useState()
+
     const data = [
         {
             id: 1,
@@ -40,8 +45,8 @@ const TripList = () => {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.headerTitle}>Trips</Text>
-                <TouchableOpacity>
+                <Text style={styles.headerTitle}>{status} Trips</Text>
+                <TouchableOpacity onPress={() => router.push(`/listtrips/${status}`)}>
                     <Text style={styles.headerBtn}>Show all</Text>
                 </TouchableOpacity>
             </View>
@@ -52,13 +57,22 @@ const TripList = () => {
                 ) : error ? (
                     <Text>Something went wrong</Text>
                 ) : (
-                    data?.map((trip) => (
-                        <TripCard
-                            trip={trip}
-                            key={`nearby-trip-${trip?.id}`}
-                            handleNavigate={() => router.push(`/trip/${trip?.id}`)}
-                        />
-                    ))
+                    <FlatList
+                        data={data}
+                        renderItem={({ item }) => (
+                            <TripCard
+                                trip={item}
+                                selectedTrip={selectedTrip}
+                                handleNavigate={() => {
+                                    setSelectedTrip(item.id)
+                                    router.push(`/trip/${item.id}`)
+                                }}
+                            />
+                        )}
+                        keyExtractor={trip => trip.id}
+                        contentContainerStyle={{ columnGap: SIZES.medium }}
+                        horizontal
+                    />
                 )}
             </View>
         </View>

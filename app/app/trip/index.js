@@ -57,7 +57,11 @@ const Trip = () => {
                         activeTab={activeTab}
                     />
 
-                    <TripList />
+                    <TripList status="new" />
+                    <TripList status="active" />
+                    <TripList status="joined" />
+                    <TripList status="requested" />
+                    <TripList status="completed" />
                 </View>
             </ScrollView>
             <CreateButton activeTab={activeTab} />
