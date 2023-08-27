@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Stack, useRouter } from "expo-router";
@@ -17,7 +18,7 @@ import { axiosInstance } from "../../config/api";
 
 const CreateTrip = () => {
   const router = useRouter();
-
+  const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [fromDestination, setFromDestination] = useState("");
@@ -67,6 +68,8 @@ const CreateTrip = () => {
         console.log("Community options:", options);
       } catch (error) {
         console.error("Error fetching communities:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -74,6 +77,7 @@ const CreateTrip = () => {
   }, []);
 
   const handleCreateTrip = async () => {
+    setLoading(true);
     try {
       const response = await axiosInstance.post("/trips", {
         title,
@@ -88,9 +92,11 @@ const CreateTrip = () => {
       console.log("New trip created:", response.data);
     } catch (error) {
       console.error("Error creating trip:", error);
+    } finally {
+      setLoading(false);
     }
   };
-  
+
   const hideDatePicker = () => {
     setShowDatePicker(false);
   };
@@ -101,105 +107,118 @@ const CreateTrip = () => {
         options={{
           headerStyle: { backgroundColor: COLORS.lightWhite },
           headerShadowVisible: false,
-          headerLeft: () => (
-            <ScreenHeaderBtn iconUrl={icons.chevronLeft} dimension="80%" handlePress={() => router.back()} />
-          ),
+          // headerLeft: () => (
+          //   <ScreenHeaderBtn
+          //     iconUrl={icons.chevronLeft}
+          //     dimension="80%"
+          //     handlePress={() => router.back()}
+          //   />
+          // ),
           headerRight: () => (
-            <ScreenHeaderBtn iconUrl={images.profile} dimension="100%" handlePress={() => router.push("/profile/guv")} />
+            <ScreenHeaderBtn
+              iconUrl={images.profile}
+              dimension="100%"
+              handlePress={() => router.push("/profile/guv")}
+            />
           ),
           headerTitle: "",
         }}
       />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.container}>
-          <Text style={styles.title}>Create Trip</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Title"
-            value={title}
-            onChangeText={setTitle}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Description"
-            value={description}
-            onChangeText={setDescription}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="From Destination"
-            value={fromDestination}
-            onChangeText={setFromDestination}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="To Destination"
-            value={toDestination}
-            onChangeText={setToDestination}
-          />
-          <TouchableOpacity onPress={() => setShowDatePicker(true)}>
-            <Text style={styles.input}>
-              {startDate ? startDate.toISOString().substring(0, 16) : "Select Start Date and Time"}
-            </Text>
-          </TouchableOpacity>
-          {showDatePicker && (
-            <DateTimePickerModal
-              isVisible={showDatePicker}
-              mode="datetime"
-              onConfirm={(selectedDate) => {
-                const currentDate = selectedDate || startDate;
-                setStartDate(currentDate);
-              }}
-              onCancel={hideDatePicker}
-            />
-          <TextInput
-            style={styles.input}
-            placeholder="Mode of transport"
-            value={modeOfTransport}
-            onChangeText={setModeOfTransport}
-          />
-          <DropDownPicker
-            items={transportOptions}
-            open={isTransportOpen}
-            setOpen={() => setIsTransportOpen(!isTransportOpen)}
-            value={currentTransport}
-            setValue={(val) => setCurrentTransport(val)}
-            placeholder="Select Mode of Transport"
-            maxHeight={100}
-            containerStyle={styles.dropdownContainer}
-            style={styles.dropdownStyle}
-          />
-          <TextInput
-            style={styles.input}
-            value={capacity}
-            placeholder="Capacity"
-            onChangeText={setCapacity}
-            keyboardType="numeric"
-          />
-          )}
-          <DropDownPicker
-            items={communityOptions}
-            open={isOpen}
-            setOpen={() => setIsOpen(!isOpen)}
-            value={currentCommunityId}
-            setValue={(val) => setCurrentCommunityId(val)}
-            placeholder="Select Community"
-            maxHeight={100}
-            containerStyle={styles.dropdownContainer}
-            style={styles.dropdownStyle}
-          />
-          <TouchableOpacity
-            style={styles.buttonContainer}
-            onPress={handleCreateTrip}
-          >
-          <TouchableOpacity
-            style={styles.buttonContainer}
-            onPress={handleCreateTrip}
-          >
-            <Text style={styles.buttonText}>Create Trip</Text>
-          </TouchableOpacity>
+      {loading ? (
+        <View style={{ alignItems: "center" }}>
+          <ActivityIndicator size="large" color="blue" />
+          <Text>Loading...</Text>
         </View>
-      </ScrollView>
+      ) : (
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={styles.container}>
+            <Text style={styles.title}>Create Trip</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Title"
+              value={title}
+              onChangeText={setTitle}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Description"
+              value={description}
+              onChangeText={setDescription}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="From Destination"
+              value={fromDestination}
+              onChangeText={setFromDestination}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="To Destination"
+              value={toDestination}
+              onChangeText={setToDestination}
+            />
+            <TouchableOpacity onPress={() => setShowDatePicker(true)}>
+              <Text style={styles.input}>
+                {startDate
+                  ? startDate.toISOString().substring(0, 16)
+                  : "Select Start Date and Time"}
+              </Text>
+            </TouchableOpacity>
+            {showDatePicker && (
+              <DateTimePickerModal
+                isVisible={showDatePicker}
+                mode="datetime"
+                onConfirm={(selectedDate) => {
+                  const currentDate = selectedDate || startDate;
+                  setStartDate(currentDate);
+                }}
+                onCancel={hideDatePicker}
+              />
+            )}
+            <TextInput
+              style={styles.input}
+              placeholder="Mode of transport"
+              value={modeOfTransport}
+              onChangeText={setModeOfTransport}
+            />
+            <DropDownPicker
+              items={transportOptions}
+              open={isTransportOpen}
+              setOpen={() => setIsTransportOpen(!isTransportOpen)}
+              value={currentTransport}
+              setValue={(val) => setCurrentTransport(val)}
+              placeholder="Select Mode of Transport"
+              maxHeight={100}
+              containerStyle={styles.dropdownContainer}
+              style={styles.dropdownStyle}
+            />
+            <TextInput
+              style={styles.input}
+              value={capacity}
+              placeholder="Capacity"
+              onChangeText={setCapacity}
+              keyboardType="numeric"
+            />
+            <DropDownPicker
+              items={communityOptions}
+              open={isOpen}
+              setOpen={() => setIsOpen(!isOpen)}
+              value={currentCommunityId}
+              setValue={(val) => setCurrentCommunityId(val)}
+              placeholder="Select Community"
+              maxHeight={100}
+              containerStyle={styles.dropdownContainer}
+              style={styles.dropdownStyle}
+            />
+            <TouchableOpacity
+              style={styles.buttonContainer}
+              onPress={handleCreateTrip}
+            >
+              <Text style={styles.buttonText}>Create Trip</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      )}
     </SafeAreaView>
   );
 };

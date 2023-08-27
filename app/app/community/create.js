@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import styles from "../../styles/createcommunity";
 import { Stack, useRouter } from "expo-router";
@@ -15,12 +16,13 @@ import { axiosInstance } from "../../config/api";
 
 const CreateCommunity = () => {
   const router = useRouter();
-
+  const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
 
   const handleCreateCommunity = async () => {
+    setLoading(true);
     try {
       const response = await axiosInstance.post("/communities", {
         name,
@@ -30,6 +32,8 @@ const CreateCommunity = () => {
       console.log("New community created:", response.data);
     } catch (error) {
       console.error("Error creating community:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -42,43 +46,54 @@ const CreateCommunity = () => {
           // headerLeft: () => (
           //   <ScreenHeaderBtn iconUrl={icons.menu} dimension="60%" />
           // ),
-          // headerRight: () => (
-          //   <ScreenHeaderBtn iconUrl={images.profile} dimension="100%" />
-          // ),
+          headerRight: () => (
+            <ScreenHeaderBtn
+              iconUrl={images.profile}
+              dimension="100%"
+              handlePress={() => router.push("/profile/guv")}
+            />
+          ),
           headerTitle: "",
         }}
       />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.container}>
-          <Text style={styles.title}>Create Community</Text>
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="Name"
-              value={name}
-              onChangeText={setName}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Community Description"
-              value={description}
-              onChangeText={setDescription}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Location"
-              value={location}
-              onChangeText={setLocation}
-            />
-          </View>
-          <TouchableOpacity
-            style={styles.buttonContainer}
-            onPress={handleCreateCommunity}
-          >
-            <Text style={styles.buttonText}>Create Community</Text>
-          </TouchableOpacity>
+      {loading ? (
+        <View style={{ alignItems: "center" }}>
+          <ActivityIndicator size="large" color="blue" />
+          <Text>Loading...</Text>
         </View>
-      </ScrollView>
+      ) : (
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={styles.container}>
+            <Text style={styles.title}>Create Community</Text>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.input}
+                placeholder="Name"
+                value={name}
+                onChangeText={setName}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Community Description"
+                value={description}
+                onChangeText={setDescription}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Location"
+                value={location}
+                onChangeText={setLocation}
+              />
+            </View>
+            <TouchableOpacity
+              style={styles.buttonContainer}
+              onPress={handleCreateCommunity}
+            >
+              <Text style={styles.buttonText}>Create Community</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      )}
     </SafeAreaView>
   );
 };
