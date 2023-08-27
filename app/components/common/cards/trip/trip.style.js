@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
     container: (selectedTrip, item) => ({
         width: 250,
         padding: SIZES.xLarge,
-        backgroundColor: selectedTrip === item.id ? COLORS.primary : "#FFF",
+        backgroundColor: selectedTrip === item._id ? COLORS.primary : "#FFF",
         borderRadius: SIZES.medium,
         justifyContent: "space-between",
         ...SHADOWS.medium,
@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     logoContainer: (selectedTrip, item) => ({
         width: 50,
         height: 50,
-        backgroundColor: selectedTrip === item.id ? "#FFF" : COLORS.white,
+        backgroundColor: selectedTrip === item._id ? "#FFF" : COLORS.white,
         borderRadius: SIZES.medium,
         justifyContent: "center",
         alignItems: "center",
@@ -31,12 +31,17 @@ const styles = StyleSheet.create({
         marginTop: SIZES.small / 1.5,
     },
     infoContainer: {
-        marginTop: SIZES.large,
+        marginTop: SIZES.medium,
     },
-    tripDesc: (selectedTrip, item) => ({
-        fontSize: SIZES.large,
+    tripRoute: (selectedTrip, item) => ({
+        fontSize: SIZES.medium,
         fontFamily: FONT.medium,
-        color: selectedTrip === item.id ? COLORS.white : COLORS.primary,
+        color: selectedTrip === item._id ? COLORS.white : COLORS.primary,
+    }),
+    tripTime: (selectedTrip, item) => ({
+        fontSize: SIZES.medium,
+        fontFamily: FONT.medium,
+        color: selectedTrip === item._id ? COLORS.white : COLORS.secondary,
     }),
 });
 

@@ -6,8 +6,8 @@ import { Text, SafeAreaView } from 'react-native'
 import { ScreenHeaderBtn } from '../../components'
 import { COLORS, icons, SIZES } from '../../constants'
 import styles from '../../styles/listtrips'
-import { axiosInstance } from '../../config/api'
 import TripCard from '../../components/common/cards/trip/TripCard'
+import { axiosInstance } from '../../config/api'
 
 const ListTrips = () => {
     const params = useGlobalSearchParams();
@@ -23,12 +23,19 @@ const ListTrips = () => {
         setSearchLoader(true);
         setSearchResult([])
 
-        const response = await axiosInstance.get("/trips", {
-            params: {
-                tripStatus: params.id,
-            }
-        });
-        console.log(response.data)
+        try {
+            const response = await axiosInstance.get('/trips', {
+                params: {
+                    tripStatus: params.id,
+                },
+            })
+            setSearchResult(response.data);
+        } catch (error) {
+            setSearchError(error);
+            console.log(error);
+        } finally {
+            setSearchLoader(false);
+        }
     };
 
     const handlePagination = (direction) => {
