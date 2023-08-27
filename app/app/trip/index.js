@@ -5,22 +5,11 @@ import { Stack, useRouter } from "expo-router";
 import { COLORS, icons, images, SIZES } from "../../constants";
 import { ScreenHeaderBtn, Welcome, TripList } from "../../components";
 import CreateButton from "../../components/common/button/create/CreateButton";
-import { axiosInstance } from "../../config/api";
 
 const Trip = () => {
     const router = useRouter()
-    const [trips, setTrips] = useState([]);
     const [searchTerm, setSearchTerm] = useState("")
     const activeTab = "Trip"
-
-    useEffect(() => {
-        async function fetchData() {
-            // Fetch trip data using Axios
-            const response = await axiosInstance.get("/trips");
-            setTrips(response.data);
-        }
-        fetchData();
-    }, []);
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>

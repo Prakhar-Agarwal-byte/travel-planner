@@ -1,6 +1,13 @@
 import { View, Text, TouchableOpacity, Image } from 'react-native'
 
 import styles from './trip.style'
+import { icons } from '../../../../constants';
+
+const formatDateTime = (dateString) => {
+    const date = new Date(dateString);
+    const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+    return date.toLocaleDateString(undefined, options);
+};
 
 const TripCard = ({ trip, selectedTrip, handleNavigate }) => {
     return (
@@ -11,17 +18,18 @@ const TripCard = ({ trip, selectedTrip, handleNavigate }) => {
             <TouchableOpacity style={styles.logoContainer(selectedTrip, trip)}>
                 <Image
                     source={{
-                        uri: 'https://media.istockphoto.com/id/1272521633/vector/happy-travel-case-vector-illustration.jpg?s=612x612&w=0&k=20&c=MHlTTH2n5MUp8G0dqAvJjiKs0dgZ-re8CohaB21HegU='
+                        uri: `../../../../assets/icons/${trip.modeOfTransport}.png`
                     }}
                     resizeMode='contain'
                     style={styles.logoImage}
                 />
             </TouchableOpacity>
 
-            <Text style={styles.tripName} numberOfLines={1}>{trip.name}</Text>
+            <Text style={styles.tripName} numberOfLines={1}>{trip.title}</Text>
 
             <View style={styles.infoContainer}>
-                <Text style={styles.tripDesc(selectedTrip, trip)} numberOfLines={1}>{trip.desc}</Text>
+                <Text style={styles.tripRoute(selectedTrip, trip)} numberOfLines={1}>{trip.fromDestination}{' -> '}{trip.toDestination}</Text>
+                <Text style={styles.tripTime(selectedTrip, trip)}>Starts On {formatDateTime(trip.startDate)}</Text>
             </View>
         </TouchableOpacity>
 

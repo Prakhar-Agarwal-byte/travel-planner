@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image, TextInput, SafeAreaView, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, Image, SafeAreaView, ScrollView } from 'react-native';
 import { Stack, useRouter } from 'expo-router';
 
 import { COLORS, icons, images } from '../../constants';
-import { CommunityList, ScreenHeaderBtn, TripList } from '../../components';
+import { CommunityList, ScreenHeaderBtn } from '../../components';
 import styles from '../../styles/profile';
+
+import useFetch from '../../hooks/useFetch';
 
 const Profile = () => {
     const router = useRouter();
@@ -12,11 +14,8 @@ const Profile = () => {
     const [activeTab, setActiveTab] = useState('Trip');
     const [searchText, setSearchText] = useState('');
 
-    const user = {
-        name: 'Adarsh',
-        email: 'adarsh@gmail.com',
-        profileImage: 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50',
-    };
+    const { data } = useFetch('users')
+    const user = data
 
     const TripButton = ({ status }) => {
         return (

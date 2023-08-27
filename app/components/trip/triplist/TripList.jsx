@@ -5,6 +5,7 @@ import { useRouter } from 'expo-router'
 import styles from './triplist.style'
 import { COLORS, SIZES } from '../../../constants'
 import TripCard from '../../common/cards/trip/TripCard'
+import useFetch from '../../../hooks/useFetch'
 
 
 const TripList = ({ status }) => {
@@ -12,35 +13,9 @@ const TripList = ({ status }) => {
 
     const [selectedTrip, setSelectedTrip] = useState()
 
-    const data = [
-        {
-            id: 1,
-            name: "Beach Getaway",
-            desc: "A relaxing trip to the tropical paradise, filled with sun, sand, and surf."
-        },
-        {
-            id: 2,
-            name: "City Adventure",
-            desc: "Explore the bustling streets, iconic landmarks, and vibrant culture of a new city."
-        },
-        {
-            id: 3,
-            name: "Mountain Expedition",
-            desc: "Embark on a challenging journey to conquer towering peaks and breathtaking vistas."
-        },
-        {
-            id: 4,
-            name: "Cultural Exploration",
-            desc: "Immerse yourself in the rich heritage, traditions, and history of a foreign land."
-        },
-        {
-            id: 5,
-            name: "Wildlife Safari",
-            desc: "Experience the thrill of encountering exotic wildlife in their natural habitat."
-        }
-    ]
-    const isLoading = false
-    const error = false
+    const { data, isLoading, error } = useFetch('trips', {
+        tripStatus: status,
+    })
 
     return (
         <View style={styles.container}>
@@ -64,8 +39,8 @@ const TripList = ({ status }) => {
                                 trip={item}
                                 selectedTrip={selectedTrip}
                                 handleNavigate={() => {
-                                    setSelectedTrip(item.id)
-                                    router.push(`/trip/${item.id}`)
+                                    setSelectedTrip(item._id)
+                                    router.push(`/trip/${item._id}`)
                                 }}
                             />
                         )}
