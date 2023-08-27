@@ -13,6 +13,7 @@ exports.createCommunity = async (req, res) => {
       description,
       location,
       createdBy: req.user.id,
+      members: [req.user.id], // Add the user to the members list
     });
 
     await community.save();
@@ -27,7 +28,10 @@ exports.createCommunity = async (req, res) => {
 // Get all communities
 exports.getCommunities = async (req, res) => {
   try {
-    const communities = await Community.find();
+    const communities = await Community.find()
+      .populate("members.user", "name")
+      .populate("pendingJoiningRequests.user", "name")
+      .populate("trips", "title");
     res.json(communities);
   } catch (err) {
     console.error(err.message);
@@ -38,7 +42,10 @@ exports.getCommunities = async (req, res) => {
 // Get a community by ID
 exports.getCommunityById = async (req, res) => {
   try {
-    const community = await Community.findById(req.params.id);
+    const community = await Community.findById(req.params.id)
+      .populate("members.user", "name")
+      .populate("pendingJoiningRequests.user", "name")
+      .populate("trips", "title");
     if (!community) {
       return res.status(404).json({ msg: "Community not found" });
     }
@@ -177,10 +184,12 @@ exports.getCommunityTrips = async (req, res) => {
 // Get communities joined by a user
 exports.getUserJoinedCommunities = async (req, res) => {
   try {
-    const communities = await Community.find({ "members.user": req.user.id })
+    const userId = req.params.userId;
+    const communities = await Community.find({
+      members: { $in: [userId] },
+    })
       .populate("members.user", "name")
       .populate("createdBy", "name");
-
     res.json(communities);
   } catch (err) {
     console.error(err.message);
@@ -191,7 +200,8 @@ exports.getUserJoinedCommunities = async (req, res) => {
 // Get communities created by a user
 exports.getUserCreatedCommunities = async (req, res) => {
   try {
-    const communities = await Community.find({ createdBy: req.user.id })
+    const userId = req.params.userId;
+    const communities = await Community.find({ createdBy: userId })
       .populate("members.user", "name")
       .populate("createdBy", "name");
 

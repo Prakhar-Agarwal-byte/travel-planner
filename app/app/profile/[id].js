@@ -99,7 +99,7 @@ const Profile = () => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
           <Image
-            source={{ uri: user.profileImage }}
+            source={{ uri: profile.profileImage }}
             style={styles.profileImage}
           />
           <Text style={styles.userName}>{user.name}</Text>

@@ -1,9 +1,18 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, SafeAreaView, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  SafeAreaView,
+  ScrollView,
+} from "react-native";
 import styles from "../../styles/createcommunity";
 import { Stack, useRouter } from "expo-router";
 import { COLORS, icons, images } from "../../constants";
 import { ScreenHeaderBtn } from "../../components";
+import { axiosInstance } from "../../config/api";
+
 const CreateCommunity = () => {
   const router = useRouter();
 
@@ -11,8 +20,17 @@ const CreateCommunity = () => {
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
 
-  const handleCreateCommunity = () => {
-    // Logic to create the community using the collected data
+  const handleCreateCommunity = async () => {
+    try {
+      const response = await axiosInstance.post("/communities", {
+        name,
+        description,
+        location,
+      });
+      console.log("New community created:", response.data);
+    } catch (error) {
+      console.error("Error creating community:", error);
+    }
   };
 
   return (
@@ -21,12 +39,12 @@ const CreateCommunity = () => {
         options={{
           headerStyle: { backgroundColor: COLORS.lightWhite },
           headerShadowVisible: false,
-          headerLeft: () => (
-            <ScreenHeaderBtn iconUrl={icons.chevronLeft} dimension="80%" handlePress={() => router.back()} />
-          ),
-          headerRight: () => (
-            <ScreenHeaderBtn iconUrl={images.profile} dimension="100%" handlePress={() => router.push("/profile/guv")} />
-          ),
+          // headerLeft: () => (
+          //   <ScreenHeaderBtn iconUrl={icons.menu} dimension="60%" />
+          // ),
+          // headerRight: () => (
+          //   <ScreenHeaderBtn iconUrl={images.profile} dimension="100%" />
+          // ),
           headerTitle: "",
         }}
       />
@@ -53,7 +71,10 @@ const CreateCommunity = () => {
               onChangeText={setLocation}
             />
           </View>
-          <TouchableOpacity style={styles.buttonContainer} onPress={handleCreateCommunity}>
+          <TouchableOpacity
+            style={styles.buttonContainer}
+            onPress={handleCreateCommunity}
+          >
             <Text style={styles.buttonText}>Create Community</Text>
           </TouchableOpacity>
         </View>

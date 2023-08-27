@@ -1,34 +1,96 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, SafeAreaView, ScrollView } from "react-native";
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  SafeAreaView,
+  ScrollView,
+} from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Stack, useRouter } from "expo-router";
 import { COLORS, icons, images } from "../../constants";
 import DropDownPicker from "react-native-dropdown-picker";
 import styles from "../../styles/createtrip";
 import { ScreenHeaderBtn } from "../../components";
+import { axiosInstance } from "../../config/api";
 
 const CreateTrip = () => {
   const router = useRouter();
 
-  const [name, setName] = useState("");
+  const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [fromDestination, setFromDestination] = useState("");
   const [toDestination, setToDestination] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [modeOfTransport, setModeOfTransport] = useState("");
+  const [capacity, setCapacity] = useState();
   const [isOpen, setIsOpen] = useState(false);
-  const [currentValue, setCurrentValue] = useState("Select Community");
-  const community = [
-    { label: "Beach Getaway", value: "Beach Getaway" },
-    { label: "City Adventure", value: "City Adventure" },
-    { label: "Mountain Expedition", value: "Mountain Expedition" },
-    { label: "Cultural Exploration", value: "Cultural Exploration" },
-    { label: "Wildlife Safari", value: "Wildlife Safari" },
-  ];
+  const [isTransportOpen, setIsTransportOpen] = useState(false);
+  const [currentCommunityId, setCurrentCommunityId] =
+    useState("Select Community");
+  const [currentTransport, setCurrentTransport] = useState(
+    "Select Mode of Transport"
+  );
+  const [communityOptions, setCommunityOptions] = useState([{}]);
 
-  const handleCreateTrip = () => {
-    // Logic to create the trip using the collected data
+  const transportOptions = [
+    { label: "Car", value: "car" },
+    { label: "Train", value: "train" },
+    { label: "Bus", value: "bus" },
+    { label: "Flight", value: "flight" },
+    { label: "Bike", value: "bike" },
+    { label: "Ferry", value: "ferry" },
+  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userData = await axiosInstance.get("/users/profile");
+        const userId = userData.data._id;
+
+        const communitiesJoinedByUser = await axiosInstance.get(
+          `/communities/user/${userId}/joined`
+        );
+
+        console.log(
+          "Communities joined by user:",
+          communitiesJoinedByUser.data
+        );
+
+        const options = communitiesJoinedByUser.data.map((d) => ({
+          label: d.name,
+          value: d._id,
+        }));
+
+        setCommunityOptions(options);
+        console.log("Community options:", options);
+      } catch (error) {
+        console.error("Error fetching communities:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleCreateTrip = async () => {
+    try {
+      const response = await axiosInstance.post("/trips", {
+        title,
+        description,
+        fromDestination,
+        toDestination,
+        startDate,
+        modeOfTransport,
+        capacity,
+        communityId: currentCommunityId,
+      });
+      console.log("New trip created:", response.data);
+    } catch (error) {
+      console.error("Error creating trip:", error);
+    }
   };
+  
   const hideDatePicker = () => {
     setShowDatePicker(false);
   };
@@ -53,9 +115,9 @@ const CreateTrip = () => {
           <Text style={styles.title}>Create Trip</Text>
           <TextInput
             style={styles.input}
-            placeholder="Name"
-            value={name}
-            onChangeText={setName}
+            placeholder="Title"
+            value={title}
+            onChangeText={setTitle}
           />
           <TextInput
             style={styles.input}
@@ -90,18 +152,46 @@ const CreateTrip = () => {
               }}
               onCancel={hideDatePicker}
             />
+          <TextInput
+            style={styles.input}
+            placeholder="Mode of transport"
+            value={modeOfTransport}
+            onChangeText={setModeOfTransport}
+          />
+          <DropDownPicker
+            items={transportOptions}
+            open={isTransportOpen}
+            setOpen={() => setIsTransportOpen(!isTransportOpen)}
+            value={currentTransport}
+            setValue={(val) => setCurrentTransport(val)}
+            placeholder="Select Mode of Transport"
+            maxHeight={100}
+            containerStyle={styles.dropdownContainer}
+            style={styles.dropdownStyle}
+          />
+          <TextInput
+            style={styles.input}
+            value={capacity}
+            placeholder="Capacity"
+            onChangeText={setCapacity}
+            keyboardType="numeric"
+          />
           )}
           <DropDownPicker
-            items={community}
+            items={communityOptions}
             open={isOpen}
             setOpen={() => setIsOpen(!isOpen)}
-            value={currentValue}
-            setValue={(val) => setCurrentValue(val)}
+            value={currentCommunityId}
+            setValue={(val) => setCurrentCommunityId(val)}
             placeholder="Select Community"
             maxHeight={100}
             containerStyle={styles.dropdownContainer}
             style={styles.dropdownStyle}
           />
+          <TouchableOpacity
+            style={styles.buttonContainer}
+            onPress={handleCreateTrip}
+          >
           <TouchableOpacity
             style={styles.buttonContainer}
             onPress={handleCreateTrip}
