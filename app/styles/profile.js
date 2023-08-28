@@ -111,6 +111,19 @@ const styles = StyleSheet.create({
         backgroundColor: "#FFF",
         ...SHADOWS.medium,
         shadowColor: COLORS.white,
+        marginBottom:5,
+    },
+    communityContainer: {
+        flex: 1,
+        justifyContent: "space-between",
+        alignItems: "center",
+        flexDirection: "row",
+        padding: SIZES.medium,
+        borderRadius: SIZES.small,
+        backgroundColor: "#FFF",
+        ...SHADOWS.medium,
+        shadowColor: COLORS.white,
+        marginBottom:5,
     },
     logoContainer: {
         width: 50,
@@ -121,8 +134,8 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     logoImage: {
-        width: "70%",
-        height: "70%",
+        width: "40%",
+        height: "40%",
     },
     textContainer: {
         flex: 1,

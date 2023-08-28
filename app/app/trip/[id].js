@@ -43,10 +43,7 @@ const TripDetails = () => {
                         <Text style={styles.label}>Destination</Text>
                         <Text style={styles.value}>New Delhi</Text>
                     </View>
-                    <View style={styles.detailsContainer}>
-                        <Text style={styles.label}>members:</Text>
-                        <Text style={styles.value}>Prakhar, Adarsh</Text>
-                    </View>
+                   
                     <View style={styles.detailsContainer}>
                         <Text style={styles.label}>Date:</Text>
                         <Text style={styles.value}>August 25, 2023</Text>
@@ -63,10 +60,7 @@ const TripDetails = () => {
                         <Text style={styles.label}>Mode of Transportation:</Text>
                         <Text style={styles.value}>Car</Text>
                     </View>
-                    <View style={styles.detailsContainer}>
-                        <Text style={styles.label}>Stops:</Text>
-                        <Text style={styles.value}>Stop 1, Stop 2, Stop 3</Text>
-                    </View>
+                   
                     <View style={styles.detailsContainer}>
                         <Text style={styles.label}>Community:</Text>
                         <Text style={styles.value}>Travel Enthusiasts</Text>
