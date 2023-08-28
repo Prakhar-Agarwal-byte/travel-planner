@@ -8,6 +8,18 @@
       "expo-router"
     ],
     "name": "app",
-    "slug": "app"
+    "slug": "app",
+    "android": {
+      "config": {
+        "googleMaps": {
+          "apiKey": "YOUR_GOOGLE_API_KEY"
+        }
+      }
+    },
+    "ios": {
+      "config": {
+        "googleMapsApiKey": "YOUR_GOOGLE_API_KEY"
+      }
+    }
   }
 }
