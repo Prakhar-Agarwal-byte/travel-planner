@@ -13,6 +13,7 @@ exports.createCommunity = async (req, res) => {
       description,
       location,
       createdBy: req.user.id,
+      members: [req.user.id], // Add the user to the members list
     });
 
     await community.save();
@@ -183,10 +184,12 @@ exports.getCommunityTrips = async (req, res) => {
 // Get communities joined by a user
 exports.getUserJoinedCommunities = async (req, res) => {
   try {
-    const communities = await Community.find({ "members.user": req.user.id })
+    const userId = req.params.userId;
+    const communities = await Community.find({
+      members: { $in: [userId] },
+    })
       .populate("members.user", "name")
       .populate("createdBy", "name");
-
     res.json(communities);
   } catch (err) {
     console.error(err.message);
@@ -197,7 +200,8 @@ exports.getUserJoinedCommunities = async (req, res) => {
 // Get communities created by a user
 exports.getUserCreatedCommunities = async (req, res) => {
   try {
-    const communities = await Community.find({ createdBy: req.user.id })
+    const userId = req.params.userId;
+    const communities = await Community.find({ createdBy: userId })
       .populate("members.user", "name")
       .populate("createdBy", "name");
 

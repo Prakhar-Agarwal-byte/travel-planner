@@ -15,6 +15,10 @@ const tripSchema = new mongoose.Schema({
     enum: ["car", "train", "bus", "ferry", "bike", "flight"],
     required: true,
   },
+  capacity: {
+    type: Number,
+    required: true,
+  },
   fromDestination: {
     type: String,
     required: true,
@@ -24,7 +28,7 @@ const tripSchema = new mongoose.Schema({
     required: true,
   },
   startDate: {
-    type: Date,
+    type: String,
     required: true,
   },
   createdBy: {
