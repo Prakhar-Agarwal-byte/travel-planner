@@ -1,4 +1,5 @@
 const Trip = require("../models/Trip");
+const Community = require("../models/Community");
 
 exports.createTrip = async (req, res) => {
   const {
@@ -13,6 +14,7 @@ exports.createTrip = async (req, res) => {
   } = req.body;
 
   try {
+    // Create a new trip
     const newTrip = new Trip({
       title,
       description,
@@ -21,13 +23,21 @@ exports.createTrip = async (req, res) => {
       toDestination,
       startDate,
       capacity,
-      createdBy: req.user.id, // Assuming authenticated user's ID is stored in req.user.id
-      community: communityId, // Assuming you're passing the community's ID in the request body
-      pendingJoinRequests: [], // Initialize with an empty array
-      members: [req.user.id], // Assuming the creator is automatically a member
+      createdBy: req.user.id,
+      community: communityId,
+      pendingJoinRequests: [],
+      members: [req.user.id],
     });
 
     await newTrip.save();
+
+    // Add the new trip's ID to the community's trips array
+    await Community.findByIdAndUpdate(
+      communityId,
+      { $push: { trips: newTrip._id } }, // Add the new trip's ID to the trips array
+      { new: true }
+    );
+
     res.json(newTrip);
   } catch (err) {
     console.error(err.message);
