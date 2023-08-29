@@ -85,7 +85,7 @@ export function Provider(props) {
 
     // Get user info
     setAuth(response.data.user);
-    saveUserData(response.data.user);
+    await saveUserData(response.data.user);
   };
 
   const clearUserData = async () => {
