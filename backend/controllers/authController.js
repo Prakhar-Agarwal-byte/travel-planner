@@ -100,7 +100,11 @@ exports.login = async (req, res) => {
       { expiresIn: 86400 * 30 } // Adjust as needed
     );
 
-    res.json({ user, accessToken, refreshToken });
+    // Create a user object without the password field
+    const userWithoutPassword = { ...user._doc };
+    delete userWithoutPassword.password;
+
+    res.json({ user: userWithoutPassword, accessToken, refreshToken });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
@@ -137,7 +141,11 @@ exports.refreshToken = async (req, res) => {
       expiresIn: 3600,
     });
 
-    res.json({ user, accessToken });
+    // Create a user object without the password field
+    const userWithoutPassword = { ...user._doc };
+    delete userWithoutPassword.password;
+
+    res.json({ user: userWithoutPassword, accessToken });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server error");
