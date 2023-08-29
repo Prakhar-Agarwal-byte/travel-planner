@@ -39,20 +39,21 @@ exports.registerUser = async (req, res) => {
     await user.save();
 
     // Generate JWTs
-    const accessTokenPayload = { user: { id: user.id } };
-    const refreshTokenPayload = { user: { id: user.id, refresh: true } };
+    // const accessTokenPayload = { user: { id: user.id } };
+    // const refreshTokenPayload = { user: { id: user.id, refresh: true } };
 
-    const accessToken = jwt.sign(accessTokenPayload, process.env.JWT_SECRET, {
-      expiresIn: 3600,
-    });
+    // const accessToken = jwt.sign(accessTokenPayload, process.env.JWT_SECRET, {
+    //   expiresIn: 3600,
+    // });
 
-    const refreshToken = jwt.sign(
-      refreshTokenPayload,
-      process.env.JWT_REFRESH_SECRET,
-      { expiresIn: 86400 * 30 } // Adjust as needed
-    );
+    // const refreshToken = jwt.sign(
+    //   refreshTokenPayload,
+    //   process.env.JWT_REFRESH_SECRET,
+    //   { expiresIn: 86400 * 30 } // Adjust as needed
+    // );
 
-    res.json({ accessToken, refreshToken });
+    // res.json({ accessToken, refreshToken });
+    res.json({ ...user, password: "" });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
@@ -64,7 +65,7 @@ exports.login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    let user = await User.findOne({ email });
+    let user = await User.findOne({ email }).select(-password);
 
     if (!user) {
       return res.status(400).json({ msg: "Invalid credentials" });
@@ -115,7 +116,7 @@ exports.refreshToken = async (req, res) => {
     }
 
     // Find the user by ID
-    const user = await User.findById(decoded.user.id);
+    const user = await User.findById(decoded.user.id).select(-password);
 
     if (!user) {
       return res.status(404).json({ msg: "User not found" });
