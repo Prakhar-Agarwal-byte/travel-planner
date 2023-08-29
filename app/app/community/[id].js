@@ -41,7 +41,13 @@ const CommunityDetails = () => {
                         <ScreenHeaderBtn iconUrl={icons.logo} dimension="100%" handlePress={() => router.push("/")} />
                     ),
                     headerRight: () => (
-                        <ScreenHeaderBtn iconUrl={user.profileImage} dimension="100%" handlePress={() => router.push("/profile")} />
+                        <ScreenHeaderBtn
+                            iconUrl={{
+                                uri: user.profileImage
+                            }}
+                            dimension="100%"
+                            handlePress={() => router.push("/profile")}
+                        />
                     ),
                     headerTitle: ""
                 }} />

@@ -122,7 +122,9 @@ const CreateTrip = () => {
           ),
           headerRight: () => (
             <ScreenHeaderBtn
-              iconUrl={user.profileImage}
+              iconUrl={{
+                uri: user.profileImage
+              }}
               dimension="100%"
               handlePress={() => router.push("/profile")}
             />

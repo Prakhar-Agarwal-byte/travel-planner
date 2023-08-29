@@ -8,10 +8,10 @@ import CreateButton from "../../components/common/button/create/CreateButton";
 import { useAuth } from "../../context/auth";
 
 const Trip = () => {
-  const router = useRouter();
-  const { user } = useAuth();
-  const [searchTerm, setSearchTerm] = useState("");
-  const activeTab = "Trip";
+    const router = useRouter();
+    const { user } = useAuth();
+    const [searchTerm, setSearchTerm] = useState("");
+    const activeTab = "Trip";
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
@@ -49,16 +49,16 @@ const Trip = () => {
                         activeTab={activeTab}
                     />
 
-          <TripList status="new" />
-          <TripList status="active" />
-          <TripList status="joined" />
-          <TripList status="requested" />
-          <TripList status="completed" />
-        </View>
-      </ScrollView>
-      <CreateButton activeTab={activeTab} />
-    </SafeAreaView>
-  );
+                    <TripList status="new" />
+                    <TripList status="active" />
+                    <TripList status="joined" />
+                    <TripList status="requested" />
+                    <TripList status="completed" />
+                </View>
+            </ScrollView>
+            <CreateButton activeTab={activeTab} />
+        </SafeAreaView>
+    );
 };
 
 export default Trip;

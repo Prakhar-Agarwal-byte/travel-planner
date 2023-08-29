@@ -11,7 +11,7 @@ import {
 import { useRouter, Stack } from "expo-router";
 
 import styles from "../../../styles/signup";
-import { COLORS, icons, images } from "../../../constants";
+import { COLORS, icons } from "../../../constants";
 import { ScreenHeaderBtn } from "../../../components";
 import { ActivityIndicator } from "react-native";
 
@@ -62,12 +62,12 @@ const Signup = ({ navigation }) => {
         options={{
           headerStyle: { backgroundColor: COLORS.lightWhite },
           headerShadowVisible: false,
-          //   headerLeft: () => (
-          //     <ScreenHeaderBtn iconUrl={icons.menu} dimension="60%" />
-          //   ),
-          //   headerRight: () => (
-          //     <ScreenHeaderBtn iconUrl={images.profile} dimension="100%" />
-          //   ),
+          headerLeft: () => (
+            <ScreenHeaderBtn iconUrl={icons.logo} dimension="100%" />
+          ),
+          headerRight: () => (
+            <ScreenHeaderBtn iconUrl={icons.user} dimension="100%" />
+          ),
           headerTitle: "",
         }}
       />

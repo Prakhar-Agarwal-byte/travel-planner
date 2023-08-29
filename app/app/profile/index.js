@@ -14,6 +14,7 @@ import { CommunityList, ScreenHeaderBtn } from "../../components";
 import styles from "../../styles/profile";
 
 import useFetch from "../../hooks/useFetch";
+import { clearAuthTokens } from "react-native-axios-jwt";
 
 const Profile = () => {
     const router = useRouter();
@@ -74,7 +75,7 @@ const Profile = () => {
 
     const handleLogout = () => {
         // Logout logic here
-        router.push("/login");
+        router.push("/auth/login");
     };
 
     return (

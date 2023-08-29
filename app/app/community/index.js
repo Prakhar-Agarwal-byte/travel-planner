@@ -22,7 +22,13 @@ const Community = () => {
                         <ScreenHeaderBtn iconUrl={icons.logo} dimension="100%" handlePress={() => router.push("/")} />
                     ),
                     headerRight: () => (
-                        <ScreenHeaderBtn iconUrl={user.profileImage} dimension="100%" handlePress={() => router.push("/profile")} />
+                        <ScreenHeaderBtn
+                            iconUrl={{
+                                uri: user.profileImage
+                            }}
+                            dimension="100%"
+                            handlePress={() => router.push("/profile")}
+                        />
                     ),
                     headerTitle: ""
                 }} />
@@ -46,12 +52,12 @@ const Community = () => {
                         activeTab={activeTab}
                     />
 
-          <CommunityList />
-        </View>
-      </ScrollView>
-      <CreateButton activeTab={activeTab} />
-    </SafeAreaView>
-  );
+                    <CommunityList />
+                </View>
+            </ScrollView>
+            <CreateButton activeTab={activeTab} />
+        </SafeAreaView>
+    );
 };
 
 export default Community;
