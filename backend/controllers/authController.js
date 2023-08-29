@@ -90,7 +90,7 @@ exports.login = async (req, res) => {
       { expiresIn: 86400 * 30 } // Adjust as needed
     );
 
-    res.json({ accessToken, refreshToken });
+    res.json({ user, accessToken, refreshToken });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
@@ -127,7 +127,7 @@ exports.refreshToken = async (req, res) => {
       expiresIn: 3600,
     });
 
-    res.json({ accessToken });
+    res.json({ user, accessToken });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server error");

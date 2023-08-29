@@ -15,9 +15,11 @@ import DropDownPicker from "react-native-dropdown-picker";
 import styles from "../../styles/createtrip";
 import { ScreenHeaderBtn } from "../../components";
 import { axiosInstance } from "../../config/api";
+import { useAuth } from "../../context/auth";
 
 const CreateTrip = () => {
   const router = useRouter();
+  const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -46,8 +48,7 @@ const CreateTrip = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userData = await axiosInstance.get("/users/profile");
-        const userId = userData.data._id;
+        const userId = user.id;
 
         const communitiesJoinedByUser = await axiosInstance.get(
           `/communities/user/${userId}/joined`
@@ -115,7 +116,7 @@ const CreateTrip = () => {
           // ),
           headerRight: () => (
             <ScreenHeaderBtn
-              iconUrl={images.profile}
+              iconUrl={user.profileImage}
               dimension="100%"
               handlePress={() => router.push("/profile/guv")}
             />

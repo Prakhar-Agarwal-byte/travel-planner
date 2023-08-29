@@ -15,15 +15,15 @@ import styles from "../../styles/profile";
 
 import useFetch from "../../hooks/useFetch";
 import { clearAuthTokens } from "react-native-axios-jwt";
+import { useAuth } from "../../context/auth";
 
 const Profile = () => {
   const router = useRouter();
+  const { user } = useAuth();
+  const { signOut } = useAuth();
   const activeTabs = ["Trip", "Community"];
   const [activeTab, setActiveTab] = useState("Trip");
   const [searchText, setSearchText] = useState("");
-
-  const { data } = useFetch("users/profile");
-  const user = data;
 
   const TripButton = ({ status }) => {
     return (
@@ -74,9 +74,7 @@ const Profile = () => {
   };
 
   const handleLogout = () => {
-    // Logout logic here
-    clearAuthTokens();
-    router.push("/login");
+    signOut();
   };
 
   return (
@@ -93,7 +91,7 @@ const Profile = () => {
             />
           ),
           headerRight: () => (
-            <ScreenHeaderBtn iconUrl={images.profile} dimension="100%" />
+            <ScreenHeaderBtn iconUrl={user.profileImage} dimension="100%" />
           ),
           headerTitle: "",
         }}
