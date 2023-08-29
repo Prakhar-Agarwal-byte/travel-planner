@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
     value: {
         flex: 2,
         color: COLORS.secondary,
+        textTransform: "capitalize",
     },
     joinButtonContainer: {
         alignItems: "center",

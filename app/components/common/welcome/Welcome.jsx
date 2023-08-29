@@ -15,7 +15,6 @@ const activeTabs = ["Community", "Trip"];
 
 const Welcome = ({
   welcomeMessage,
-  isHomePage,
   searchTerm,
   setSearchTerm,
   handleClick,
@@ -26,29 +25,26 @@ const Welcome = ({
   return (
     <View>
       <View style={styles.container}>
-        {isHomePage && <Text style={styles.userName}>Hello Adi</Text>}
         <Text style={styles.welcomeMessage}>{welcomeMessage}</Text>
       </View>
 
-      {!isHomePage && (
-        <View style={styles.searchContainer}>
-          <View style={styles.searchWrapper}>
-            <TextInput
-              style={styles.searchInput}
-              value={searchTerm}
-              onChangeText={(text) => setSearchTerm(text)}
-              placeholder={`Search for ${activeTab}`}
-            />
-          </View>
-          <TouchableOpacity style={styles.searchBtn} onPress={handleClick}>
-            <Image
-              source={icons.search}
-              resizeMode="contain"
-              style={styles.searchBtnImage}
-            />
-          </TouchableOpacity>
+      <View style={styles.searchContainer}>
+        <View style={styles.searchWrapper}>
+          <TextInput
+            style={styles.searchInput}
+            value={searchTerm}
+            onChangeText={(text) => setSearchTerm(text)}
+            placeholder={`Search for ${activeTab}`}
+          />
         </View>
-      )}
+        <TouchableOpacity style={styles.searchBtn} onPress={handleClick}>
+          <Image
+            source={icons.search}
+            resizeMode="contain"
+            style={styles.searchBtnImage}
+          />
+        </TouchableOpacity>
+      </View>
 
       <View style={styles.tabsContainer}>
         {activeTabs.map((item) => (

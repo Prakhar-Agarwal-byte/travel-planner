@@ -5,15 +5,16 @@ import { useRouter } from 'expo-router'
 import styles from './memberlist.style';
 import MemberCard from '../../common/cards/member/MemberCard';
 
-const TripMembersList = () => {
+import useFetch from '../../../hooks/useFetch'
+
+const TripMembersList = ({ id }) => {
     const router = useRouter()
-    const members = [
-        { id: 1, name: "John Doe", bio: "Nature enthusiast", profileImage: "profile_image_url_1" },
-        { id: 2, name: "Jane Smith", bio: "Adventure lover", profileImage: "profile_image_url_2" },
-        { id: 3, name: "Michael Johnson", bio: "Travel blogger", profileImage: "profile_image_url_3" },
-        { id: 4, name: "Emily Wilson", bio: "Photography enthusiast", profileImage: "profile_image_url_4" },
-        { id: 5, name: "David Brown", bio: "Outdoor explorer", profileImage: "profile_image_url_5" },
-    ];
+
+    const { data, error } = useFetch(`trips/${id}/members`)
+    console.log(data)
+    if (error) {
+        console.log(error)
+    }
 
     return (
         <View style={styles.container}>
@@ -25,11 +26,11 @@ const TripMembersList = () => {
             </View>
 
             <View style={styles.cardsContainer}>
-                {members?.map((member) => (
+                {data?.map((member) => (
                     <MemberCard
                         member={member}
-                        key={`profile-${member?.id}`}
-                        handleNavigate={() => router.push(`/profile/${member?.id}`)}
+                        key={`profile-${member?._id}`}
+                        handleNavigate={() => router.push(`/profile/${member?._id}`)}
                     />
                 ))}
             </View>

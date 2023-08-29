@@ -4,6 +4,7 @@ import styles from './member.style';
 import { images } from '../../../../constants';
 
 const MemberCard = ({ member, handleNavigate }) => {
+    console.log(member)
     return (
         <TouchableOpacity
             style={styles.container}
@@ -18,8 +19,8 @@ const MemberCard = ({ member, handleNavigate }) => {
             </TouchableOpacity>
 
             <View style={styles.memberInfo}>
-                <Text style={styles.memberName}>{member.name}</Text>
-                <Text style={styles.memberBio}>{member.bio}</Text>
+                <Text style={styles.memberName}>{member?.name}</Text>
+                <Text style={styles.memberEmail}>{member?.email}</Text>
             </View>
         </TouchableOpacity>
     )

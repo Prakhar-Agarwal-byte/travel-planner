@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
         fontFamily: "DMBold",
         color: COLORS.primary,
     },
-    memberBio: {
+    memberEmail: {
         fontSize: SIZES.small + 2,
         fontFamily: "DMRegular",
         color: COLORS.gray,
