@@ -14,6 +14,7 @@ import { CommunityList, ScreenHeaderBtn } from "../../components";
 import styles from "../../styles/profile";
 
 import useFetch from "../../hooks/useFetch";
+import { clearAuthTokens } from "react-native-axios-jwt";
 
 const Profile = () => {
   const router = useRouter();
@@ -21,7 +22,7 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState("Trip");
   const [searchText, setSearchText] = useState("");
 
-  const { data } = useFetch("users");
+  const { data } = useFetch("users/profile");
   const user = data;
 
   const TripButton = ({ status }) => {
@@ -74,6 +75,7 @@ const Profile = () => {
 
   const handleLogout = () => {
     // Logout logic here
+    clearAuthTokens();
     router.push("/login");
   };
 
@@ -99,7 +101,7 @@ const Profile = () => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
           <Image
-            source={{ uri: profile.profileImage }}
+            source={{ uri: user.profileImage }}
             style={styles.profileImage}
           />
           <Text style={styles.userName}>{user.name}</Text>

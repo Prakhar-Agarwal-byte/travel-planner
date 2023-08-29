@@ -29,8 +29,8 @@ exports.createCommunity = async (req, res) => {
 exports.getCommunities = async (req, res) => {
   try {
     const communities = await Community.find()
-      .populate("members.user", "name")
-      .populate("pendingJoiningRequests.user", "name")
+      .populate("members", "name")
+      .populate("pendingJoinRequests", "name")
       .populate("trips", "title");
     res.json(communities);
   } catch (err) {
@@ -43,8 +43,8 @@ exports.getCommunities = async (req, res) => {
 exports.getCommunityById = async (req, res) => {
   try {
     const community = await Community.findById(req.params.id)
-      .populate("members.user", "name")
-      .populate("pendingJoiningRequests.user", "name")
+      .populate("members", "name")
+      .populate("pendingJoinRequests", "name")
       .populate("trips", "title");
     if (!community) {
       return res.status(404).json({ msg: "Community not found" });
@@ -73,7 +73,7 @@ exports.joinCommunity = async (req, res) => {
       community.members.some(
         (member) => member.user.toString() === req.user.id
       ) ||
-      community.pendingJoiningRequests.some(
+      community.pendingJoinRequests.some(
         (request) => request.user.toString() === req.user.id
       )
     ) {
@@ -82,7 +82,7 @@ exports.joinCommunity = async (req, res) => {
         .json({ msg: "User is already a member or has a pending request" });
     }
 
-    community.pendingJoiningRequests.push({ user: req.user.id });
+    community.pendingJoinRequests.push({ user: req.user.id });
     await community.save();
 
     res.json(community);
@@ -109,8 +109,8 @@ exports.acceptJoinRequest = async (req, res) => {
       return res.status(401).json({ msg: "Not authorized" });
     }
 
-    // Find the user in pendingJoiningRequests
-    const pendingUserIndex = community.pendingJoiningRequests.findIndex(
+    // Find the user in pendingJoinRequests
+    const pendingUserIndex = community.pendingJoinRequests.findIndex(
       (request) => request.user.toString() === req.params.userId
     );
 
@@ -118,10 +118,10 @@ exports.acceptJoinRequest = async (req, res) => {
       return res.status(400).json({ msg: "User request not found" });
     }
 
-    const pendingUser = community.pendingJoiningRequests[pendingUserIndex];
-    community.pendingJoiningRequests.splice(pendingUserIndex, 1);
+    const pendingUser = community.pendingJoinRequests[pendingUserIndex];
+    community.pendingJoinRequests.splice(pendingUserIndex, 1);
 
-    // Move the user from pendingJoiningRequests to members
+    // Move the user from pendingJoinRequests to members
     community.members.push({ user: pendingUser.user });
     await community.save();
 
@@ -139,7 +139,7 @@ exports.acceptJoinRequest = async (req, res) => {
 exports.getCommunityMembers = async (req, res) => {
   try {
     const community = await Community.findById(req.params.id).populate(
-      "members.user",
+      "members",
       "name"
     );
 
@@ -167,7 +167,7 @@ exports.getCommunityTrips = async (req, res) => {
     }
 
     const trips = await Trip.find({ community: community.id })
-      .populate("members.user", "name")
+      .populate("members", "name")
       .populate("community", "name")
       .populate("createdBy", "name");
 
@@ -188,7 +188,7 @@ exports.getUserJoinedCommunities = async (req, res) => {
     const communities = await Community.find({
       members: { $in: [userId] },
     })
-      .populate("members.user", "name")
+      .populate("members", "name")
       .populate("createdBy", "name");
     res.json(communities);
   } catch (err) {
@@ -202,7 +202,7 @@ exports.getUserCreatedCommunities = async (req, res) => {
   try {
     const userId = req.params.userId;
     const communities = await Community.find({ createdBy: userId })
-      .populate("members.user", "name")
+      .populate("members", "name")
       .populate("createdBy", "name");
 
     res.json(communities);
@@ -248,7 +248,7 @@ exports.getCommunitiesByLocation = async (req, res) => {
 
   try {
     const communities = await Community.find({ location })
-      .populate("members.user", "name")
+      .populate("members", "name")
       .populate("createdBy", "name");
 
     res.json(communities);
