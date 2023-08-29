@@ -21,8 +21,7 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState("Trip");
   const [searchText, setSearchText] = useState("");
 
-  const { data } = useFetch("users");
-  const user = data;
+  
 
   const TripButton = ({ status }) => {
     return (
