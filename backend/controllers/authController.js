@@ -2,6 +2,7 @@ const User = require("../models/User");
 const { validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const md5 = require("md5");
 
 // Register a new user
 exports.registerUser = async (req, res) => {
@@ -53,7 +54,15 @@ exports.registerUser = async (req, res) => {
     // );
 
     // res.json({ accessToken, refreshToken });
-    res.json({ ...user, password: "" });
+
+    // Remove password from user object before sending
+    const userWithoutPassword = { ...user._doc };
+    delete userWithoutPassword.password;
+
+    // You can also delete other sensitive properties if needed
+    // delete userWithoutPassword.sensitiveProperty;
+
+    res.json(userWithoutPassword);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
