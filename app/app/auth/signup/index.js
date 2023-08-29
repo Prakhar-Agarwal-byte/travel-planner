@@ -31,20 +31,20 @@ const Signup = ({ navigation }) => {
   const [password, setPassword] = useState("");
 
   const handleSignup = async () => {
-    const response = await axiosInstance.post("/auth/register", {
+    await axiosInstance.post("/auth/register", {
       name,
       email,
       password,
     });
 
     // save tokens to storage
-    await setAuthTokens({
-      accessToken: response.data.accessToken,
-      refreshToken: response.data.refreshToken,
-    });
+    // await setAuthTokens({
+    //   accessToken: response.data.accessToken,
+    //   refreshToken: response.data.refreshToken,
+    // });
 
     // Get access to tokens
-    const accessToken = await getAccessToken();
+    // const accessToken = await getAccessToken();
     router.push("/auth/login");
   };
 
