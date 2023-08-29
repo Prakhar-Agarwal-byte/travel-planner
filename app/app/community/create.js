@@ -13,9 +13,11 @@ import { Stack, useRouter } from "expo-router";
 import { COLORS, icons, images } from "../../constants";
 import { ScreenHeaderBtn } from "../../components";
 import { axiosInstance } from "../../config/api";
+import { useAuth } from "../../context/auth";
 
 const CreateCommunity = () => {
   const router = useRouter();
+  const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -48,7 +50,7 @@ const CreateCommunity = () => {
           // ),
           headerRight: () => (
             <ScreenHeaderBtn
-              iconUrl={images.profile}
+              iconUrl={user.profileImage}
               dimension="100%"
               handlePress={() => router.push("/profile/guv")}
             />
