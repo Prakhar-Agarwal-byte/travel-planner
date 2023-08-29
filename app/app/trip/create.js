@@ -25,7 +25,6 @@ const CreateTrip = () => {
   const [toDestination, setToDestination] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [modeOfTransport, setModeOfTransport] = useState("");
   const [capacity, setCapacity] = useState();
   const [isOpen, setIsOpen] = useState(false);
   const [isTransportOpen, setIsTransportOpen] = useState(false);
@@ -85,7 +84,7 @@ const CreateTrip = () => {
         fromDestination,
         toDestination,
         startDate,
-        modeOfTransport,
+        modeOfTransport: currentTransport,
         capacity,
         communityId: currentCommunityId,
       });
@@ -175,12 +174,6 @@ const CreateTrip = () => {
                 onCancel={hideDatePicker}
               />
             )}
-            <TextInput
-              style={styles.input}
-              placeholder="Mode of transport"
-              value={modeOfTransport}
-              onChangeText={setModeOfTransport}
-            />
             <DropDownPicker
               items={transportOptions}
               open={isTransportOpen}
