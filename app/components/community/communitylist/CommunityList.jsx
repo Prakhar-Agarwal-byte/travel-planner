@@ -9,7 +9,6 @@ import useFetch from '../../../hooks/useFetch'
 const CommunityList = () => {
     const router = useRouter()
     const { data, isLoading, error } = useFetch('communities')
-
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -28,8 +27,8 @@ const CommunityList = () => {
                     data?.map((community) => (
                         <CommunityCard
                             community={community}
-                            key={`nearby-community-${community?.id}`}
-                            handleNavigate={() => router.push(`/community/${community?.id}`)}
+                            key={`nearby-community-${community?._id}`}
+                            handleNavigate={() => router.push(`/community/${community?._id}`)}
                         />
                     ))
                 )}

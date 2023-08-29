@@ -20,7 +20,8 @@ const CommunityCard = ({ community, handleNavigate }) => {
 
             <View style={styles.textContainer}>
                 <Text style={styles.communityName} numberOfLines={1}>{community.name}</Text>
-                <Text style={styles.communityType}>{community.desc}</Text>
+                <Text style={styles.communityType}>{community.description}</Text>
+                <Text style={styles.communityType}>{community.location}</Text>
             </View>
         </TouchableOpacity>
 

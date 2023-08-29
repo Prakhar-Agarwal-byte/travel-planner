@@ -1,10 +1,7 @@
-import { Stack, Slot } from "expo-router";
+import { Stack } from "expo-router";
 import { useCallback } from "react";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { FONT, COLORS } from "../constants";
-import { Text } from "react-native";
 import { Provider } from "../context/auth";
 
 // SplashScreen.preventAutoHideAsync()
@@ -24,7 +21,6 @@ const Layout = () => {
 
   if (!fontsLoaded) return null;
 
-  // return <Stack onLayout={onLayoutRootView} />
   return (
     <Provider>
       <Stack onLayout={onLayoutRootView} />

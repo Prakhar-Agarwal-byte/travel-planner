@@ -36,6 +36,10 @@ const CreateCommunity = () => {
       console.error("Error creating community:", error);
     } finally {
       setLoading(false);
+      setName("");
+      setDescription("");
+      setLocation("");
+      router.push("/community");
     }
   };
 
@@ -45,14 +49,14 @@ const CreateCommunity = () => {
         options={{
           headerStyle: { backgroundColor: COLORS.lightWhite },
           headerShadowVisible: false,
-          // headerLeft: () => (
-          //   <ScreenHeaderBtn iconUrl={icons.menu} dimension="60%" />
-          // ),
+          headerLeft: () => (
+            <ScreenHeaderBtn iconUrl={icons.logo} dimension="100%" handlePress={() => router.push("/")} />
+          ),
           headerRight: () => (
             <ScreenHeaderBtn
               iconUrl={user.profileImage}
               dimension="100%"
-              handlePress={() => router.push("/profile/guv")}
+              handlePress={() => router.push("/profile")}
             />
           ),
           headerTitle: "",
