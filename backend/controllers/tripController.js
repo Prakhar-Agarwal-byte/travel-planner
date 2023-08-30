@@ -1,4 +1,5 @@
 const Trip = require("../models/Trip");
+const Community = require("../models/Community");
 
 exports.createTrip = async (req, res) => {
   const {
@@ -8,10 +9,12 @@ exports.createTrip = async (req, res) => {
     fromDestination,
     toDestination,
     startDate,
+    capacity,
     communityId,
   } = req.body;
 
   try {
+    // Create a new trip
     const newTrip = new Trip({
       title,
       description,
@@ -19,13 +22,22 @@ exports.createTrip = async (req, res) => {
       fromDestination,
       toDestination,
       startDate,
-      createdBy: req.user.id, // Assuming authenticated user's ID is stored in req.user.id
-      community: communityId, // Assuming you're passing the community's ID in the request body
-      pendingJoinRequests: [], // Initialize with an empty array
-      members: [req.user.id], // Assuming the creator is automatically a member
+      capacity,
+      createdBy: req.user.id,
+      community: communityId,
+      pendingJoinRequests: [],
+      members: [req.user.id],
     });
 
     await newTrip.save();
+
+    // Add the new trip's ID to the community's trips array
+    await Community.findByIdAndUpdate(
+      communityId,
+      { $push: { trips: newTrip._id } }, // Add the new trip's ID to the trips array
+      { new: true }
+    );
+
     res.json(newTrip);
   } catch (err) {
     console.error(err.message);
@@ -209,7 +221,7 @@ exports.acceptJoinRequest = async (req, res) => {
 exports.getPendingJoinRequests = async (req, res) => {
   try {
     const trip = await Trip.findById(req.params.id).populate(
-      "pendingJoinRequests.user",
+      "pendingJoinRequests",
       "name"
     );
 
@@ -230,10 +242,7 @@ exports.getPendingJoinRequests = async (req, res) => {
 // Get members of a trip
 exports.getTripMembers = async (req, res) => {
   try {
-    const trip = await Trip.findById(req.params.id).populate(
-      "members.user",
-      "name"
-    );
+    const trip = await Trip.findById(req.params.id).populate("members", "name");
 
     if (!trip) {
       return res.status(404).json({ msg: "Trip not found" });
@@ -254,7 +263,7 @@ exports.getUserTrips = async (req, res) => {
   try {
     const trips = await Trip.find({ createdBy: req.user.id })
       .populate("community", "name")
-      .populate("members.user", "name");
+      .populate("members", "name");
     res.json(trips);
   } catch (err) {
     console.error(err.message);
@@ -302,8 +311,8 @@ exports.getCommunityTrips = async (req, res) => {
     }
 
     const trips = await Trip.find({ community: community.id })
-      .populate("members.user", "name")
-      .populate("pendingJoinRequests.user", "name")
+      .populate("members", "name")
+      .populate("pendingJoinRequests", "name")
       .populate("createdBy", "name");
 
     res.json(trips);
