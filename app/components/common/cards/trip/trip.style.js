@@ -4,7 +4,6 @@ import { COLORS, SHADOWS, SIZES, FONT } from "../../../../constants";
 
 const styles = StyleSheet.create({
     container: (selectedTrip, item) => ({
-        width: 250,
         padding: SIZES.xLarge,
         backgroundColor: selectedTrip === item._id ? COLORS.primary : "#FFF",
         borderRadius: SIZES.medium,
@@ -21,8 +20,8 @@ const styles = StyleSheet.create({
         alignItems: "center",
     }),
     logoImage: {
-        width: "70%",
-        height: "70%",
+        width: "80%",
+        height: "80%",
     },
     tripName: {
         fontSize: SIZES.medium,

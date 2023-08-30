@@ -1,8 +1,9 @@
 import React from 'react';
-import { TouchableOpacity, Text, View } from 'react-native';
+import { TouchableOpacity, Text, View, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router'
 
 import styles from './memberlist.style';
+import { COLORS } from '../../../constants';
 import MemberCard from '../../common/cards/member/MemberCard';
 
 import useFetch from '../../../hooks/useFetch'
@@ -10,8 +11,7 @@ import useFetch from '../../../hooks/useFetch'
 const CommunityMembersList = ({ id }) => {
   const router = useRouter()
 
-  const { data, error } = useFetch(`communities/${id}/members`)
-  console.log(data)
+  const { data, isLoading, error } = useFetch(`communities/${id}/members`)
   if (error) {
     console.log(error)
   }
@@ -25,16 +25,21 @@ const CommunityMembersList = ({ id }) => {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.cardsContainer}>
-        {data?.map((member) => (
-          <MemberCard
-            member={member}
-            key={`profile-${member?.id}`}
-            handleNavigate={() => router.push(`/profile/${member?.id}`)}
-          />
-        ))}
-      </View>
-
+      {isLoading ? (
+        <ActivityIndicator size="large" colors={COLORS.primary} />
+      ) : error ? (
+        <Text>Something went wrong</Text>
+      ) : (
+        <View style={styles.cardsContainer}>
+          {data?.map((member) => (
+            <MemberCard
+              member={member}
+              key={`profile-${member?._id}`}
+              handleNavigate={() => router.push(`/profile/${member?._id}`)}
+            />
+          ))}
+        </View>
+      )}
     </View>
   );
 };

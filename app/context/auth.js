@@ -5,7 +5,6 @@ import { axiosInstance } from "../config/api";
 import {
   clearAuthTokens,
   setAuthTokens,
-  getAccessToken,
 } from "react-native-axios-jwt";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 

@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { Stack, useRouter } from "expo-router";
-import { COLORS, icons, images } from "../../constants";
+import { COLORS, icons } from "../../constants";
 import DropDownPicker from "react-native-dropdown-picker";
 import styles from "../../styles/createtrip";
 import { ScreenHeaderBtn } from "../../components";
@@ -40,6 +40,7 @@ const CreateTrip = () => {
     { label: "Bus", value: "bus" },
     { label: "Flight", value: "flight" },
     { label: "Bike", value: "bike" },
+    { label: "Bicycle", value: "bicycle" },
     { label: "Ferry", value: "ferry" },
   ];
   useEffect(() => {
@@ -122,7 +123,7 @@ const CreateTrip = () => {
           headerRight: () => (
             <ScreenHeaderBtn
               iconUrl={{
-                uri: user.profileImage
+                uri: user?.profileImage
               }}
               dimension="100%"
               handlePress={() => router.push("/profile")}
@@ -137,7 +138,7 @@ const CreateTrip = () => {
           <Text>Loading...</Text>
         </View>
       ) : (
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
           <View style={styles.container}>
             <Text style={styles.title}>Create Trip</Text>
             <TextInput
@@ -186,6 +187,7 @@ const CreateTrip = () => {
               maxHeight={100}
               containerStyle={styles.dropdownContainer}
               style={styles.dropdownStyle}
+              listMode="SCROLLVIEW"
             />
             <TextInput
               style={styles.input}
@@ -204,6 +206,7 @@ const CreateTrip = () => {
               maxHeight={100}
               containerStyle={styles.dropdownContainer}
               style={styles.dropdownStyle}
+              listMode="SCROLLVIEW"
             />
             <TouchableOpacity
               style={styles.buttonContainer}

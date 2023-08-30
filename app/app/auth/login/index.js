@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Stack, router } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import {
   View,
   Text,
@@ -17,6 +17,7 @@ import styles from "../../../styles/login";
 import { useAuth } from "../../../context/auth";
 
 const Login = () => {
+  const router = useRouter();
   const { signIn } = useAuth();
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
@@ -30,6 +31,8 @@ const Login = () => {
       console.log("error logging in ", error);
     } finally {
       setLoading(false);
+      setEmail("");
+      setPassword("");
     }
   };
 

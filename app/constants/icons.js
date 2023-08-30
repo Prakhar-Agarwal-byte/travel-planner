@@ -2,6 +2,7 @@ import bicycle from "../assets/icons/bicycle.png";
 import bike from "../assets/icons/bike.png";
 import bus from "../assets/icons/bus.png";
 import car from "../assets/icons/car.png";
+import community from "../assets/icons/community.png";
 import heart from "../assets/icons/heart.png";
 import home from "../assets/icons/home.png";
 import menu from "../assets/icons/menu.png";
@@ -17,6 +18,7 @@ import location from "../assets/icons/location.png";
 import chevronLeft from '../assets/icons/chevron-left.png'
 import chevronRight from '../assets/icons/chevron-right.png'
 import train from "../assets/icons/train.png";
+import trip from "../assets/icons/trip.png";
 import user from "../assets/icons/user.png";
 
 export default {
@@ -24,6 +26,7 @@ export default {
   bike,
   bus,
   car,
+  community,
   heart,
   home,
   menu,
@@ -39,5 +42,6 @@ export default {
   chevronLeft,
   chevronRight,
   train,
+  trip,
   user,
 };
