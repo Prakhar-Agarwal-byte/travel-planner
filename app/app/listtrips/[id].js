@@ -86,7 +86,7 @@ const ListTrips = () => {
                         }}
                     />
                 )}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item) => item._id}
                 contentContainerStyle={{ padding: SIZES.medium, rowGap: SIZES.medium }}
                 ListHeaderComponent={() => (
                     <>

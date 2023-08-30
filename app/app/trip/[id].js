@@ -129,13 +129,12 @@ const TripDetails = () => {
                         </View>
                         <View style={styles.detailsContainer}>
                             <Text style={styles.label}>Vacant Seats:</Text>
-                            <Text style={styles.value}>1</Text>
+                            <Text style={styles.value}>{data.capacity}</Text>
                         </View>
                         <View style={styles.detailsContainer}>
                             <Text style={styles.label}>Mode of Transportation:</Text>
                             <Text style={styles.value}>{data.modeOfTransport}</Text>
                         </View>
-                        
                         <View style={styles.detailsContainer}>
                             <Text style={styles.label}>Community:</Text>
                             <Text style={styles.value}>{data.community?.name || 'Unknown'}</Text>

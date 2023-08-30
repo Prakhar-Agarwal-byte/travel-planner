@@ -1,11 +1,11 @@
 import { StyleSheet } from "react-native";
 
-import { COLORS, SHADOWS, SIZES, FONT } from "../../../../constants";
+import { COLORS, SHADOWS, SIZES } from "../../../../constants";
 
 const styles = StyleSheet.create({
     container: {
-        padding: SIZES.large,
-        backgroundColor: '#EFEFEF' ,
+        padding: SIZES.xLarge,
+        backgroundColor: COLORS.white,
         borderRadius: SIZES.medium,
         justifyContent: "space-between",
         ...SHADOWS.medium,
@@ -15,7 +15,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         paddingBottom: 10,
-       
     },
     profileImage: {
         width: 60,
