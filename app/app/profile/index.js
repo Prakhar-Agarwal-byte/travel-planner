@@ -9,21 +9,17 @@ import {
 } from "react-native";
 import { Stack, useRouter } from "expo-router";
 
-import { COLORS, icons, images } from "../../constants";
+import { COLORS, icons } from "../../constants";
 import { CommunityList, ScreenHeaderBtn } from "../../components";
 import styles from "../../styles/profile";
 
-import useFetch from "../../hooks/useFetch";
-import { clearAuthTokens } from "react-native-axios-jwt";
+import { useAuth } from "../../context/auth";
 
 const Profile = () => {
     const router = useRouter();
+    const { signOut, user } = useAuth();
     const activeTabs = ["Trip", "Community"];
     const [activeTab, setActiveTab] = useState("Trip");
-
-    const { data } = useFetch("users/profile");
-    const user = data;
-    console.log(user);
 
     const TripButton = ({ status }) => {
         return (
@@ -33,9 +29,7 @@ const Profile = () => {
             >
                 <TouchableOpacity style={styles.logoContainer}>
                     <Image
-                        source={{
-                            uri: "https://t3.ftcdn.net/jpg/00/94/74/70/240_F_94747015_w710pojp7hWrRPNTZaY4MgBAMNW7LHq7.jpg",
-                        }}
+                        source={icons.trip}
                         resizeMode="contain"
                         style={styles.logoImage}
                     />
@@ -74,8 +68,7 @@ const Profile = () => {
     };
 
     const handleLogout = () => {
-        // Logout logic here
-        router.push("/auth/login");
+        signOut();
     };
 
     return (
@@ -93,7 +86,7 @@ const Profile = () => {
                     ),
                     headerRight: () => (
                         <ScreenHeaderBtn iconUrl={{
-                            uri: user.profileImage
+                            uri: user?.profileImage
                         }} dimension="100%" />
                     ),
                     headerTitle: "",
@@ -102,11 +95,11 @@ const Profile = () => {
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.container}>
                     <Image
-                        source={{ uri: user.profileImage }}
+                        source={{ uri: user?.profileImage }}
                         style={styles.profileImage}
                     />
-                    <Text style={styles.userName}>{user.name}</Text>
-                    <Text style={styles.userEmail}>{user.email}</Text>
+                    <Text style={styles.userName}>{user?.name}</Text>
+                    <Text style={styles.userEmail}>{user?.email}</Text>
                     <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
                         <Text style={styles.logoutButtonText}>Logout</Text>
                     </TouchableOpacity>

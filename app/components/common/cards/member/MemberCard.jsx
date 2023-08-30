@@ -4,7 +4,6 @@ import styles from './member.style';
 import { images } from '../../../../constants';
 
 const MemberCard = ({ member, handleNavigate }) => {
-    console.log(member)
     return (
         <TouchableOpacity
             style={styles.container}

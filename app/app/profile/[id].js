@@ -5,6 +5,7 @@ import {
   Image,
   SafeAreaView,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import { Stack, useGlobalSearchParams, useRouter } from "expo-router";
 
@@ -20,7 +21,7 @@ const UserProfile = () => {
   const router = useRouter();
   const { user } = useAuth();
 
-  const { data } = useFetch(`users/profile/${params.id}}`);
+  const { data, isLoading, error } = useFetch(`users/profile/${params.id}`);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
@@ -38,7 +39,7 @@ const UserProfile = () => {
           headerRight: () => (
             <ScreenHeaderBtn
               iconUrl={{
-                uri: user.profileImage
+                uri: user?.profileImage
               }}
               dimension="100%"
               handlePress={() => router.push("/profile")}
@@ -47,16 +48,22 @@ const UserProfile = () => {
           headerTitle: "",
         }}
       />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.container}>
-          <Image
-            source={{ uri: data.profileImage }}
-            style={styles.profileImage}
-          />
-          <Text style={styles.userName}>{data.name}</Text>
-          <Text style={styles.userEmail}>{data.email}</Text>
-        </View>
-      </ScrollView>
+      {isLoading ? (
+        <ActivityIndicator size="large" colors={COLORS.primary} />
+      ) : error ? (
+        <Text>Something went wrong</Text>
+      ) : (
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={styles.container}>
+            <Image
+              source={{ uri: data?.profileImage }}
+              style={styles.profileImage}
+            />
+            <Text style={styles.userName}>{data?.name}</Text>
+            <Text style={styles.userEmail}>{data?.email}</Text>
+          </View>
+        </ScrollView>
+      )}
     </SafeAreaView>
   );
 };

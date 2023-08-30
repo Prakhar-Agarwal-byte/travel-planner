@@ -24,7 +24,7 @@ const Community = () => {
                     headerRight: () => (
                         <ScreenHeaderBtn
                             iconUrl={{
-                                uri: user.profileImage
+                                uri: user?.profileImage
                             }}
                             dimension="100%"
                             handlePress={() => router.push("/profile")}

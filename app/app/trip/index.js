@@ -2,7 +2,7 @@ import { useState } from "react";
 import { View, ScrollView, SafeAreaView } from "react-native";
 import { Stack, useRouter } from "expo-router";
 
-import { COLORS, icons, images, SIZES } from "../../constants";
+import { COLORS, icons, SIZES } from "../../constants";
 import { ScreenHeaderBtn, Welcome, TripList } from "../../components";
 import CreateButton from "../../components/common/button/create/CreateButton";
 import { useAuth } from "../../context/auth";
@@ -24,7 +24,7 @@ const Trip = () => {
                     ),
                     headerRight: () => (
                         <ScreenHeaderBtn iconUrl={{
-                            uri: user.profileImage
+                            uri: user?.profileImage
                         }} dimension="100%" handlePress={() => router.push("/profile")} />
                     ),
                     headerTitle: ""

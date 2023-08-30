@@ -17,14 +17,14 @@ const styles = StyleSheet.create({
     logoContainer: {
         width: 50,
         height: 50,
-        backgroundColor: COLORS.white,
+        backgroundColor: COLORS.lightWhite,
         borderRadius: SIZES.medium,
         justifyContent: "center",
         alignItems: "center",
     },
     logoImage: {
-        width: "70%",
-        height: "70%",
+        width: "80%",
+        height: "80%",
     },
     textContainer: {
         flex: 1,

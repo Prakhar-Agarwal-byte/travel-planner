@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity, Image } from 'react-native'
 
 import styles from './community.style'
+import { icons } from '../../../../constants'
 
 const CommunityCard = ({ community, handleNavigate }) => {
     return (
@@ -10,9 +11,7 @@ const CommunityCard = ({ community, handleNavigate }) => {
         >
             <TouchableOpacity style={styles.logoContainer}>
                 <Image
-                    source={{
-                        uri: 'https://t3.ftcdn.net/jpg/00/94/74/70/240_F_94747015_w710pojp7hWrRPNTZaY4MgBAMNW7LHq7.jpg'
-                    }}
+                    source={icons.community}
                     resizeMode='contain'
                     style={styles.logoImage}
                 />

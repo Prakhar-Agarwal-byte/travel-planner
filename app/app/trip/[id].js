@@ -2,7 +2,7 @@ import React from 'react';
 import { Stack, useRouter, useGlobalSearchParams } from "expo-router";
 import { View, Text, TouchableOpacity, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native';
 
-import { COLORS, icons, images } from '../../constants'
+import { COLORS, icons } from '../../constants'
 import { ScreenHeaderBtn } from '../../components'
 import styles from '../../styles/tripdetails'
 import TripMembersList from '../../components/trip/memberlist/MemberList';
@@ -25,7 +25,6 @@ const TripDetails = () => {
     };
 
     const { data, isLoading, error } = useFetch(`trips/${params.id}`)
-    console.log(data)
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
@@ -39,7 +38,7 @@ const TripDetails = () => {
                     headerRight: () => (
                         <ScreenHeaderBtn
                             iconUrl={{
-                                uri: user.profileImage
+                                uri: user?.profileImage
                             }}
                             dimension="100%"
                             handlePress={() => router.push("/profile")}

@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
     ActivityIndicator,
     FlatList,
-    Image,
-    TouchableOpacity,
     View,
 } from "react-native";
 import { Stack, useRouter, useGlobalSearchParams } from "expo-router";
@@ -25,7 +23,6 @@ const ListTrips = () => {
     const [searchResult, setSearchResult] = useState([]);
     const [searchLoader, setSearchLoader] = useState(false);
     const [searchError, setSearchError] = useState(null);
-    const [page, setPage] = useState(1);
     const [selectedTrip, setSelectedTrip] = useState();
 
     const handleSearch = async () => {
@@ -44,16 +41,6 @@ const ListTrips = () => {
             console.log(error);
         } finally {
             setSearchLoader(false);
-        }
-    };
-
-    const handlePagination = (direction) => {
-        if (direction === "left" && page > 1) {
-            setPage(page - 1);
-            handleSearch();
-        } else if (direction === "right") {
-            setPage(page + 1);
-            handleSearch();
         }
     };
 
@@ -77,7 +64,7 @@ const ListTrips = () => {
                     headerRight: () => (
                         <ScreenHeaderBtn
                             iconUrl={{
-                                uri: user.profileImage
+                                uri: user?.profileImage
                             }}
                             dimension="100%"
                             handlePress={() => router.push("/profile")}
@@ -94,8 +81,8 @@ const ListTrips = () => {
                         trip={item}
                         selectedTrip={selectedTrip}
                         handleNavigate={() => {
-                            setSelectedTrip(item.id);
-                            router.push(`/trip/${item.id}`);
+                            setSelectedTrip(item._id);
+                            router.push(`/trip/${item._id}`);
                         }}
                     />
                 )}
@@ -118,29 +105,9 @@ const ListTrips = () => {
                 )}
                 ListFooterComponent={() => (
                     <View style={styles.footerContainer}>
-                        <TouchableOpacity
-                            style={styles.paginationButton}
-                            onPress={() => handlePagination("left")}
-                        >
-                            <Image
-                                source={icons.chevronLeft}
-                                style={styles.paginationImage}
-                                resizeMode="contain"
-                            />
-                        </TouchableOpacity>
-                        <View style={styles.paginationTextBox}>
-                            <Text style={styles.paginationText}>{page}</Text>
-                        </View>
-                        <TouchableOpacity
-                            style={styles.paginationButton}
-                            onPress={() => handlePagination("right")}
-                        >
-                            <Image
-                                source={icons.chevronRight}
-                                style={styles.paginationImage}
-                                resizeMode="contain"
-                            />
-                        </TouchableOpacity>
+                        <Text style={styles.footerText}>
+                            Total {params.id} Trips: {searchResult.length}
+                        </Text>
                     </View>
                 )}
             />

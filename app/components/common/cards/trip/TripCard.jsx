@@ -9,6 +9,27 @@ const formatDateTime = (dateString) => {
     return date.toLocaleDateString(undefined, options);
 };
 
+const VehicleIcon = (modeOfTransport) => {
+    switch (modeOfTransport) {
+        case "car":
+            return icons.car;
+        case "train":
+            return icons.train;
+        case "bus":
+            return icons.bus;
+        case "flight":
+            return icons.flight;
+        case "bike":
+            return icons.bike;
+        case "bicycle":
+            return icons.bicycle;
+        case "ferry":
+            return icons.ferry;
+        default:
+            return icons.car;
+    }
+}
+
 const TripCard = ({ trip, selectedTrip, handleNavigate }) => {
     return (
         <TouchableOpacity
@@ -17,9 +38,7 @@ const TripCard = ({ trip, selectedTrip, handleNavigate }) => {
         >
             <TouchableOpacity style={styles.logoContainer(selectedTrip, trip)}>
                 <Image
-                    source={{
-                        uri: `../../../../assets/icons/${trip.modeOfTransport}.png`
-                    }}
+                    source={VehicleIcon(trip.modeOfTransport)}
                     resizeMode='contain'
                     style={styles.logoImage}
                 />

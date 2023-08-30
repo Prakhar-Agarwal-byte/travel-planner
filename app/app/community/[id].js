@@ -1,6 +1,6 @@
 import React from 'react';
 import { Stack, useRouter, useGlobalSearchParams } from "expo-router";
-import { View, Text, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native';
 
 import { COLORS, icons } from '../../constants'
 import { ScreenHeaderBtn } from '../../components'
@@ -25,8 +25,7 @@ const CommunityDetails = () => {
         console.log('User joined the community');
     };
 
-    const { data, error } = useFetch(`communities/${params.id}`)
-    console.log(data)
+    const { data, isLoading, error } = useFetch(`communities/${params.id}`)
     if (error) {
         console.log(error);
     }
@@ -43,7 +42,7 @@ const CommunityDetails = () => {
                     headerRight: () => (
                         <ScreenHeaderBtn
                             iconUrl={{
-                                uri: user.profileImage
+                                uri: user?.profileImage
                             }}
                             dimension="100%"
                             handlePress={() => router.push("/profile")}
@@ -51,51 +50,57 @@ const CommunityDetails = () => {
                     ),
                     headerTitle: ""
                 }} />
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <View style={styles.container}>
-                    <Text style={styles.communityName}>{data.name}</Text>
-                    <View style={styles.detailsContainer}>
-                        <Text style={styles.label}>Description:</Text>
-                        <Text style={styles.value}>
-                            {data.description}
-                        </Text>
+            {isLoading ? (
+                <ActivityIndicator size="large" colors={COLORS.primary} />
+            ) : error ? (
+                <Text>Something went wrong</Text>
+            ) : (
+                <ScrollView showsVerticalScrollIndicator={false}>
+                    <View style={styles.container}>
+                        <Text style={styles.communityName}>{data.name}</Text>
+                        <View style={styles.detailsContainer}>
+                            <Text style={styles.label}>Description:</Text>
+                            <Text style={styles.value}>
+                                {data.description}
+                            </Text>
+                        </View>
+                        <View style={styles.detailsContainer}>
+                            <Text style={styles.label}>Admin:</Text>
+                            <Text style={styles.value}>
+                                {data.createdBy?.name || 'Unknown'}
+                            </Text>
+                        </View>
+                        <View style={styles.detailsContainer}>
+                            <Text style={styles.label}>Members:</Text>
+                            <Text style={styles.value}>
+                                {data.members?.map((member) => (
+                                    <Text style={styles.value}>{member?.name || 'Unknown'}</Text>
+                                ))}
+                            </Text>
+                        </View>
+                        <View style={styles.detailsContainer}>
+                            <Text style={styles.label}>Trips:</Text>
+                            <Text style={styles.value}>
+                                {data.trips?.map((trip) => (
+                                    <Text style={styles.value}>{trip?.title}</Text>
+                                ))}
+                            </Text>
+                        </View>
+                        <View style={styles.detailsContainer}>
+                            <Text style={styles.label}>Founded:</Text>
+                            <Text style={styles.value}>
+                                {formatDateTime(data.createdAt)}
+                            </Text>
+                        </View>
+                        <View style={styles.joinButtonContainer}>
+                            <TouchableOpacity onPress={handleJoinCommunity} style={styles.joinButton}>
+                                <Text style={styles.joinButtonText}>Join Now</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <CommunityMembersList id={params.id} />
                     </View>
-                    <View style={styles.detailsContainer}>
-                        <Text style={styles.label}>Admin:</Text>
-                        <Text style={styles.value}>
-                            {data.createdBy?.name || 'Unknown'}
-                        </Text>
-                    </View>
-                    <View style={styles.detailsContainer}>
-                        <Text style={styles.label}>Members:</Text>
-                        <Text style={styles.value}>
-                            {data.members?.map((member) => (
-                                <Text style={styles.value}>{member?.name || 'Unknown'}</Text>
-                            ))}
-                        </Text>
-                    </View>
-                    <View style={styles.detailsContainer}>
-                        <Text style={styles.label}>Trips:</Text>
-                        <Text style={styles.value}>
-                            {data.trips?.map((trip) => (
-                                <Text style={styles.value}>{trip?.title}</Text>
-                            ))}
-                        </Text>
-                    </View>
-                    <View style={styles.detailsContainer}>
-                        <Text style={styles.label}>Founded:</Text>
-                        <Text style={styles.value}>
-                            {formatDateTime(data.createdAt)}
-                        </Text>
-                    </View>
-                    <View style={styles.joinButtonContainer}>
-                        <TouchableOpacity onPress={handleJoinCommunity} style={styles.joinButton}>
-                            <Text style={styles.joinButtonText}>Join Now</Text>
-                        </TouchableOpacity>
-                    </View>
-                    <CommunityMembersList id={params.id} />
-                </View>
-            </ScrollView>
+                </ScrollView>
+            )}
         </SafeAreaView >
     );
 };

@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import styles from "../../styles/createcommunity";
 import { Stack, useRouter } from "expo-router";
-import { COLORS, icons, images } from "../../constants";
+import { COLORS, icons } from "../../constants";
 import { ScreenHeaderBtn } from "../../components";
 import { axiosInstance } from "../../config/api";
 import { useAuth } from "../../context/auth";
@@ -55,7 +55,7 @@ const CreateCommunity = () => {
           headerRight: () => (
             <ScreenHeaderBtn
               iconUrl={{
-                uri: user.profileImage
+                uri: user?.profileImage
               }}
               dimension="100%"
               handlePress={() => router.push("/profile")}
