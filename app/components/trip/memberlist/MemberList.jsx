@@ -37,7 +37,7 @@ const TripMembersList = ({ id }) => {
                      <MemberCard
                      member={item}
                      key={`profile-${item?.id}`}
-                     handleNavigate={() => router.push(`/profile/${item?.id}`)}
+                     handleNavigate={() => router.push(`/profile/${item?._id}`)}
                          
                      />
                  )}
