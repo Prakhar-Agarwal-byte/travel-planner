@@ -45,8 +45,7 @@ const CreateTrip = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userId = user.id;
-
+        const userId = user._id;
         const communitiesJoinedByUser = await axiosInstance.get(
           `/communities/user/${userId}/joined`
         );

@@ -100,7 +100,7 @@ export function Provider(props) {
 
   const signOut = async () => {
     await clearAuthTokens();
-    clearUserData();
+    await clearUserData();
     setAuth(null);
   };
 
