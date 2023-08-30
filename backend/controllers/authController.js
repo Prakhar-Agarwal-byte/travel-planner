@@ -113,15 +113,15 @@ exports.login = async (req, res) => {
 
 // Refresh token
 exports.refreshToken = async (req, res) => {
-  const { refreshToken } = req.body;
+  const { refresh } = req.body;
 
-  if (!refreshToken) {
+  if (!refresh) {
     return res.status(401).json({ msg: "No refresh token provided" });
   }
 
   try {
     // Verify the refresh token
-    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+    const decoded = jwt.verify(refresh, process.env.JWT_REFRESH_SECRET);
 
     // Check if the token is valid and has the refresh flag
     if (!decoded.user || !decoded.user.refresh) {
