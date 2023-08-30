@@ -3,13 +3,13 @@ import { View, Text, TouchableOpacity, Image } from 'react-native'
 import styles from './community.style'
 import { icons } from '../../../../constants'
 
-const CommunityCard = ({ community, handleNavigate }) => {
+const CommunityCard = ({ community, selectedCommunity, handleNavigate }) => {
     return (
         <TouchableOpacity
-            style={styles.container}
+            style={styles.container(selectedCommunity, community)}
             onPress={handleNavigate}
         >
-            <TouchableOpacity style={styles.logoContainer}>
+            <TouchableOpacity style={styles.logoContainer(selectedCommunity, community)}>
                 <Image
                     source={icons.community}
                     resizeMode='contain'
@@ -17,10 +17,11 @@ const CommunityCard = ({ community, handleNavigate }) => {
                 />
             </TouchableOpacity>
 
-            <View style={styles.textContainer}>
-                <Text style={styles.communityName} numberOfLines={1}>{community.name}</Text>
-                <Text style={styles.communityType}>{community.description}</Text>
-                <Text style={styles.communityType}>{community.location}</Text>
+            <Text style={styles.communityName}>{community.name}</Text>
+
+            <View style={styles.infoContainer}>
+                <Text style={styles.communityDesc(selectedCommunity, community)} numberOfLines={1}>{community.description}</Text>
+                <Text style={styles.communityPlace(selectedCommunity, community)}>{community.location}</Text>
             </View>
         </TouchableOpacity>
 

@@ -11,7 +11,7 @@ const MemberCard = ({ member, handleNavigate }) => {
         >
             <TouchableOpacity style={styles.memberCard}>
                 <Image
-                    source={{ uri: member?.profileImage }} // Replace with member's profile image URL
+                    source={{ uri: member?.profileImage }}
                     resizeMode='contain'
                     style={styles.profileImage}
                 />
