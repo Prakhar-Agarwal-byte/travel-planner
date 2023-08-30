@@ -39,15 +39,7 @@ const ListCommunities = () => {
         }
     };
 
-    const handlePagination = (direction) => {
-        if (direction === 'left' && page > 1) {
-            setPage(page - 1)
-            handleSearch()
-        } else if (direction === 'right') {
-            setPage(page + 1)
-            handleSearch()
-        }
-    }
+    
 
     useEffect(() => {
         handleSearch()
@@ -99,33 +91,13 @@ const ListCommunities = () => {
                         </View>
                     </>
                 )}
-                CommunityFooterComponent={() => (
+                ListFooterComponent={() => (
                     <View style={styles.footerContainer}>
-                        <TouchableOpacity
-                            style={styles.paginationButton}
-                            onPress={() => handlePagination('left')}
-                        >
-                            <Image
-                                source={icons.chevronLeft}
-                                style={styles.paginationImage}
-                                resizeMode="contain"
-                            />
-                        </TouchableOpacity>
-                        <View style={styles.paginationTextBox}>
-                            <Text style={styles.paginationText}>{page}</Text>
-                        </View>
-                        <TouchableOpacity
-                            style={styles.paginationButton}
-                            onPress={() => handlePagination('right')}
-                        >
-                            <Image
-                                source={icons.chevronRight}
-                                style={styles.paginationImage}
-                                resizeMode="contain"
-                            />
-                        </TouchableOpacity>
+                        <Text style={styles.footerText}>
+                            Total {params.id} Communities: {searchResult.length}
+                        </Text>
                     </View>
-                )}
+                    )}
             />
         </SafeAreaView>
     )
