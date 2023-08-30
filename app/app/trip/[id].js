@@ -134,10 +134,7 @@ const TripDetails = () => {
                             <Text style={styles.label}>Mode of Transportation:</Text>
                             <Text style={styles.value}>{data.modeOfTransport}</Text>
                         </View>
-                        <View style={styles.detailsContainer}>
-                            <Text style={styles.label}>Stops:</Text>
-                            <Text style={styles.value}>Stop 1, Stop 2, Stop 3</Text>
-                        </View>
+                        
                         <View style={styles.detailsContainer}>
                             <Text style={styles.label}>Community:</Text>
                             <Text style={styles.value}>{data.community?.name || 'Unknown'}</Text>

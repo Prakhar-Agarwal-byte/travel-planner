@@ -99,6 +99,7 @@ const Profile = () => {
                 <View>
                 <CommunityButton status='created' />
                 <CommunityButton status='joined' />
+                <CommunityButton status='requested' />
                 
             </View>
               );
