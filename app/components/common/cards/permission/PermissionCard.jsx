@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, Image } from 'react-native'
 import styles from './member.style';
 
 
-const MemberCard = ({ member, handleNavigate }) => {
+const PermissionCard = ({ member, handleNavigate }) => {
     return (
         <TouchableOpacity
             style={styles.container}
@@ -25,4 +25,4 @@ const MemberCard = ({ member, handleNavigate }) => {
     )
 }
 
-export default MemberCard
+export default PermissionCard

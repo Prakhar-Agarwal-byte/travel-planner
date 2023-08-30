@@ -51,21 +51,62 @@ const Profile = () => {
             </TouchableOpacity>
         );
     };
-
-    const RenderTabContent = () => {
-        if (activeTab === "Trip") {
-            return (
-                <View>
-                    <TripButton status="active" />
-                    <TripButton status="joined" />
-                    <TripButton status="requested" />
-                    <TripButton status="completed" />
+    const CommunityButton = ({ status }) => {
+        return (
+            <TouchableOpacity
+                style={styles.communityContainer}
+                onPress={() => router.push(`/listcommunities/${status}`)}
+            >
+                <TouchableOpacity style={styles.logoContainer}>
+                    <Image
+                        source={{
+                            uri: 'https://t3.ftcdn.net/jpg/00/94/74/70/240_F_94747015_w710pojp7hWrRPNTZaY4MgBAMNW7LHq7.jpg'
+                        }}
+                        resizeMode='contain'
+                        style={styles.logoImage}
+                    />
+                </TouchableOpacity>
+  
+                <View style={styles.textContainer}>
+                    <Text style={styles.tripStatus}>{status} Communities</Text>
                 </View>
-            );
-        } else if (activeTab === "Community") {
-            return <CommunityList />;
-        }
-    };
+                <TouchableOpacity
+                    style={styles.logoContainer}
+                    onPress={() => router.push(`/listcommunities/${status}`)}
+                >
+                    <Image
+                        source={icons.chevronRight}
+                        resizeMode='contain'
+                        style={styles.logoImage}
+                    />
+                </TouchableOpacity>
+            </TouchableOpacity>
+        )
+    }
+  
+      const RenderTabContent = () => {
+          if (activeTab === 'Trip') {
+              return (
+                  <View>
+                      <TripButton status='active' />
+                      <TripButton status='joined' />
+                      <TripButton status='requested' />
+                      <TripButton status='completed' />
+                  </View>
+              );
+          } else if (activeTab === 'Community') {
+              return (
+                <View>
+                <CommunityButton status='created' />
+                <CommunityButton status='joined' />
+                <CommunityButton status='requested' />
+                
+            </View>
+              );
+          }
+      };
+  
+   
 
     const handleLogout = () => {
         signOut();

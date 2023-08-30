@@ -1,7 +1,7 @@
 import React from 'react';
-import { TouchableOpacity, Text, View, ActivityIndicator } from 'react-native';
+import { TouchableOpacity, Text, View, ActivityIndicator,FlatList } from 'react-native';
 import { useRouter } from 'expo-router'
-
+import { SIZES } from '../../../constants';
 import styles from './memberlist.style';
 import { COLORS } from '../../../constants';
 import MemberCard from '../../common/cards/member/MemberCard';
@@ -31,13 +31,22 @@ const TripMembersList = ({ id }) => {
                 <Text>Something went wrong</Text>
             ) : (
                 <View style={styles.cardsContainer}>
-                    {data?.map((member) => (
-                        <MemberCard
-                            member={member}
-                            key={`profile-${member?._id}`}
-                            handleNavigate={() => router.push(`/profile/${member?._id}`)}
-                        />
-                    ))}
+                   <FlatList 
+                 data={data}
+                 renderItem={({item}) => (
+                     <MemberCard
+                     member={item}
+                     key={`profile-${item?.id}`}
+                     handleNavigate={() => router.push(`/profile/${item?._id}`)}
+                         
+                     />
+                 )}
+                
+                
+                horizontal 
+                contentContainerStyle={{ columnGap: SIZES.medium }}
+                />
+               
                 </View>
             )}
 

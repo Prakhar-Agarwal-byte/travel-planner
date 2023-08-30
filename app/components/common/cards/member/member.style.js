@@ -1,24 +1,21 @@
 import { StyleSheet } from "react-native";
 
-import { COLORS, SHADOWS, SIZES } from "../../../../constants";
+import { COLORS, SHADOWS, SIZES, FONT } from "../../../../constants";
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        padding: SIZES.large,
+        backgroundColor: '#EFEFEF' ,
+        borderRadius: SIZES.medium,
         justifyContent: "space-between",
-        alignItems: "center",
-        flexDirection: "row",
-        padding: SIZES.medium,
-        borderRadius: SIZES.small,
-        backgroundColor: COLORS.white,
         ...SHADOWS.medium,
         shadowColor: COLORS.white,
-        marginBottom: SIZES.medium,
     },
     memberCard: {
         flexDirection: 'row',
         alignItems: 'center',
         paddingBottom: 10,
+       
     },
     profileImage: {
         width: 60,
