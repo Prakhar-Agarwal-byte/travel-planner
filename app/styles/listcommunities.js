@@ -49,10 +49,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: COLORS.white
     },
-    paginationText: {
+    footerText: {
         fontFamily: FONT.bold,
         fontSize: SIZES.medium,
-        color: COLORS.primary
+        color: COLORS.primary,
+        textTransform: "capitalize"
     }
 });
 
