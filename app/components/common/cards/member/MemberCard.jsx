@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, Image } from 'react-native'
 
 import styles from './member.style';
-import { images } from '../../../../constants';
+
 
 const MemberCard = ({ member, handleNavigate }) => {
     return (
