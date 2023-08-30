@@ -8,16 +8,17 @@ import { COLORS, icons, SIZES } from '../../constants'
 import styles from '../../styles/listcommunities'
 import CommunityCard from '../../components/common/cards/community/CommunityCard'
 import { axiosInstance } from '../../config/api'
+import { useAuth } from '../../context/auth'
 
 
 const ListCommunities = () => {
     const params = useGlobalSearchParams();
-    const router = useRouter()
+    const router = useRouter();
+    const { user } = useAuth();
 
     const [searchResult, setSearchResult] = useState([]);
     const [searchLoader, setSearchLoader] = useState(false);
     const [searchError, setSearchError] = useState(null);
-    const [page, setPage] = useState(1);
     const [selectedCommunity, setSelectedCommunity] = useState();
 
     const handleSearch = async () => {
@@ -39,7 +40,7 @@ const ListCommunities = () => {
         }
     };
 
-    
+
 
     useEffect(() => {
         handleSearch()
@@ -53,9 +54,18 @@ const ListCommunities = () => {
                     headerShadowVisible: false,
                     headerLeft: () => (
                         <ScreenHeaderBtn
-                            iconUrl={icons.chevronLeft}
-                            dimension='60%'
-                            handlePress={() => router.back()}
+                            iconUrl={icons.logo}
+                            dimension='100%'
+                            handlePress={() => router.push("/")}
+                        />
+                    ),
+                    headerRight: () => (
+                        <ScreenHeaderBtn
+                            iconUrl={{
+                                uri: user?.profileImage
+                            }}
+                            dimension="100%"
+                            handlePress={() => router.push("/profile")}
                         />
                     ),
                     headerTitle: "",
@@ -69,12 +79,12 @@ const ListCommunities = () => {
                         community={item}
                         selectedCommunity={selectedCommunity}
                         handleNavigate={() => {
-                            setSelectedCommunity(item.id)
-                            router.push(`/community/${item.id}`)
+                            setSelectedCommunity(item._id)
+                            router.push(`/community/${item._id}`)
                         }}
                     />
                 )}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item) => item._id}
                 contentContainerStyle={{ padding: SIZES.medium, rowGap: SIZES.medium }}
                 ListHeaderComponent={() => (
                     <>
@@ -97,7 +107,7 @@ const ListCommunities = () => {
                             Total {params.id} Communities: {searchResult.length}
                         </Text>
                     </View>
-                    )}
+                )}
             />
         </SafeAreaView>
     )

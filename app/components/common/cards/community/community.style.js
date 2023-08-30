@@ -1,47 +1,47 @@
 import { StyleSheet } from "react-native";
 
-import { COLORS, SHADOWS, SIZES } from "../../../../constants";
+import { COLORS, SHADOWS, SIZES, FONT } from "../../../../constants";
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
+    container: (selectedCommunity, item) => ({
+        padding: SIZES.xLarge,
+        backgroundColor: selectedCommunity === item._id ? COLORS.primary : "#FFF",
+        borderRadius: SIZES.medium,
         justifyContent: "space-between",
-        alignItems: "center",
-        flexDirection: "row",
-        padding: SIZES.medium,
-        borderRadius: SIZES.small,
-        backgroundColor: "#FFF",
         ...SHADOWS.medium,
         shadowColor: COLORS.white,
-    },
-    logoContainer: {
+    }),
+    logoContainer: (selectedCommunity, item) => ({
         width: 50,
         height: 50,
-        backgroundColor: COLORS.lightWhite,
+        backgroundColor: selectedCommunity === item._id ? "#FFF" : COLORS.white,
         borderRadius: SIZES.medium,
         justifyContent: "center",
         alignItems: "center",
-    },
+    }),
     logoImage: {
         width: "80%",
         height: "80%",
     },
-    textContainer: {
-        flex: 1,
-        marginHorizontal: SIZES.medium,
-    },
     communityName: {
         fontSize: SIZES.medium,
-        fontFamily: "DMBold",
-        color: COLORS.primary,
+        fontFamily: FONT.regular,
+        color: "#B3AEC6",
+        marginTop: SIZES.small / 1.5,
     },
-    communityType: {
-        fontSize: SIZES.small + 2,
-        fontFamily: "DMRegular",
-        color: COLORS.gray,
-        marginTop: 3,
-        textTransform: "capitalize",
+    infoContainer: {
+        marginTop: SIZES.medium,
     },
+    communityDesc: (selectedCommunity, item) => ({
+        fontSize: SIZES.medium,
+        fontFamily: FONT.medium,
+        color: selectedCommunity === item._id ? COLORS.white : COLORS.gray,
+    }),
+    communityPlace: (selectedCommunity, item) => ({
+        fontSize: SIZES.medium,
+        fontFamily: FONT.medium,
+        color: selectedCommunity === item._id ? COLORS.white : COLORS.secondary,
+    }),
 });
 
 export default styles;

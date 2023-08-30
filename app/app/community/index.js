@@ -52,7 +52,10 @@ const Community = () => {
                         activeTab={activeTab}
                     />
 
-                    <CommunityList />
+                    <CommunityList status="new" />
+                    <CommunityList status="created" />
+                    <CommunityList status="joined" />
+                    <CommunityList status="requested" />
                 </View>
             </ScrollView>
             <CreateButton activeTab={activeTab} />
