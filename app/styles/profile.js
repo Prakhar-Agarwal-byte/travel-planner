@@ -134,8 +134,8 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     logoImage: {
-        width: "40%",
-        height: "40%",
+        width: "80%",
+        height: "80%",
     },
     textContainer: {
         flex: 1,

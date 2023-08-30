@@ -18,8 +18,8 @@ const MemberCard = ({ member, handleNavigate }) => {
             </TouchableOpacity>
 
             <View style={styles.memberInfo}>
-                <Text style={styles.memberName}>{member.name}</Text>
-                <Text style={styles.memberBio}>{member.email}</Text>
+                <Text style={styles.memberName}>{member?.name}</Text>
+                <Text style={styles.memberEmail}>{member?.email}</Text>
             </View>
         </TouchableOpacity>
     )

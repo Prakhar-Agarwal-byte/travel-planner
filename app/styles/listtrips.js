@@ -28,31 +28,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         gap: 10
     },
-    paginationButton: {
-        width: 30,
-        height: 30,
-        borderRadius: 5,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: COLORS.tertiary
-    },
-    paginationImage: {
-        width: '60%',
-        height: '60%',
-        tintColor: COLORS.white
-    },
-    paginationTextBox: {
-        width: 30,
-        height: 30,
-        borderRadius: 2,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: COLORS.white
-    },
-    paginationText: {
+    footerText: {
         fontFamily: FONT.bold,
         fontSize: SIZES.medium,
-        color: COLORS.primary
+        color: COLORS.primary,
+        textTransform: "capitalize"
     }
 });
 

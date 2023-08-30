@@ -17,6 +17,22 @@ exports.getProfile = async (req, res) => {
   }
 };
 
+exports.getUserProfile = async (req, res) => {
+  try {
+    const userId = req.params.userId; // Assuming userId is provided as a URL parameter
+    const user = await User.findById(userId).select("-password");
+
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+};
+
 // updateProfile
 exports.updateProfile = async (req, res) => {
   try {
@@ -42,7 +58,6 @@ exports.updateProfile = async (req, res) => {
     res.status(500).send("Server error");
   }
 };
-
 
 // changePassword
 exports.changePassword = async (req, res) => {
@@ -80,6 +95,4 @@ exports.changePassword = async (req, res) => {
   }
 };
 
-
 // Other controller functions like login, getProfile, updateProfile, etc.
-

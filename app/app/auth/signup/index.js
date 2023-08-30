@@ -15,13 +15,6 @@ import { COLORS, icons } from "../../../constants";
 import { ScreenHeaderBtn } from "../../../components";
 import { ActivityIndicator } from "react-native";
 
-import {
-  isLoggedIn,
-  setAuthTokens,
-  clearAuthTokens,
-  getAccessToken,
-  getRefreshToken,
-} from "react-native-axios-jwt";
 import { axiosInstance } from "../../../config/api";
 
 const Signup = ({ navigation }) => {
@@ -40,14 +33,6 @@ const Signup = ({ navigation }) => {
         password,
       });
 
-      // save tokens to storage
-      // await setAuthTokens({
-      //   accessToken: response.data.accessToken,
-      //   refreshToken: response.data.refreshToken,
-      // });
-
-      // Get access to tokens
-      // const accessToken = await getAccessToken();
       router.push("/auth/login");
     } catch (error) {
       console.log("error singing up ", error);

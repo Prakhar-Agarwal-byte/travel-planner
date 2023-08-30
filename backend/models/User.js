@@ -28,6 +28,7 @@ const userSchema = new mongoose.Schema({
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Community", // Reference to the User model
+      autopopulate: true,
     },
   ],
   createdAt: {
@@ -35,6 +36,8 @@ const userSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
+
+userSchema.plugin(require("mongoose-autopopulate"));
 
 // Create User model
 const User = mongoose.model("User", userSchema);

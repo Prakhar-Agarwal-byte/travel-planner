@@ -10,12 +10,14 @@ import {
 } from "react-native";
 import styles from "../../styles/createcommunity";
 import { Stack, useRouter } from "expo-router";
-import { COLORS, icons, images } from "../../constants";
+import { COLORS, icons } from "../../constants";
 import { ScreenHeaderBtn } from "../../components";
 import { axiosInstance } from "../../config/api";
+import { useAuth } from "../../context/auth";
 
 const CreateCommunity = () => {
   const router = useRouter();
+  const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -34,6 +36,10 @@ const CreateCommunity = () => {
       console.error("Error creating community:", error);
     } finally {
       setLoading(false);
+      setName("");
+      setDescription("");
+      setLocation("");
+      router.push("/community");
     }
   };
 
@@ -43,14 +49,16 @@ const CreateCommunity = () => {
         options={{
           headerStyle: { backgroundColor: COLORS.lightWhite },
           headerShadowVisible: false,
-          // headerLeft: () => (
-          //   <ScreenHeaderBtn iconUrl={icons.menu} dimension="60%" />
-          // ),
+          headerLeft: () => (
+            <ScreenHeaderBtn iconUrl={icons.logo} dimension="100%" handlePress={() => router.push("/")} />
+          ),
           headerRight: () => (
             <ScreenHeaderBtn
-              iconUrl={images.profile}
+              iconUrl={{
+                uri: user?.profileImage
+              }}
               dimension="100%"
-              handlePress={() => router.push("/profile/guv")}
+              handlePress={() => router.push("/profile")}
             />
           ),
           headerTitle: "",

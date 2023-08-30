@@ -1,19 +1,20 @@
 import React from 'react';
-import { TouchableOpacity, Text, View,FlatList } from 'react-native';
+import { TouchableOpacity, Text, View,FlatList, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router'
 import { SIZES } from '../../../constants';
 import styles from './memberlist.style';
+import { COLORS } from '../../../constants';
 import MemberCard from '../../common/cards/member/MemberCard';
 
-const CommunityMembersList = () => {
+import useFetch from '../../../hooks/useFetch'
+
+const CommunityMembersList = ({ id }) => {
   const router = useRouter()
-  const members = [
-    { id: 1, name: "John Doe", bio: "Nature enthusiast", profileImage: "profile_image_url_1" },
-    { id: 2, name: "Jane Smith", bio: "Adventure lover", profileImage: "profile_image_url_2" },
-    { id: 3, name: "Michael Johnson", bio: "Travel blogger", profileImage: "profile_image_url_3" },
-    { id: 4, name: "Emily Wilson", bio: "Photography enthusiast", profileImage: "profile_image_url_4" },
-    { id: 5, name: "David Brown", bio: "Outdoor explorer", profileImage: "profile_image_url_5" },
-  ];
+
+  const { data, isLoading, error } = useFetch(`communities/${id}/members`)
+  if (error) {
+    console.log(error)
+  }
 
   return (
     <View style={styles.container}>
@@ -24,14 +25,19 @@ const CommunityMembersList = () => {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.cardsContainer}>
+      {isLoading ? (
+        <ActivityIndicator size="large" colors={COLORS.primary} />
+      ) : error ? (
+        <Text>Something went wrong</Text>
+      ) : (
+        <View style={styles.cardsContainer}>
       <FlatList 
-                 data={members}
+                   data={data}
                  renderItem={({item}) => (
-                     <MemberCard
-                     member={item}
-                     key={`profile-${item?.id}`}
-                     handleNavigate={() => router.push(`/profile/${item?.id}`)}
+                       <MemberCard
+                       member={item}
+                       key={`profile-${item?._id}`}
+                       handleNavigate={() => router.push(`/profile/${item?._id}`)}
                          
                      />
                  )}
@@ -39,9 +45,9 @@ const CommunityMembersList = () => {
                 
                 horizontal 
                 contentContainerStyle={{ columnGap: SIZES.medium }}
-                />
-      </View>
-
+                  />
+          </View>
+      )}
     </View>
   );
 };
