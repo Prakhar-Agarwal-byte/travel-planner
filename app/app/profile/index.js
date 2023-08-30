@@ -55,7 +55,7 @@ const Profile = () => {
         return (
             <TouchableOpacity
                 style={styles.communityContainer}
-                onPress={() => router.push(`/listtrips/${status}`)}
+                onPress={() => router.push(`/listcommunities/${status}`)}
             >
                 <TouchableOpacity style={styles.logoContainer}>
                     <Image
