@@ -6,6 +6,7 @@ import { COLORS, icons } from '../../constants'
 import { ScreenHeaderBtn } from '../../components'
 import styles from '../../styles/tripdetails'
 import TripMembersList from '../../components/trip/memberlist/MemberList';
+import TripPermissionList from '../../components/trip/permissionlist/PermissionList';
 import { useAuth } from "../../context/auth";
 import useFetch from '../../hooks/useFetch';
 
@@ -144,6 +145,7 @@ const TripDetails = () => {
                             </TouchableOpacity>
                         </View>
                         <TripMembersList id={params.id} />
+                        <TripPermissionList id={params.id} />
                     </View>
                 </ScrollView>
             )}
