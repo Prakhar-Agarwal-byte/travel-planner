@@ -23,7 +23,7 @@ const TripDetails = () => {
     const handleJoinNow = () => {
         if (joinStatus === 'not_joined') {
             //joining the trip
-            axiosInstance.post('/api/trip/join')
+            axiosInstance.post('/trip/join')
                 .then(response => {
                     setJoinStatus('requested');
                     console.log('User requested to join the trip');

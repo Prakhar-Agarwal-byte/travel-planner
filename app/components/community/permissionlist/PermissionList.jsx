@@ -8,10 +8,11 @@ import PermissionCard from '../../common/cards/permission/PermissionCard';
 import { useAuth } from '../../../context/auth';
 import useFetch from '../../../hooks/useFetch'
 
-const TripPermissionList = ({ id }) => {
-    const router = useRouter()
+
+const CommunityPermissionList = ({ id }) => {
+    const router = useRouter();
     const {user}= useAuth();
-    const { data, isLoading, error } = useFetch(`trips/${id}/members`)
+    const { data, isLoading, error } = useFetch(`communities/${id}/members`)
     if (error) {
         console.log(error)
     }
@@ -55,4 +56,4 @@ const TripPermissionList = ({ id }) => {
     );
 };
 
-export default TripPermissionList;
+export default CommunityPermissionList;
