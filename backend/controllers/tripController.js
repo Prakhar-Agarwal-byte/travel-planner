@@ -137,8 +137,7 @@ exports.deleteTrip = async (req, res) => {
     );
 
     await community.save();
-
-    await trip.remove();
+    await trip.deleteOne();
 
     res.json({ msg: "Trip removed" });
   } catch (err) {
