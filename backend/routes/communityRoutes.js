@@ -50,10 +50,10 @@ router.get(
 // router.get("/:id/trips", communityController.getCommunityTrips);
 
 // Get communities joined by a user
-// router.get(
-//   "/user/:userId/joined",
-//   communityController.getUserJoinedCommunities
-// );
+router.get(
+  "/user/:userId/joined",
+  communityController.getUserJoinedCommunities
+);
 
 // Get communities created by a user
 // router.get(
