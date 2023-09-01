@@ -51,21 +51,60 @@ const Profile = () => {
             </TouchableOpacity>
         );
     };
+    const CommunityButton = ({ status }) => {
+        return (
+            <TouchableOpacity
+                style={styles.communityContainer}
+                onPress={() => router.push(`/listcommunities/${status}`)}
+            >
+                <TouchableOpacity style={styles.logoContainer}>
+                    <Image
+                        source={icons.community}
+                        resizeMode='contain'
+                        style={styles.logoImage}
+                    />
+                </TouchableOpacity>
+
+                <View style={styles.textContainer}>
+                    <Text style={styles.tripStatus}>{status} Communities</Text>
+                </View>
+                <TouchableOpacity
+                    style={styles.logoContainer}
+                    onPress={() => router.push(`/listcommunities/${status}`)}
+                >
+                    <Image
+                        source={icons.chevronRight}
+                        resizeMode='contain'
+                        style={styles.logoImage}
+                    />
+                </TouchableOpacity>
+            </TouchableOpacity>
+        )
+    }
 
     const RenderTabContent = () => {
-        if (activeTab === "Trip") {
+        if (activeTab === 'Trip') {
             return (
                 <View>
-                    <TripButton status="active" />
-                    <TripButton status="joined" />
-                    <TripButton status="requested" />
-                    <TripButton status="completed" />
+                    <TripButton status='active' />
+                    <TripButton status='joined' />
+                    <TripButton status='requested' />
+                    <TripButton status='completed' />
                 </View>
             );
-        } else if (activeTab === "Community") {
-            return <CommunityList />;
+        } else if (activeTab === 'Community') {
+            return (
+                <View>
+                    <CommunityButton status='created' />
+                    <CommunityButton status='joined' />
+                    <CommunityButton status='requested' />
+
+                </View>
+            );
         }
     };
+
+
 
     const handleLogout = () => {
         signOut();

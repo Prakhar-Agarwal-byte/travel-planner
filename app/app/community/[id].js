@@ -6,7 +6,7 @@ import { COLORS, icons } from '../../constants'
 import { ScreenHeaderBtn } from '../../components'
 import styles from '../../styles/communitydetails'
 import CommunityMembersList from '../../components/community/memberlist/MemberList';
-
+import CommunityPermissionList from '../../components/community/permissionlist/PermissionList';
 import { useAuth } from "../../context/auth";
 import useFetch from '../../hooks/useFetch';
 
@@ -98,6 +98,7 @@ const CommunityDetails = () => {
                             </TouchableOpacity>
                         </View>
                         <CommunityMembersList id={params.id} />
+                        <CommunityPermissionList id={params.id} />
                     </View>
                 </ScrollView>
             )}

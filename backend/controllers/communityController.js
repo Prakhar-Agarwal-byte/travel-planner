@@ -39,7 +39,15 @@ exports.getCommunities = async (req, res) => {
 // Get a community by ID
 exports.getCommunityById = async (req, res) => {
   try {
-    const community = await Community.findById(req.params.id);
+    const community = await Community.findById(req.params.id)
+      .populate("members", "name email profileImage")
+      .populate("pendingJoinRequests", "name email profileImage")
+      .populate(
+        "trips",
+        "title modeOfTransport fromDestination toDestination startDate"
+      )
+      .populate("createdBy", "name");
+
     if (!community) {
       return res.status(404).json({ msg: "Community not found" });
     }
@@ -129,12 +137,49 @@ exports.acceptJoinRequest = async (req, res) => {
   }
 };
 
+// Decline a user's request to join a community
+exports.declineJoinRequest = async (req, res) => {
+  try {
+    const community = await Community.findById(req.params.id);
+
+    if (!community) {
+      return res.status(404).json({ msg: "Community not found" });
+    }
+
+    // Check if the authenticated user is the creator of the community
+    if (community.createdBy.toString() !== req.user.id) {
+      return res.status(401).json({ msg: "Not authorized" });
+    }
+
+    // Find the user in pendingJoinRequests
+    const pendingUserIndex = community.pendingJoinRequests.findIndex(
+      (request) => request.user.toString() === req.params.userId
+    );
+
+    if (pendingUserIndex === -1) {
+      return res.status(400).json({ msg: "User request not found" });
+    }
+
+    // Remove the user from pendingJoinRequests
+    community.pendingJoinRequests.splice(pendingUserIndex, 1);
+    await community.save();
+
+    res.json({ msg: "Join request declined" });
+  } catch (err) {
+    console.error(err.message);
+    if (err.kind === "ObjectId") {
+      return res.status(404).json({ msg: "Community not found" });
+    }
+    res.status(500).send("Server error");
+  }
+};
+
 // Get members of a community
 exports.getCommunityMembers = async (req, res) => {
   try {
     const community = await Community.findById(req.params.id).populate(
       "members",
-      "name"
+      "name email profileImage"
     );
 
     if (!community) {
@@ -151,21 +196,19 @@ exports.getCommunityMembers = async (req, res) => {
   }
 };
 
-// Get trips of a community
-exports.getCommunityTrips = async (req, res) => {
+// Get pending join requests of a community
+exports.getPendingJoinRequests = async (req, res) => {
   try {
-    const community = await Community.findById(req.params.id);
+    const community = await Community.findById(req.params.id).populate(
+      "pendingJoinRequests",
+      "name email profileImage"
+    );
 
     if (!community) {
       return res.status(404).json({ msg: "Community not found" });
     }
 
-    const trips = await Trip.find({ community: community.id })
-      .populate("members", "name")
-      .populate("community", "name")
-      .populate("createdBy", "name");
-
-    res.json(trips);
+    res.json(community.pendingJoinRequests);
   } catch (err) {
     console.error(err.message);
     if (err.kind === "ObjectId") {
@@ -175,15 +218,37 @@ exports.getCommunityTrips = async (req, res) => {
   }
 };
 
+// Get trips of a community
+// exports.getCommunityTrips = async (req, res) => {
+//   try {
+//     const community = await Community.findById(req.params.id);
+
+//     if (!community) {
+//       return res.status(404).json({ msg: "Community not found" });
+//     }
+
+//     const trips = await Trip.find({ community: community.id })
+//       .populate("members", "name")
+//       .populate("community", "name")
+//       .populate("createdBy", "name");
+
+//     res.json(trips);
+//   } catch (err) {
+//     console.error(err.message);
+//     if (err.kind === "ObjectId") {
+//       return res.status(404).json({ msg: "Community not found" });
+//     }
+//     res.status(500).send("Server error");
+//   }
+// };
+
 // Get communities joined by a user
 exports.getUserJoinedCommunities = async (req, res) => {
   try {
     const userId = req.params.userId;
     const communities = await Community.find({
       members: { $in: [userId] },
-    })
-      .populate("members", "name")
-      .populate("createdBy", "name");
+    });
     res.json(communities);
   } catch (err) {
     console.error(err.message);
@@ -192,19 +257,19 @@ exports.getUserJoinedCommunities = async (req, res) => {
 };
 
 // Get communities created by a user
-exports.getUserCreatedCommunities = async (req, res) => {
-  try {
-    const userId = req.params.userId;
-    const communities = await Community.find({ createdBy: userId })
-      .populate("members", "name")
-      .populate("createdBy", "name");
+// exports.getUserCreatedCommunities = async (req, res) => {
+//   try {
+//     const userId = req.params.userId;
+//     const communities = await Community.find({ createdBy: userId })
+//       .populate("members", "name")
+//       .populate("createdBy", "name");
 
-    res.json(communities);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server error");
-  }
-};
+//     res.json(communities);
+//   } catch (err) {
+//     console.error(err.message);
+//     res.status(500).send("Server error");
+//   }
+// };
 
 // Remove a user from a community
 exports.leaveCommunity = async (req, res) => {
@@ -237,17 +302,17 @@ exports.leaveCommunity = async (req, res) => {
 };
 
 // Get communities by location
-exports.getCommunitiesByLocation = async (req, res) => {
-  const { location } = req.params;
+// exports.getCommunitiesByLocation = async (req, res) => {
+//   const { location } = req.params;
 
-  try {
-    const communities = await Community.find({ location })
-      .populate("members", "name")
-      .populate("createdBy", "name");
+//   try {
+//     const communities = await Community.find({ location })
+//       .populate("members", "name")
+//       .populate("createdBy", "name");
 
-    res.json(communities);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server error");
-  }
-};
+//     res.json(communities);
+//   } catch (err) {
+//     console.error(err.message);
+//     res.status(500).send("Server error");
+//   }
+// };

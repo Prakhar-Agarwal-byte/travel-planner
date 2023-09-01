@@ -1,24 +1,33 @@
 import { StyleSheet } from "react-native";
 
-import { COLORS, SHADOWS, SIZES } from "../../../../constants";
+import { COLORS, SHADOWS, SIZES, FONT } from "../../../../constants";
 
 const styles = StyleSheet.create({
     container: {
-        padding: SIZES.xLarge,
-        backgroundColor: COLORS.white,
+        padding: SIZES.large,
+        backgroundColor: '#EFEFEF' ,
         borderRadius: SIZES.medium,
         justifyContent: "space-between",
         ...SHADOWS.medium,
         shadowColor: COLORS.white,
     },
-    memberCard: {
+    permissionCard: {
         flexDirection: 'row',
         alignItems: 'center',
         paddingBottom: 10,
+       
     },
     profileImage: {
         width: 60,
         height: 60,
+        borderRadius: 30,
+        marginRight: SIZES.medium,
+    },
+    approvalIcon:
+    {
+        marginTop:20,
+        width: 40,
+        height: 40,
         borderRadius: 30,
         marginRight: SIZES.medium,
     },
@@ -36,6 +45,11 @@ const styles = StyleSheet.create({
         color: COLORS.gray,
         marginTop: 3,
     },
+    approvalButtonsArea:
+    {
+        flexDirection: 'row',
+        justifyContent: "space-between",
+    }
 });
 
 export default styles;

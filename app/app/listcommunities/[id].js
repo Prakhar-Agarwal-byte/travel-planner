@@ -1,21 +1,17 @@
-import React, { useEffect, useState } from "react";
-import {
-    ActivityIndicator,
-    FlatList,
-    View,
-} from "react-native";
-import { Stack, useRouter, useGlobalSearchParams } from "expo-router";
-import { Text, SafeAreaView } from "react-native";
+import React, { useEffect, useState } from 'react'
+import { ActivityIndicator, FlatList, Image, TouchableOpacity, View } from 'react-native'
+import { Stack, useRouter, useGlobalSearchParams } from 'expo-router'
+import { Text, SafeAreaView } from 'react-native'
 
-import { ScreenHeaderBtn } from "../../components";
-import { COLORS, icons, SIZES } from "../../constants";
-import styles from "../../styles/listtrips";
-import TripCard from "../../components/common/cards/trip/TripCard";
+import { ScreenHeaderBtn } from '../../components'
+import { COLORS, icons, SIZES } from '../../constants'
+import styles from '../../styles/listcommunities'
+import CommunityCard from '../../components/common/cards/community/CommunityCard'
+import { axiosInstance } from '../../config/api'
+import { useAuth } from '../../context/auth'
 
-import { axiosInstance } from "../../config/api";
-import { useAuth } from "../../context/auth";
 
-const ListTrips = () => {
+const ListCommunities = () => {
     const params = useGlobalSearchParams();
     const router = useRouter();
     const { user } = useAuth();
@@ -23,18 +19,18 @@ const ListTrips = () => {
     const [searchResult, setSearchResult] = useState([]);
     const [searchLoader, setSearchLoader] = useState(false);
     const [searchError, setSearchError] = useState(null);
-    const [selectedTrip, setSelectedTrip] = useState();
+    const [selectedCommunity, setSelectedCommunity] = useState();
 
     const handleSearch = async () => {
         setSearchLoader(true);
-        setSearchResult([]);
+        setSearchResult([])
 
         try {
-            const response = await axiosInstance.get("/trips", {
+            const response = await axiosInstance.get('/communities', {
                 params: {
-                    tripStatus: params.id,
+                    Status: params.id,
                 },
-            });
+            })
             setSearchResult(response.data);
         } catch (error) {
             setSearchError(error);
@@ -44,9 +40,11 @@ const ListTrips = () => {
         }
     };
 
+
+
     useEffect(() => {
-        handleSearch();
-    }, []);
+        handleSearch()
+    }, [])
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
@@ -77,12 +75,12 @@ const ListTrips = () => {
             <FlatList
                 data={searchResult}
                 renderItem={({ item }) => (
-                    <TripCard
-                        trip={item}
-                        selectedTrip={selectedTrip}
+                    <CommunityCard
+                        community={item}
+                        selectedCommunity={selectedCommunity}
                         handleNavigate={() => {
-                            setSelectedTrip(item._id);
-                            router.push(`/trip/${item._id}`);
+                            setSelectedCommunity(item._id)
+                            router.push(`/community/${item._id}`)
                         }}
                     />
                 )}
@@ -91,14 +89,14 @@ const ListTrips = () => {
                 ListHeaderComponent={() => (
                     <>
                         <View style={styles.container}>
-                            <Text style={styles.searchTitle}>{params.id + " Trips"}</Text>
-                            <Text style={styles.noOfTrips}>{params.id}</Text>
+                            <Text style={styles.searchTitle}>{params.id + ' Communities'}</Text>
+                            <Text style={styles.noOfCommunities}>{params.id}</Text>
                         </View>
                         <View style={styles.loaderContainer}>
                             {searchLoader ? (
-                                <ActivityIndicator size="large" color={COLORS.primary} />
-                            ) : (
-                                searchError && <Text>Oops something went wrong</Text>
+                                <ActivityIndicator size='large' color={COLORS.primary} />
+                            ) : searchError && (
+                                <Text>Oops something went wrong</Text>
                             )}
                         </View>
                     </>
@@ -106,13 +104,13 @@ const ListTrips = () => {
                 ListFooterComponent={() => (
                     <View style={styles.footerContainer}>
                         <Text style={styles.footerText}>
-                            Total {params.id} Trips: {searchResult.length}
+                            Total {params.id} Communities: {searchResult.length}
                         </Text>
                     </View>
                 )}
             />
         </SafeAreaView>
-    );
-};
+    )
+}
 
-export default ListTrips;
+export default ListCommunities;

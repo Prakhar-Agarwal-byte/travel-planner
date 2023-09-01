@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, Image } from 'react-native'
 
 import styles from './member.style';
-import { images } from '../../../../constants';
+
 
 const MemberCard = ({ member, handleNavigate }) => {
     return (
@@ -11,7 +11,7 @@ const MemberCard = ({ member, handleNavigate }) => {
         >
             <TouchableOpacity style={styles.memberCard}>
                 <Image
-                    source={images.profile} // Replace with member's profile image URL
+                    source={{ uri: member?.profileImage }}
                     resizeMode='contain'
                     style={styles.profileImage}
                 />

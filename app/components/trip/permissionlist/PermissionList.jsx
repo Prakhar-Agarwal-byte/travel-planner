@@ -2,15 +2,15 @@ import React from 'react';
 import { TouchableOpacity, Text, View, ActivityIndicator,FlatList } from 'react-native';
 import { useRouter } from 'expo-router'
 import { SIZES } from '../../../constants';
-import styles from './memberlist.style';
+import styles from './permissionlist.style';
 import { COLORS } from '../../../constants';
-import MemberCard from '../../common/cards/member/MemberCard';
-
+import PermissionCard from '../../common/cards/permission/PermissionCard';
+import { useAuth } from '../../../context/auth';
 import useFetch from '../../../hooks/useFetch'
 
-const TripMembersList = ({ id }) => {
+const TripPermissionList = ({ id }) => {
     const router = useRouter()
-
+    const {user}= useAuth();
     const { data, isLoading, error } = useFetch(`trips/${id}/members`)
     if (error) {
         console.log(error)
@@ -19,7 +19,7 @@ const TripMembersList = ({ id }) => {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.headerTitle}>Members</Text>
+                <Text style={styles.headerTitle}>Pending requests</Text>
                 <TouchableOpacity>
                     <Text style={styles.headerBtn}>Show all</Text>
                 </TouchableOpacity>
@@ -34,11 +34,12 @@ const TripMembersList = ({ id }) => {
                    <FlatList 
                  data={data}
                  renderItem={({item}) => (
-                     <MemberCard
+                     <PermissionCard
                      member={item}
                      key={`profile-${item?.id}`}
                      handleNavigate={() => router.push(`/profile/${item?._id}`)}
-                         
+                     handleApproval={() => router.push(`/profile/${item?._id}`)}
+                     handleRejection={() => router.push(`/profile/${item?._id}`)}
                      />
                  )}
                 
@@ -54,4 +55,4 @@ const TripMembersList = ({ id }) => {
     );
 };
 
-export default TripMembersList;
+export default TripPermissionList;

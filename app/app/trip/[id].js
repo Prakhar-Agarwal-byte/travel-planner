@@ -6,6 +6,7 @@ import { COLORS, icons } from '../../constants'
 import { ScreenHeaderBtn } from '../../components'
 import styles from '../../styles/tripdetails'
 import TripMembersList from '../../components/trip/memberlist/MemberList';
+import TripPermissionList from '../../components/trip/permissionlist/PermissionList';
 import { useAuth } from "../../context/auth";
 import useFetch from '../../hooks/useFetch';
 
@@ -20,8 +21,58 @@ const TripDetails = () => {
     const { user } = useAuth();
     const params = useGlobalSearchParams();
     const handleJoinNow = () => {
-        // Handle the logic for joining the trip
-        console.log('User joined the trip');
+        if (joinStatus === 'not_joined') {
+            //joining the trip
+            axiosInstance.post('/trip/join')
+                .then(response => {
+                    setJoinStatus('requested');
+                    console.log('User requested to join the trip');
+                })
+                .catch(error => {
+                    console.error('Error joining the trip:', error);
+                });
+        } else if (joinStatus === 'requested') {
+            // canceling the join request
+            axiosInstance.post('/api/trip/cancel-request')
+                .then(response => {
+                    setJoinStatus('not_joined');
+                    console.log('User canceled join request');
+                })
+                .catch(error => {
+                    console.error('Error canceling join request:', error);
+                });
+        } else if (joinStatus === 'joined') {
+            //leaving the trip
+            axiosInstance.post('/api/trip/leave')
+                .then(response => {
+                    setJoinStatus('not_joined');
+                    console.log('User left the trip');
+                })
+                .catch(error => {
+                    console.error('Error leaving the trip:', error);
+                });
+        }
+    };
+
+    const getJoinButtonLabel = () => {
+        if (joinStatus === 'not_joined') {
+            return 'Join Now';
+        } else if (joinStatus === 'requested') {
+            return 'Requested';
+        } else if (joinStatus === 'joined') {
+            return 'Leave';
+        }
+    };
+
+    const getJoinButtonStyle = () => {
+        if (joinStatus === 'joined') {
+            return styles.leaveButton;
+        }
+        return styles.joinButton;
+    };
+
+    const isJoinButtonDisabled = () => {
+        return joinStatus === 'requested';
     };
 
     const { data, isLoading, error } = useFetch(`trips/${params.id}`)
@@ -78,15 +129,11 @@ const TripDetails = () => {
                         </View>
                         <View style={styles.detailsContainer}>
                             <Text style={styles.label}>Vacant Seats:</Text>
-                            <Text style={styles.value}>1</Text>
+                            <Text style={styles.value}>{data.capacity}</Text>
                         </View>
                         <View style={styles.detailsContainer}>
                             <Text style={styles.label}>Mode of Transportation:</Text>
                             <Text style={styles.value}>{data.modeOfTransport}</Text>
-                        </View>
-                        <View style={styles.detailsContainer}>
-                            <Text style={styles.label}>Stops:</Text>
-                            <Text style={styles.value}>Stop 1, Stop 2, Stop 3</Text>
                         </View>
                         <View style={styles.detailsContainer}>
                             <Text style={styles.label}>Community:</Text>
@@ -98,6 +145,7 @@ const TripDetails = () => {
                             </TouchableOpacity>
                         </View>
                         <TripMembersList id={params.id} />
+                        <TripPermissionList id={params.id} />
                     </View>
                 </ScrollView>
             )}

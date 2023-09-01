@@ -5,6 +5,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 0,
         zIndex: 100,
+
     },
     createButton: {
         position: 'absolute',
@@ -14,14 +15,15 @@ const styles = StyleSheet.create({
         width: 50,
         height: 50,
         borderRadius: 25,
-        justifyContent: 'center',
-        alignItems: 'center',
+        right:20,
+        bottom:35,
+        
         elevation: 5,
         shadowColor: COLORS.black,
-        shadowOpacity: 0.3,
+        shadowOpacity: 0.2,
         shadowOffset: {
             width: 0,
-            height: 2,
+            height: 0,
         },
     },
 });
