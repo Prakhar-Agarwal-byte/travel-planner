@@ -17,11 +17,11 @@ router.get("/", tripController.getTrips);
 router.get("/:id", tripController.getTripById);
 
 // Update a trip
-router.put(
-  "/:id",
-  passport.authenticate("jwt", { session: false }),
-  tripController.updateTrip
-);
+// router.put(
+//   "/:id",
+//   passport.authenticate("jwt", { session: false }),
+//   tripController.updateTrip
+// );
 
 // Delete a trip
 router.delete(
@@ -38,14 +38,14 @@ router.post(
 );
 
 // Get members of a trip
-router.get("/:id/members", tripController.getTripMembers);
+// router.get("/:id/members", tripController.getTripMembers);
 
 // Get trips of a user
-router.get(
-  "/user/:userId",
-  passport.authenticate("jwt", { session: false }),
-  tripController.getUserTrips
-);
+// router.get(
+//   "/user/:userId",
+//   passport.authenticate("jwt", { session: false }),
+//   tripController.getUserTrips
+// );
 
 // Remove user from a trip
 router.delete(
@@ -68,11 +68,18 @@ router.put(
   tripController.acceptJoinRequest
 );
 
-// Get pending join requests for a trip
-router.get(
-  "/:id/pending-requests",
+// Decline a join request for a trip
+router.put(
+  "/:id/accept-request/:userId",
   passport.authenticate("jwt", { session: false }),
-  tripController.getPendingJoinRequests
+  tripController.declineJoinRequest
 );
+
+// Get pending join requests for a trip
+// router.get(
+//   "/:id/pending-requests",
+//   passport.authenticate("jwt", { session: false }),
+//   tripController.getPendingJoinRequests
+// );
 
 module.exports = router;

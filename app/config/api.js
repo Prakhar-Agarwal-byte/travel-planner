@@ -2,6 +2,7 @@
 
 import { applyAuthTokenInterceptor } from "react-native-axios-jwt";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const BASE_URL = "https://travel-planner-production-9c43.up.railway.app";
 

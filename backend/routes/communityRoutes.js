@@ -30,23 +30,30 @@ router.put(
   communityController.acceptJoinRequest
 );
 
+// Decline a join request for a community
+router.put(
+  "/:id/decline-request/:userId",
+  passport.authenticate("jwt", { session: false }),
+  communityController.declineJoinRequest
+);
+
 // Get members of a community
-router.get("/:id/members", communityController.getCommunityMembers);
+// router.get("/:id/members", communityController.getCommunityMembers);
 
 // Get trips of a community
-router.get("/:id/trips", communityController.getCommunityTrips);
+// router.get("/:id/trips", communityController.getCommunityTrips);
 
 // Get communities joined by a user
-router.get(
-  "/user/:userId/joined",
-  communityController.getUserJoinedCommunities
-);
+// router.get(
+//   "/user/:userId/joined",
+//   communityController.getUserJoinedCommunities
+// );
 
 // Get communities created by a user
-router.get(
-  "/user/:userId/created",
-  communityController.getUserCreatedCommunities
-);
+// router.get(
+//   "/user/:userId/created",
+//   communityController.getUserCreatedCommunities
+// );
 
 // Leave a community
 router.delete(
@@ -56,6 +63,6 @@ router.delete(
 );
 
 // Get communities by location
-router.get("/location/:location", communityController.getCommunitiesByLocation);
+// router.get("/location/:location", communityController.getCommunitiesByLocation);
 
 module.exports = router;

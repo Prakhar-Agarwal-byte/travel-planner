@@ -14,17 +14,17 @@ router.get(
 router.get("/profile/:userId", userController.getUserProfile);
 
 // Update user profile
-router.put(
-  "/profile",
-  passport.authenticate("jwt", { session: false }),
-  userController.updateProfile
-);
+// router.put(
+//   "/profile",
+//   passport.authenticate("jwt", { session: false }),
+//   userController.updateProfile
+// );
 
 // Change user password
-router.put(
-  "/change-password",
-  passport.authenticate("jwt", { session: false }),
-  userController.changePassword
-);
+// router.put(
+//   "/change-password",
+//   passport.authenticate("jwt", { session: false }),
+//   userController.changePassword
+// );
 
 module.exports = router;
