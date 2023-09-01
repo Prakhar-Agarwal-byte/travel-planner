@@ -37,8 +37,11 @@ router.post(
   tripController.joinTrip
 );
 
-// Get members of a trip
-// router.get("/:id/members", tripController.getTripMembers);
+//Get members of a trip
+router.get("/:id/members", tripController.getTripMembers);
+
+//Get pending join requests of a trip
+router.get("/:id/members", tripController.getPendingJoinRequests);
 
 // Get trips of a user
 // router.get(
