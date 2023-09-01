@@ -39,7 +39,14 @@ exports.getCommunities = async (req, res) => {
 // Get a community by ID
 exports.getCommunityById = async (req, res) => {
   try {
-    const community = await Community.findById(req.params.id);
+    const community = await Community.findById(req.params.id)
+      .populate({ path: "members", select: "name email profileImage" })
+      .populate({
+        path: "pendingJoinRequests",
+        select: "name email profileImage",
+      })
+      .populate({ path: "trips", select: "title" })
+      .populate({ path: "createdBy", select: "name" });
     if (!community) {
       return res.status(404).json({ msg: "Community not found" });
     }

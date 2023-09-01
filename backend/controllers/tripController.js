@@ -59,7 +59,14 @@ exports.getTrips = async (req, res) => {
 // Get a trip by ID
 exports.getTripById = async (req, res) => {
   try {
-    const trip = await Trip.findById(req.params.id);
+    const trip = await Trip.findById(req.params.id)
+      .populate({ path: "members", select: "name email profileImage" })
+      .populate({
+        path: "pendingJoinRequests",
+        select: "name email profileImage",
+      })
+      .populate({ path: "community", select: "name" })
+      .populate({ path: "createdBy", select: "name" });
     if (!trip) {
       return res.status(404).json({ msg: "Trip not found" });
     }

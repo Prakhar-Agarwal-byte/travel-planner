@@ -30,8 +30,6 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-userSchema.plugin(require("mongoose-autopopulate"));
-
 // Create User model
 const User = mongoose.model("User", userSchema);
 
