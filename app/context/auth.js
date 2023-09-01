@@ -2,10 +2,7 @@ import { router, useSegments } from "expo-router";
 import React from "react";
 import { useState, useEffect } from "react";
 import { axiosInstance } from "../config/api";
-import {
-  clearAuthTokens,
-  setAuthTokens,
-} from "react-native-axios-jwt";
+import { clearAuthTokens, setAuthTokens } from "react-native-axios-jwt";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const AuthContext = React.createContext(null);
@@ -90,7 +87,7 @@ export function Provider(props) {
   const clearUserData = async () => {
     try {
       await AsyncStorage.removeItem("user");
-      setUser(null);
+      setAuth(null);
       console.log("User data cleared successfully!");
     } catch (error) {
       console.log("Error clearing user data:", error);
