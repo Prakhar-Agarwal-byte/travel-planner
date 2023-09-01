@@ -301,6 +301,37 @@ exports.leaveCommunity = async (req, res) => {
   }
 };
 
+// Delete a community and its associated trips
+exports.deleteCommunity = async (req, res) => {
+  try {
+    // Find the community by ID
+    const community = await Community.findById(req.params.id);
+
+    if (!community) {
+      return res.status(404).json({ msg: "Community not found" });
+    }
+
+    // Check if the authenticated user is the creator of the community
+    if (community.createdBy.toString() !== req.user.id) {
+      return res.status(401).json({ msg: "Not authorized" });
+    }
+
+    // Find and delete all trips associated with the community
+    await Trip.deleteMany({ community: community._id });
+
+    // Delete the community
+    await community.deleteOne();
+
+    res.json({ msg: "Community and associated trips removed" });
+  } catch (err) {
+    console.error(err.message);
+    if (err.kind === "ObjectId") {
+      return res.status(404).json({ msg: "Community not found" });
+    }
+    res.status(500).send("Server error");
+  }
+};
+
 // Get communities by location
 // exports.getCommunitiesByLocation = async (req, res) => {
 //   const { location } = req.params;

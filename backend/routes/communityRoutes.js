@@ -68,6 +68,13 @@ router.delete(
   communityController.leaveCommunity
 );
 
+// Delete a community and its associated trips
+router.delete(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  communityController.deleteCommunity
+);
+
 // Get communities by location
 // router.get("/location/:location", communityController.getCommunitiesByLocation);
 
