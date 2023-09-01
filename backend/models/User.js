@@ -24,13 +24,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  communities: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Community", // Reference to the User model
-      autopopulate: true,
-    },
-  ],
   createdAt: {
     type: Date,
     default: Date.now,
