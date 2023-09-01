@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Stack, useRouter, useGlobalSearchParams } from "expo-router";
 import { View, Text, TouchableOpacity, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native';
 
@@ -20,6 +20,7 @@ const TripDetails = () => {
     const router = useRouter()
     const { user } = useAuth();
     const params = useGlobalSearchParams();
+    const [estimatedPriceRange, setEstimatedPriceRange] = useState("Unknown");
     const handleJoinNow = () => {
         if (joinStatus === 'not_joined') {
             //joining the trip
@@ -139,6 +140,10 @@ const TripDetails = () => {
                             <Text style={styles.label}>Community:</Text>
                             <Text style={styles.value}>{data.community?.name || 'Unknown'}</Text>
                         </View>
+                        {(data.modeOfTransport === 'flight') && (<View style={styles.detailsContainer}>
+                            <Text style={styles.label}>Estimated Price Range:</Text>
+                            <Text style={styles.value}>{estimatedPriceRange}</Text>
+                        </View>)}
                         <View style={styles.joinButtonContainer}>
                             <TouchableOpacity onPress={handleJoinNow} style={styles.joinButton}>
                                 <Text style={styles.joinButtonText}>Join Now</Text>

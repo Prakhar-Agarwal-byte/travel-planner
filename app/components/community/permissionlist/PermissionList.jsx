@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, Text, View, ActivityIndicator,FlatList } from 'react-native';
+import { TouchableOpacity, Text, View, ActivityIndicator, FlatList } from 'react-native';
 import { useRouter } from 'expo-router'
 import { SIZES } from '../../../constants';
 import styles from './permissionlist.style';
@@ -11,7 +11,6 @@ import useFetch from '../../../hooks/useFetch'
 
 const CommunityPermissionList = ({ id }) => {
     const router = useRouter();
-    const {user}= useAuth();
     const { data, isLoading, error } = useFetch(`communities/${id}/members`)
     if (error) {
         console.log(error)
@@ -32,23 +31,21 @@ const CommunityPermissionList = ({ id }) => {
                 <Text>Something went wrong</Text>
             ) : (
                 <View style={styles.cardsContainer}>
-                   <FlatList 
-                 data={data}
-                 renderItem={({item}) => (
-                     <PermissionCard
-                     member={item}
-                     key={`profile-${item?.id}`}
-                     handleNavigate={() => router.push(`/profile/${item?._id}`)}
-                     handleApproval={() => router.push(`/profile/${item?._id}`)}
-                     handleRejection={() => router.push(`/profile/${item?._id}`)}
-                     />
-                 )}
-                
-                
-                horizontal 
-                contentContainerStyle={{ columnGap: SIZES.medium }}
-                />
-               
+                    <FlatList
+                        data={data}
+                        renderItem={({ item }) => (
+                            <PermissionCard
+                                member={item}
+                                key={`profile-${item?.id}`}
+                                handleNavigate={() => router.push(`/profile/${item?._id}`)}
+                            />
+                        )}
+
+
+                        horizontal
+                        contentContainerStyle={{ columnGap: SIZES.medium }}
+                    />
+
                 </View>
             )}
 
