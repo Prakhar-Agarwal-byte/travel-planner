@@ -243,20 +243,18 @@ exports.getPendingJoinRequests = async (req, res) => {
 // };
 
 // Get communities joined by a user
-// exports.getUserJoinedCommunities = async (req, res) => {
-//   try {
-//     const userId = req.params.userId;
-//     const communities = await Community.find({
-//       members: { $in: [userId] },
-//     })
-//       .populate("members", "name")
-//       .populate("createdBy", "name");
-//     res.json(communities);
-//   } catch (err) {
-//     console.error(err.message);
-//     res.status(500).send("Server error");
-//   }
-// };
+exports.getUserJoinedCommunities = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const communities = await Community.find({
+      members: { $in: [userId] },
+    });
+    res.json(communities);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+};
 
 // Get communities created by a user
 // exports.getUserCreatedCommunities = async (req, res) => {
