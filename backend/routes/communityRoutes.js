@@ -37,8 +37,14 @@ router.put(
   communityController.declineJoinRequest
 );
 
-// Get members of a community
-// router.get("/:id/members", communityController.getCommunityMembers);
+//Get members of a community
+router.get("/:id/members", communityController.getCommunityMembers);
+
+//Get pending join requests of a community
+router.get(
+  "/:id/pendingJoinRequests",
+  communityController.getPendingJoinRequests
+);
 
 // Get trips of a community
 // router.get("/:id/trips", communityController.getCommunityTrips);

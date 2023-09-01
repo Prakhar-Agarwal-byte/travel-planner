@@ -59,7 +59,12 @@ exports.getTrips = async (req, res) => {
 // Get a trip by ID
 exports.getTripById = async (req, res) => {
   try {
-    const trip = await Trip.findById(req.params.id);
+    const trip = await Trip.findById(req.params.id)
+      .populate("members", "name email profileImage")
+      .populate("pendingJoinRequests", "name email profileImage")
+      .populate("community", "name")
+      .populate("createdBy", "name");
+
     if (!trip) {
       return res.status(404).json({ msg: "Trip not found" });
     }
@@ -289,24 +294,49 @@ exports.declineJoinRequest = async (req, res) => {
 //   }
 // };
 
-// Get members of a trip
-// exports.getTripMembers = async (req, res) => {
-//   try {
-//     const trip = await Trip.findById(req.params.id).populate("members", "name");
+//Get members of a trip
+exports.getTripMembers = async (req, res) => {
+  try {
+    const trip = await Trip.findById(req.params.id).populate(
+      "members",
+      "name email profileImage"
+    );
 
-//     if (!trip) {
-//       return res.status(404).json({ msg: "Trip not found" });
-//     }
+    if (!trip) {
+      return res.status(404).json({ msg: "Trip not found" });
+    }
 
-//     res.json(trip.members);
-//   } catch (err) {
-//     console.error(err.message);
-//     if (err.kind === "ObjectId") {
-//       return res.status(404).json({ msg: "Trip not found" });
-//     }
-//     res.status(500).send("Server error");
-//   }
-// };
+    res.json(trip.members);
+  } catch (err) {
+    console.error(err.message);
+    if (err.kind === "ObjectId") {
+      return res.status(404).json({ msg: "Trip not found" });
+    }
+    res.status(500).send("Server error");
+  }
+};
+
+//Get pending join requests of a trip
+exports.getPendingJoinRequests = async (req, res) => {
+  try {
+    const trip = await Trip.findById(req.params.id).populate(
+      "pendingJoinRequests",
+      "name email profileImage"
+    );
+
+    if (!trip) {
+      return res.status(404).json({ msg: "Trip not found" });
+    }
+
+    res.json(trip.pendingJoinRequests);
+  } catch (err) {
+    console.error(err.message);
+    if (err.kind === "ObjectId") {
+      return res.status(404).json({ msg: "Trip not found" });
+    }
+    res.status(500).send("Server error");
+  }
+};
 
 // Get trips of a user
 // exports.getUserTrips = async (req, res) => {

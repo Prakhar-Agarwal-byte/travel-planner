@@ -35,26 +35,22 @@ const tripSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User", // Reference to the User model
     required: true,
-    autopopulate: true,
   },
   community: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Community", // Reference to the Community model
     required: true,
-    autopopulate: true,
   },
   pendingJoinRequests: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User", // Reference to the User model
-      autopopulate: true,
     },
   ],
   members: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User", // Reference to the User model
-      autopopulate: true,
     },
   ],
   createdAt: {
@@ -62,8 +58,6 @@ const tripSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
-
-tripSchema.plugin(require("mongoose-autopopulate"));
 
 // Create Trip model
 const Trip = mongoose.model("Trip", tripSchema);

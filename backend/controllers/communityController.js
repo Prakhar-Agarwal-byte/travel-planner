@@ -39,7 +39,15 @@ exports.getCommunities = async (req, res) => {
 // Get a community by ID
 exports.getCommunityById = async (req, res) => {
   try {
-    const community = await Community.findById(req.params.id);
+    const community = await Community.findById(req.params.id)
+      .populate("members", "name email profileImage")
+      .populate("pendingJoinRequests", "name email profileImage")
+      .populate(
+        "trips",
+        "title modeOfTransport fromDestination toDestination startDate"
+      )
+      .populate("createdBy", "name");
+
     if (!community) {
       return res.status(404).json({ msg: "Community not found" });
     }
@@ -167,26 +175,48 @@ exports.declineJoinRequest = async (req, res) => {
 };
 
 // Get members of a community
-// exports.getCommunityMembers = async (req, res) => {
-//   try {
-//     const community = await Community.findById(req.params.id).populate(
-//       "members",
-//       "name"
-//     );
+exports.getCommunityMembers = async (req, res) => {
+  try {
+    const community = await Community.findById(req.params.id).populate(
+      "members",
+      "name email profileImage"
+    );
 
-//     if (!community) {
-//       return res.status(404).json({ msg: "Community not found" });
-//     }
+    if (!community) {
+      return res.status(404).json({ msg: "Community not found" });
+    }
 
-//     res.json(community.members);
-//   } catch (err) {
-//     console.error(err.message);
-//     if (err.kind === "ObjectId") {
-//       return res.status(404).json({ msg: "Community not found" });
-//     }
-//     res.status(500).send("Server error");
-//   }
-// };
+    res.json(community.members);
+  } catch (err) {
+    console.error(err.message);
+    if (err.kind === "ObjectId") {
+      return res.status(404).json({ msg: "Community not found" });
+    }
+    res.status(500).send("Server error");
+  }
+};
+
+// Get pending join requests of a community
+exports.getPendingJoinRequests = async (req, res) => {
+  try {
+    const community = await Community.findById(req.params.id).populate(
+      "pendingJoinRequests",
+      "name email profileImage"
+    );
+
+    if (!community) {
+      return res.status(404).json({ msg: "Community not found" });
+    }
+
+    res.json(community.pendingJoinRequests);
+  } catch (err) {
+    console.error(err.message);
+    if (err.kind === "ObjectId") {
+      return res.status(404).json({ msg: "Community not found" });
+    }
+    res.status(500).send("Server error");
+  }
+};
 
 // Get trips of a community
 // exports.getCommunityTrips = async (req, res) => {
