@@ -32,7 +32,7 @@ router.delete(
 
 // Join a trip
 router.post(
-  "/:id/join",
+  "/:id/join-request",
   passport.authenticate("jwt", { session: false }),
   tripController.joinTrip
 );
@@ -57,11 +57,11 @@ router.delete(
   tripController.leaveTrip
 );
 
-// Send a join request to a trip
-router.post(
-  "/:id/join-request",
+// Remove user from a trip
+router.delete(
+  "/:id/remove/:userId",
   passport.authenticate("jwt", { session: false }),
-  tripController.joinTrip
+  tripController.removeMember
 );
 
 // Accept a join request for a trip
@@ -73,7 +73,7 @@ router.put(
 
 // Decline a join request for a trip
 router.put(
-  "/:id/accept-request/:userId",
+  "/:id/decline-request/:userId",
   passport.authenticate("jwt", { session: false }),
   tripController.declineJoinRequest
 );

@@ -18,7 +18,7 @@ router.get("/:id", communityController.getCommunityById);
 
 // Join a community
 router.post(
-  "/:id/join",
+  "/:id/join-request",
   passport.authenticate("jwt", { session: false }),
   communityController.joinCommunity
 );
@@ -66,6 +66,13 @@ router.delete(
   "/:id/leave",
   passport.authenticate("jwt", { session: false }),
   communityController.leaveCommunity
+);
+
+// Remove a member from community
+router.delete(
+  "/:id/remove/:userId",
+  passport.authenticate("jwt", { session: false }),
+  communityController.removeMember
 );
 
 // Delete a community and its associated trips
