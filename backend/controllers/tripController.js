@@ -380,6 +380,38 @@ exports.leaveTrip = async (req, res) => {
   }
 };
 
+// Remove a member from a trip
+exports.removeMember = async (req, res) => {
+  try {
+    const tripId = req.params.id;
+    const userId = req.params.userId;
+    const trip = await Trip.findById(tripId);
+
+    if (!trip) {
+      return res.status(404).json({ msg: "Trip not found" });
+    }
+
+    // Check if the user is a member of the trip
+    const memberIndex = trip.members.findIndex(
+      (member) => member.user.toString() === userId
+    );
+    if (memberIndex === -1) {
+      return res.status(401).json({ msg: "Not a member" });
+    }
+
+    trip.members.splice(memberIndex, 1);
+    await trip.save();
+
+    res.json(trip);
+  } catch (err) {
+    console.error(err.message);
+    if (err.kind === "ObjectId") {
+      return res.status(404).json({ msg: "Trip not found" });
+    }
+    res.status(500).send("Server error");
+  }
+};
+
 // Get trips of a community
 // exports.getCommunityTrips = async (req, res) => {
 //   try {
