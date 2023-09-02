@@ -1,18 +1,34 @@
 import React from 'react';
-import { TouchableOpacity, Text, View, ActivityIndicator, FlatList } from 'react-native';
+import { TouchableOpacity, Text, View, FlatList } from 'react-native';
 import { useRouter } from 'expo-router'
 import { SIZES } from '../../../constants';
 import styles from './permissionlist.style';
-import { COLORS } from '../../../constants';
 import PermissionCard from '../../common/cards/permission/PermissionCard';
-import { useAuth } from '../../../context/auth';
-import useFetch from '../../../hooks/useFetch'
+import { axiosInstance } from '../../../config/api';
 
-const TripPermissionList = ({ id }) => {
+const TripPermissionList = ({ id, requests }) => {
     const router = useRouter()
-    const { data, isLoading, error } = useFetch(`trips/${id}/members`)
-    if (error) {
-        console.log(error)
+
+    const handleApproval = async (userId) => {
+        try {
+            const response = await axiosInstance.put(`/trips/${id}/accept-request/${userId}`)
+            console.log(response.data)
+        } catch (error) {
+            console.error(error)
+        } finally {
+            router.push(`/trip/${id}`)
+        }
+    }
+
+    const handleReject = async (userId) => {
+        try {
+            const response = await axiosInstance.put(`/trips/${id}/decline-request/${userId}`)
+            console.log(response.data)
+        } catch (error) {
+            console.error(error)
+        } finally {
+            router.push(`/trip/${id}`)
+        }
     }
 
     return (
@@ -24,29 +40,25 @@ const TripPermissionList = ({ id }) => {
                 </TouchableOpacity>
             </View>
 
-            {isLoading ? (
-                <ActivityIndicator size="large" colors={COLORS.primary} />
-            ) : error ? (
-                <Text>Something went wrong</Text>
-            ) : (
-                <View style={styles.cardsContainer}>
-                    <FlatList
-                        data={data}
-                        renderItem={({ item }) => (
-                            <PermissionCard
-                                member={item}
-                                key={`profile-${item?.id}`}
-                                handleNavigate={() => router.push(`/profile/${item?._id}`)}
-                            />
-                        )}
+            <View style={styles.cardsContainer}>
+                <FlatList
+                    data={requests}
+                    renderItem={({ item }) => (
+                        <PermissionCard
+                            member={item}
+                            key={`profile-${item?._id}`}
+                            handleNavigate={() => router.push(`/profile/${item?._id}`)}
+                            handleApproval={() => handleApproval(item?._id)}
+                            handleReject={() => handleReject(item?._id)}
+                        />
+                    )}
 
 
-                        horizontal
-                        contentContainerStyle={{ columnGap: SIZES.medium }}
-                    />
+                    horizontal
+                    contentContainerStyle={{ columnGap: SIZES.medium }}
+                />
 
-                </View>
-            )}
+            </View>
 
         </View>
     );

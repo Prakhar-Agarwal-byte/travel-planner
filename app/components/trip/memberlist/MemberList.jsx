@@ -1,19 +1,23 @@
 import React from 'react';
-import { TouchableOpacity, Text, View, ActivityIndicator,FlatList } from 'react-native';
+import { TouchableOpacity, Text, View, FlatList } from 'react-native';
 import { useRouter } from 'expo-router'
 import { SIZES } from '../../../constants';
 import styles from './memberlist.style';
-import { COLORS } from '../../../constants';
 import MemberCard from '../../common/cards/member/MemberCard';
+import { axiosInstance } from '../../../config/api';
 
-import useFetch from '../../../hooks/useFetch'
-
-const TripMembersList = ({ id }) => {
+const TripMembersList = ({ id, members, isAdmin }) => {
     const router = useRouter()
 
-    const { data, isLoading, error } = useFetch(`trips/${id}/members`)
-    if (error) {
-        console.log(error)
+    const handleRemove = async (userId) => {
+        try {
+            const response = await axiosInstance.delete(`/trips/${id}/remove/${userId}`)
+            console.log(response.data)
+        } catch (error) {
+            console.error(error)
+        } finally {
+            router.push(`/trip/${id}`)
+        }
     }
 
     return (
@@ -25,30 +29,22 @@ const TripMembersList = ({ id }) => {
                 </TouchableOpacity>
             </View>
 
-            {isLoading ? (
-                <ActivityIndicator size="large" colors={COLORS.primary} />
-            ) : error ? (
-                <Text>Something went wrong</Text>
-            ) : (
-                <View style={styles.cardsContainer}>
-                   <FlatList 
-                 data={data}
-                 renderItem={({item}) => (
-                     <MemberCard
-                     member={item}
-                     key={`profile-${item?.id}`}
-                     handleNavigate={() => router.push(`/profile/${item?._id}`)}
-                         
-                     />
-                 )}
-                
-                
-                horizontal 
-                contentContainerStyle={{ columnGap: SIZES.medium }}
+            <View style={styles.cardsContainer}>
+                <FlatList
+                    data={members}
+                    renderItem={({ item }) => (
+                        <MemberCard
+                            member={item}
+                            key={`profile-${item?._id}`}
+                            handleNavigate={() => router.push(`/profile/${item?._id}`)}
+                            isAdmin={isAdmin}
+                            handleRemove={() => handleRemove(item?._id)}
+                        />
+                    )}
+                    horizontal
+                    contentContainerStyle={{ columnGap: SIZES.medium }}
                 />
-               
-                </View>
-            )}
+            </View>
 
         </View>
     );

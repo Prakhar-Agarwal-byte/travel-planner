@@ -6,12 +6,20 @@ import { COLORS, icons, SIZES } from "../../constants";
 import { ScreenHeaderBtn, Welcome, TripList } from "../../components";
 import CreateButton from "../../components/common/button/create/CreateButton";
 import { useAuth } from "../../context/auth";
+import useFetch from "../../hooks/useFetch";
 
 const Trip = () => {
     const router = useRouter();
     const { user } = useAuth();
     const [searchTerm, setSearchTerm] = useState("");
     const activeTab = "Trip";
+
+    const fetchTripsByStatus = (status) => {
+        const { data: trips } = useFetch('trips', {
+            tripStatus: status,
+        })
+        return trips;
+    }
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
@@ -49,11 +57,11 @@ const Trip = () => {
                         activeTab={activeTab}
                     />
 
-                    <TripList status="new" />
-                    <TripList status="active" />
-                    <TripList status="joined" />
-                    <TripList status="requested" />
-                    <TripList status="completed" />
+                    <TripList trips={fetchTripsByStatus("new")} status="new" />
+                    <TripList trips={fetchTripsByStatus("active")} status="active" />
+                    <TripList trips={fetchTripsByStatus("joined")} status="joined" />
+                    <TripList trips={fetchTripsByStatus("requested")} status="requested" />
+                    <TripList trips={fetchTripsByStatus("completed")} status="completed" />
                 </View>
             </ScrollView>
             <CreateButton activeTab={activeTab} />

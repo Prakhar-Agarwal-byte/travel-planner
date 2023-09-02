@@ -11,10 +11,9 @@ const styles = StyleSheet.create({
         ...SHADOWS.medium,
         shadowColor: COLORS.white,
     },
-    memberCard: {
+    profileContainer: {
         flexDirection: 'row',
-        alignItems: 'center',
-        paddingBottom: 10,
+        justifyContent: 'space-between',
     },
     profileImage: {
         width: 60,
