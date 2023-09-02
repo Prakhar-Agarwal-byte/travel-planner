@@ -181,7 +181,7 @@ exports.joinTrip = async (req, res) => {
         .json({ msg: "User has already sent a request or is a member" });
     }
 
-    trip.pendingJoinRequests.push({ user: req.user.id });
+    trip.pendingJoinRequests.push(req.user.id);
     await trip.save();
 
     res.json(trip);
@@ -221,7 +221,7 @@ exports.acceptJoinRequest = async (req, res) => {
     trip.pendingJoinRequests.splice(pendingUserIndex, 1);
 
     // Move the user from pendingJoinRequests to members
-    trip.members.push({ user: pendingUser.user });
+    trip.members.push(pendingUser.user);
     await trip.save();
 
     res.json(trip);
