@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Stack, useRouter, useGlobalSearchParams } from "expo-router";
 import { View, Text, TouchableOpacity, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native';
 
 import { COLORS, icons } from '../../constants'
-import { ScreenHeaderBtn } from '../../components'
+import { ScreenHeaderBtn, TripList } from '../../components'
 import styles from '../../styles/communitydetails'
 import CommunityMembersList from '../../components/community/memberlist/MemberList';
 import CommunityPermissionList from '../../components/community/permissionlist/PermissionList';
 import { useAuth } from "../../context/auth";
 import useFetch from '../../hooks/useFetch';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { axiosInstance } from '../../config/api';
 
 const formatDateTime = (dateString) => {
     const date = new Date(dateString);
@@ -20,12 +22,42 @@ const CommunityDetails = () => {
     const params = useGlobalSearchParams();
     const router = useRouter()
     const { user } = useAuth();
-    const handleJoinCommunity = () => {
-        // Handle the logic for joining the community
-        console.log('User joined the community');
+    const [joinButtonText, setJoinButtonText] = useState("Join Now");
+    const handleJoinNow = async () => {
+        try {
+            const response = await axiosInstance.post(`/communities/${params.id}/join`)
+            console.log('Join request sent successfully', response)
+        } catch (error) {
+            console.error('Error sending join request', error)
+        } finally {
+            setJoinButtonText("Request Sent");
+        }
     };
 
+    const handleDelete = async () => {
+        try {
+            const response = await axiosInstance.delete(`/communities/${params.id}`)
+            console.log('Community deleted successfully', response);
+        } catch (error) {
+            console.error('Error deleting the community', error);
+        } finally {
+            router.push('/community');
+        }
+    }
+
+    const handleLeave = async () => {
+        try {
+            const response = await axiosInstance.delete(`/communities/${params.id}/leave`)
+            console.log('Community left successfully', response);
+        } catch (error) {
+            console.error('Error leaving the community', error);
+        } finally {
+            router.push('/community');
+        }
+    }
+
     const { data, isLoading, error } = useFetch(`communities/${params.id}`)
+    console.log('Community details:', data);
     if (error) {
         console.log(error);
     }
@@ -71,34 +103,43 @@ const CommunityDetails = () => {
                             </Text>
                         </View>
                         <View style={styles.detailsContainer}>
-                            <Text style={styles.label}>Members:</Text>
-                            <Text style={styles.value}>
-                                {data.members?.map((member) => (
-                                    <Text style={styles.value}>{member?.name || 'Unknown'}</Text>
-                                ))}
-                            </Text>
-                        </View>
-                        <View style={styles.detailsContainer}>
-                            <Text style={styles.label}>Trips:</Text>
-                            <Text style={styles.value}>
-                                {data.trips?.map((trip) => (
-                                    <Text style={styles.value}>{trip?.title}</Text>
-                                ))}
-                            </Text>
-                        </View>
-                        <View style={styles.detailsContainer}>
                             <Text style={styles.label}>Founded:</Text>
                             <Text style={styles.value}>
                                 {formatDateTime(data.createdAt)}
                             </Text>
                         </View>
-                        <View style={styles.joinButtonContainer}>
-                            <TouchableOpacity onPress={handleJoinCommunity} style={styles.joinButton}>
-                                <Text style={styles.joinButtonText}>Join Now</Text>
-                            </TouchableOpacity>
+                        <View style={styles.detailsContainer}>
+                            <Text style={styles.label}>Location:</Text>
+                            <Text style={styles.value}>
+                                {data.location}
+                            </Text>
                         </View>
-                        <CommunityMembersList id={params.id} />
-                        <CommunityPermissionList id={params.id} />
+                        <View style={styles.buttonsContainer}>
+                            {data.members?.some(member => member._id === user?._id) ? (
+                                <TouchableOpacity style={styles.joinedButton}>
+                                    <Text style={styles.joinButtonText}>Joined</Text>
+                                </TouchableOpacity>
+
+                            ) : (
+                                <TouchableOpacity onPress={handleJoinNow} style={styles.joinButton}>
+                                    <Text style={styles.joinButtonText}>{joinButtonText}</Text>
+                                </TouchableOpacity>
+                            )}
+                            {(data.createdBy?._id === user?._id) ? (
+                                <TouchableOpacity onPress={handleDelete} style={styles.deleteButton}>
+                                    <Text style={styles.deleteButtonText}>Delete</Text>
+                                    <Ionicons name="trash" size={23} color={COLORS.white} />
+                                </TouchableOpacity>
+                            ) : data.members?.some(member => member._id === user?._id) ? (
+                                <TouchableOpacity onPress={handleLeave} style={styles.deleteButton}>
+                                    <Text style={styles.deleteButtonText}>Leave</Text>
+                                    <MaterialIcons name="logout" size={25} color={COLORS.white} />
+                                </TouchableOpacity>
+                            ) : null}
+                        </View>
+                        <CommunityMembersList id={params.id} members={data.members} isAdmin={data.createdBy?._id === user?._id} />
+                        <TripList trips={data.trips} status="associated" />
+                        {(data.createdBy?._id === user?._id && data.pendingJoinRequests?.length > 0) && <CommunityPermissionList id={params.id} requests={data.pendingJoinRequests} />}
                     </View>
                 </ScrollView>
             )}

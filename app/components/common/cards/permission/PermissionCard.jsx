@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, Image } from 'react-native'
 import styles from './permission.style'
 import { icons } from '../../../../constants'
 
-const PermissionCard = ({ member, handleNavigate,handleApproval,handleRejection }) => {
+const PermissionCard = ({ member, handleNavigate, handleApproval, handleRejection }) => {
     return (
         <TouchableOpacity
             style={styles.container}
@@ -22,24 +22,24 @@ const PermissionCard = ({ member, handleNavigate,handleApproval,handleRejection 
                 <Text style={styles.memberEmail}>{member?.email}</Text>
             </View>
             <View style={styles.approvalButtonsArea}>
-            <TouchableOpacity style={styles.permissionCard}
-            onPress={handleRejection}
-            >
-                <Image
-                    source={icons.cancel} 
-                    resizeMode='contain'
-                    style={styles.approvalIcon}
-                />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.permissionCard}
-            onPress={handleApproval}
-            >
-                <Image
-                    source={icons.approve} 
-                    resizeMode='contain'
-                    style={styles.approvalIcon}
-                />
-            </TouchableOpacity>
+                <TouchableOpacity style={styles.permissionCard}
+                    onPress={handleRejection}
+                >
+                    <Image
+                        source={icons.cancel}
+                        resizeMode='contain'
+                        style={styles.approvalIcon}
+                    />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.permissionCard}
+                    onPress={handleApproval}
+                >
+                    <Image
+                        source={icons.approve}
+                        resizeMode='contain'
+                        style={styles.approvalIcon}
+                    />
+                </TouchableOpacity>
             </View>
 
         </TouchableOpacity>

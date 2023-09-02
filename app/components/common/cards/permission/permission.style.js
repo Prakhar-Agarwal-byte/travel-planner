@@ -4,8 +4,8 @@ import { COLORS, SHADOWS, SIZES, FONT } from "../../../../constants";
 
 const styles = StyleSheet.create({
     container: {
-        padding: SIZES.large,
-        backgroundColor: '#EFEFEF' ,
+        padding: SIZES.xLarge,
+        backgroundColor: COLORS.white,
         borderRadius: SIZES.medium,
         justifyContent: "space-between",
         ...SHADOWS.medium,
@@ -15,7 +15,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         paddingBottom: 10,
-       
     },
     profileImage: {
         width: 60,
@@ -25,7 +24,7 @@ const styles = StyleSheet.create({
     },
     approvalIcon:
     {
-        marginTop:20,
+        marginTop: 20,
         width: 40,
         height: 40,
         borderRadius: 30,

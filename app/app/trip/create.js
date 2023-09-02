@@ -15,6 +15,7 @@ import styles from "../../styles/createtrip";
 import { ScreenHeaderBtn } from "../../components";
 import { axiosInstance } from "../../config/api";
 import { useAuth } from "../../context/auth";
+import axios from 'axios';
 
 const CreateTrip = () => {
   const router = useRouter();
@@ -27,6 +28,7 @@ const CreateTrip = () => {
   const [startDate, setStartDate] = useState("");
   const [startTime, setStartTime] = useState("");
   const [modeOfTransport, setModeOfTransport] = useState("");
+  const [estimatedPriceRange, setEstimatedPriceRange] = useState("");
   const [capacity, setCapacity] = useState();
   const [isOpen, setIsOpen] = useState(false);
   const [isTransportOpen, setIsTransportOpen] = useState(false);
@@ -73,11 +75,48 @@ const CreateTrip = () => {
     fetchData();
   }, []);
 
+  const fetchFlightPriceData = async (source, destination, date) => {
+    const options = {
+      method: 'GET',
+      url: 'https://tripadvisor16.p.rapidapi.com/api/v1/flights/searchFlights',
+      params: {
+        sourceAirportCode: source,
+        destinationAirportCode: destination,
+        date: date,
+        itineraryType: 'ONE_WAY',
+        sortOrder: 'PRICE',
+        numAdults: '1',
+        numSeniors: '0',
+        classOfService: 'ECONOMY',
+        pageNumber: '1',
+        currencyCode: 'USD'
+      },
+      headers: {
+        'X-RapidAPI-Key': '7764ebe318mshaff88aa323487aap1d5bf4jsnd5861ae22850',
+        'X-RapidAPI-Host': 'tripadvisor16.p.rapidapi.com'
+      }
+    };
+
+    try {
+      const response = await axios.request(options);
+      console.log('Flight price data:', response.data);
+      var lowerPrice = response.data.data?.flights[0].purchaseLinks[0].totalPricePerPassenger;
+      var higherPrice = response.data.data?.flights[response.data.data?.flights.length - 1].purchaseLinks[response.data.data?.flights[0].purchaseLinks.length - 1].totalPricePerPassenger;
+      var currency = response.data.data?.flights[0].purchaseLinks[0].currency;
+      setEstimatedPriceRange(`${lowerPrice} - ${higherPrice} ${currency}`);
+      console.log('Estimated price range:', estimatedPriceRange);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   const handleCreateTrip = async () => {
     setLoading(true);
     const dateTimeString = `${startDate} ${startTime}`;
     const formattedDate = new Date(dateTimeString);
-
+    if (modeOfTransport === "flight") {
+      fetchFlightPriceData(fromDestination, toDestination, startDate);
+    }
     try {
       const response = await axiosInstance.post("/trips", {
         title,
@@ -103,6 +142,7 @@ const CreateTrip = () => {
       setModeOfTransport("");
       setCapacity("");
       setCurrentCommunityId("Select Community");
+      setEstimatedPriceRange("");
       router.push("/trip");
     }
   };

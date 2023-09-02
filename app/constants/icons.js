@@ -20,8 +20,9 @@ import chevronRight from '../assets/icons/chevron-right.png'
 import train from "../assets/icons/train.png";
 import trip from "../assets/icons/trip.png";
 import user from "../assets/icons/user.png";
-import approve from"../assets/icons/approve.png";
-import cancel from"../assets/icons/cancel.png"
+import approve from "../assets/icons/approve.png";
+import cancel from "../assets/icons/cancel.png"
+
 export default {
   bicycle,
   bike,

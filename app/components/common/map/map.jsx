@@ -4,7 +4,7 @@ import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import polyline from '@mapbox/polyline';
 
-export default function map() {
+const Map = () => {
   const [userLocation, setUserLocation] = useState(null);
   const [directionPoints, setDirectionPoints] = useState([]);
 
@@ -23,7 +23,7 @@ export default function map() {
     );
   }, []);
 
-  const fetchDirections = async(userLat, userLng) => {
+  const fetchDirections = async (userLat, userLng) => {
     const apiKey = 'YOUR_GOOGLE_API_KEY';
     const modeOfTransport = 'driving'; // Change this based on your requirements
     const origin = `25.321684,82.987289`;
@@ -45,7 +45,7 @@ export default function map() {
     }
   }
 
-  const decodePolyline =(encoded) =>{
+  const decodePolyline = (encoded) => {
     const decoded = polyline.decode(encoded);
     const coordinates = decoded.map(point => {
       const [latitude, longitude] = point;
@@ -95,6 +95,8 @@ export default function map() {
     </View>
   );
 }
+
+export default Map;
 
 const styles = StyleSheet.create({
   container: {
