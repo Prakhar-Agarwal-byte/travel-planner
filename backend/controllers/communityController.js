@@ -72,19 +72,19 @@ exports.joinCommunity = async (req, res) => {
 
     // Check if the authenticated user is already a member or has a pending request
     if (
-      community.members.some(
-        (member) => member.user.toString() === req.user.id
-      ) ||
-      community.pendingJoinRequests.some(
-        (request) => request.user.toString() === req.user.id
-      )
+      community.members.some((member) => {
+        return member.toString() === req.user.id;
+      }) ||
+      community.pendingJoinRequests.some((request) => {
+        return request.toString() === req.user.id;
+      })
     ) {
       return res
         .status(400)
         .json({ msg: "User is already a member or has a pending request" });
     }
 
-    community.pendingJoinRequests.push({ user: req.user.id });
+    community.pendingJoinRequests.push(req.user.id);
     await community.save();
 
     res.json(community);
@@ -124,7 +124,7 @@ exports.acceptJoinRequest = async (req, res) => {
     community.pendingJoinRequests.splice(pendingUserIndex, 1);
 
     // Move the user from pendingJoinRequests to members
-    community.members.push({ user: pendingUser.user });
+    community.members.push(pendingUser.user);
     await community.save();
 
     res.json(community);
