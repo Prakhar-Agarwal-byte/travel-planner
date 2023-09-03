@@ -28,7 +28,20 @@ exports.createCommunity = async (req, res) => {
 // Get all communities
 exports.getCommunities = async (req, res) => {
   try {
-    const communities = await Community.find();
+    const { communityStatus } = req.query; // Get the tripStatus query parameter
+    const userId = req.user.id;
+    let communities;
+    if (communityStatus === "requested") {
+      communities = await Community.find({ pendingJoinRequests: userId });
+    } else if (communityStatus === "joined") {
+      communities = await Community.find({ members: userId });
+    } else if (communityStatus === "new") {
+      communities = await Community.find({ members: userId });
+    } else if (communityStatus === "created") {
+      communities = await Community.find({ createdBy: userId });
+    } else {
+      communities = await Community.find();
+    }
     res.json(communities);
   } catch (err) {
     console.error(err.message);

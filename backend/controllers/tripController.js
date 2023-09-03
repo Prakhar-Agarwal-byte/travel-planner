@@ -48,7 +48,26 @@ exports.createTrip = async (req, res) => {
 // Get all trips
 exports.getTrips = async (req, res) => {
   try {
-    const trips = await Trip.find();
+    const { tripStatus } = req.query; // Get the tripStatus query parameter
+    const userId = req.user.id;
+    let trips;
+    if (tripStatus === "requested") {
+      trips = await Trip.find({ pendingJoinRequests: userId });
+    } else if (tripStatus === "joined") {
+      trips = await Trip.find({ members: userId });
+    } else if (tripStatus === "completed") {
+      trips = await Trip.find({ members: userId, isCompleted: true });
+    } else if (tripStatus === "active") {
+      trips = await Trip.find({ members: userId });
+      const currentTime = new Date();
+      trips.filter((trip) => currentTime > new Date(trip.startDate));
+    } else if (tripStatus === "created") {
+      trips = await Trip.find({ createdBy: userId });
+    } else if (tripStatus === "new") {
+      trips = await Trip.find({ members: userId });
+    } else {
+      trips = await Trip.find();
+    }
     res.json(trips);
   } catch (err) {
     console.error(err.message);
@@ -74,6 +93,35 @@ exports.getTripById = async (req, res) => {
     if (err.kind === "ObjectId") {
       return res.status(404).json({ msg: "Trip not found" });
     }
+    res.status(500).send("Server error");
+  }
+};
+
+// Set the trip status to completed
+exports.completeTrip = async (req, res) => {
+  try {
+    const tripId = req.params.id; // Get the trip ID from the route parameter
+    const userId = req.user.id; // Get the user's ID from the authenticated request
+
+    // Find the trip by ID
+    const trip = await Trip.findById(tripId);
+
+    if (!trip) {
+      return res.status(404).json({ msg: "Trip not found" });
+    }
+
+    // Check if the user requesting the update is the creator of the trip
+    if (trip.createdBy.toString() !== userId) {
+      return res.status(401).json({ msg: "Unauthorized access" });
+    }
+
+    // Update the trip status to "completed"
+    trip.isCompleted = true;
+    await trip.save();
+
+    res.json(trip);
+  } catch (err) {
+    console.error(err.message);
     res.status(500).send("Server error");
   }
 };

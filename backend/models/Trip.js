@@ -15,6 +15,11 @@ const tripSchema = new mongoose.Schema({
     enum: ["car", "train", "bus", "ferry", "bike", "flight"],
     required: true,
   },
+  isCompleted: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
   capacity: {
     type: Number,
     required: true,
