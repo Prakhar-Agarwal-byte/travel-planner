@@ -113,7 +113,9 @@ exports.acceptJoinRequest = async (req, res) => {
 
     // Find the user in pendingJoinRequests
     const pendingUserIndex = community.pendingJoinRequests.findIndex(
-      (request) => request.user.toString() === req.params.userId
+      (request) => {
+        return request.toString() === req.params.userId;
+      }
     );
 
     if (pendingUserIndex === -1) {
@@ -124,7 +126,7 @@ exports.acceptJoinRequest = async (req, res) => {
     community.pendingJoinRequests.splice(pendingUserIndex, 1);
 
     // Move the user from pendingJoinRequests to members
-    community.members.push(pendingUser.user);
+    community.members.push(pendingUser);
     await community.save();
 
     res.json(community);
@@ -153,7 +155,7 @@ exports.declineJoinRequest = async (req, res) => {
 
     // Find the user in pendingJoinRequests
     const pendingUserIndex = community.pendingJoinRequests.findIndex(
-      (request) => request.user.toString() === req.params.userId
+      (request) => request.toString() === req.params.userId
     );
 
     if (pendingUserIndex === -1) {
@@ -282,7 +284,7 @@ exports.leaveCommunity = async (req, res) => {
 
     // Check if the authenticated user is a member of the community
     const memberIndex = community.members.findIndex(
-      (member) => member.user.toString() === req.user.id
+      (member) => member.toString() === req.user.id
     );
     if (memberIndex === -1) {
       return res.status(401).json({ msg: "Not authorized" });
@@ -315,7 +317,7 @@ exports.removeMember = async (req, res) => {
 
     // Check if the user is a member of the community
     const memberIndex = community.members.findIndex(
-      (member) => member.user.toString() === userId
+      (member) => member.toString() === userId
     );
     if (memberIndex === -1) {
       return res.status(401).json({ msg: "Not a member" });
