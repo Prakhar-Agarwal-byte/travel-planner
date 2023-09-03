@@ -11,10 +11,21 @@ router.post(
 );
 
 // Get all trips
-router.get("/", tripController.getTrips);
+router.get(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  tripController.getTrips
+);
 
 // Get a trip by ID
 router.get("/:id", tripController.getTripById);
+
+// Route to set trip status to completed
+router.put(
+  "/trips/:id/complete",
+  passport.authenticate("jwt", { session: false }),
+  tripController.completeTrip
+);
 
 // Update a trip
 // router.put(
