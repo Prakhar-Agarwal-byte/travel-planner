@@ -60,7 +60,7 @@ exports.getTrips = async (req, res) => {
     } else if (tripStatus === "active") {
       trips = await Trip.find({ members: userId });
       const currentTime = new Date();
-      trips.filter((trip) => currentTime > new Date(trip.startDate));
+      trips = trips.filter((trip) => currentTime > new Date(trip.startDate));
     } else if (tripStatus === "created") {
       trips = await Trip.find({ createdBy: userId });
     } else if (tripStatus === "new") {
@@ -127,37 +127,34 @@ exports.completeTrip = async (req, res) => {
 };
 
 // Update a trip
-// exports.updateTrip = async (req, res) => {
-//   const { title, description, startDate, endDate } = req.body;
+exports.updateTrip = async (req, res) => {
+  const updatedTrip = req.body;
 
-//   try {
-//     let trip = await Trip.findById(req.params.id);
+  try {
+    let trip = await Trip.findById(req.params.id);
 
-//     if (!trip) {
-//       return res.status(404).json({ msg: "Trip not found" });
-//     }
+    if (!trip) {
+      return res.status(404).json({ msg: "Trip not found" });
+    }
 
-//     // Check if the authenticated user is the creator of the trip
-//     if (trip.createdBy.toString() !== req.user.id) {
-//       return res.status(401).json({ msg: "Not authorized" });
-//     }
+    // Check if the authenticated user is the creator of the trip
+    if (trip.createdBy.toString() !== req.user.id) {
+      return res.status(401).json({ msg: "Not authorized" });
+    }
 
-//     trip.title = title;
-//     trip.description = description;
-//     trip.startDate = startDate;
-//     trip.endDate = endDate;
+    Object.assign(trip, updatedTrip);
 
-//     await trip.save();
+    await trip.save();
 
-//     res.json(trip);
-//   } catch (err) {
-//     console.error(err.message);
-//     if (err.kind === "ObjectId") {
-//       return res.status(404).json({ msg: "Trip not found" });
-//     }
-//     res.status(500).send("Server error");
-//   }
-// };
+    res.json(trip);
+  } catch (err) {
+    console.error(err.message);
+    if (err.kind === "ObjectId") {
+      return res.status(404).json({ msg: "Trip not found" });
+    }
+    res.status(500).send("Server error");
+  }
+};
 
 // Delete a trip
 exports.deleteTrip = async (req, res) => {

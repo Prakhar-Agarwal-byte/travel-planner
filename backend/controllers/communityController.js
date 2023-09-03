@@ -25,6 +25,40 @@ exports.createCommunity = async (req, res) => {
   }
 };
 
+// Update a community
+exports.updateCommunity = async (req, res) => {
+  const updatedCommunity = req.body;
+  const communityId = req.params.id; // Assuming you pass the community ID in the URL
+
+  try {
+    // Find the community by ID
+    const community = await Community.findById(communityId);
+
+    // Check if the community exists
+    if (!community) {
+      return res.status(404).json({ msg: "Community not found" });
+    }
+
+    // Check if the user making the request is the creator of the community
+    if (community.createdBy.toString() !== req.user.id) {
+      return res
+        .status(401)
+        .json({ msg: "You are not authorized to update this community" });
+    }
+
+    // Update the community fields
+    Object.assign(community, updatedCommunity);
+
+    // Save the updated community
+    await community.save();
+
+    res.json(community);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+};
+
 // Get all communities
 exports.getCommunities = async (req, res) => {
   try {
