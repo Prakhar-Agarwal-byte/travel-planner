@@ -10,28 +10,38 @@ router.post(
   communityController.createCommunity
 );
 
+router.put(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  communityController.updateCommunity
+);
+
 // Get all communities
-router.get("/", communityController.getCommunities);
+router.get(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  communityController.getCommunities
+);
 
 // Get a community by ID
 router.get("/:id", communityController.getCommunityById);
 
 // Join a community
-router.post(
+router.patch(
   "/:id/join-request",
   passport.authenticate("jwt", { session: false }),
   communityController.joinCommunity
 );
 
 // Accept a join request for a community
-router.put(
+router.patch(
   "/:id/accept-request/:userId",
   passport.authenticate("jwt", { session: false }),
   communityController.acceptJoinRequest
 );
 
 // Decline a join request for a community
-router.put(
+router.patch(
   "/:id/decline-request/:userId",
   passport.authenticate("jwt", { session: false }),
   communityController.declineJoinRequest

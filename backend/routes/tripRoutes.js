@@ -21,18 +21,18 @@ router.get(
 router.get("/:id", tripController.getTripById);
 
 // Route to set trip status to completed
-router.put(
-  "/trips/:id/complete",
+router.patch(
+  "/:id/complete",
   passport.authenticate("jwt", { session: false }),
   tripController.completeTrip
 );
 
 // Update a trip
-// router.put(
-//   "/:id",
-//   passport.authenticate("jwt", { session: false }),
-//   tripController.updateTrip
-// );
+router.put(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  tripController.updateTrip
+);
 
 // Delete a trip
 router.delete(
@@ -42,7 +42,7 @@ router.delete(
 );
 
 // Join a trip
-router.post(
+router.patch(
   "/:id/join-request",
   passport.authenticate("jwt", { session: false }),
   tripController.joinTrip
@@ -76,14 +76,14 @@ router.delete(
 );
 
 // Accept a join request for a trip
-router.put(
+router.patch(
   "/:id/accept-request/:userId",
   passport.authenticate("jwt", { session: false }),
   tripController.acceptJoinRequest
 );
 
 // Decline a join request for a trip
-router.put(
+router.patch(
   "/:id/decline-request/:userId",
   passport.authenticate("jwt", { session: false }),
   tripController.declineJoinRequest
