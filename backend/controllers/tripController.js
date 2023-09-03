@@ -162,9 +162,7 @@ exports.joinTrip = async (req, res) => {
     const community = await Community.findById(trip.community);
     if (
       !community ||
-      !community.members.some(
-        (member) => member.user.toString() === req.user.id
-      )
+      !community.members.some((member) => member.toString() === req.user.id)
     ) {
       return res.status(401).json({ msg: "Not authorized" });
     }
@@ -172,9 +170,9 @@ exports.joinTrip = async (req, res) => {
     // Check if the user has already sent a join request or is already a member
     if (
       trip.pendingJoinRequests.some(
-        (request) => request.user.toString() === req.user.id
+        (request) => request.toString() === req.user.id
       ) ||
-      trip.members.some((member) => member.user.toString() === req.user.id)
+      trip.members.some((member) => member.toString() === req.user.id)
     ) {
       return res
         .status(400)
@@ -210,7 +208,7 @@ exports.acceptJoinRequest = async (req, res) => {
 
     // Find the user in pendingJoinRequests
     const pendingUserIndex = trip.pendingJoinRequests.findIndex(
-      (request) => request.user.toString() === req.params.userId
+      (request) => request.toString() === req.params.userId
     );
 
     if (pendingUserIndex === -1) {
@@ -221,7 +219,7 @@ exports.acceptJoinRequest = async (req, res) => {
     trip.pendingJoinRequests.splice(pendingUserIndex, 1);
 
     // Move the user from pendingJoinRequests to members
-    trip.members.push(pendingUser.user);
+    trip.members.push(pendingUser);
     await trip.save();
 
     res.json(trip);
@@ -250,7 +248,7 @@ exports.declineJoinRequest = async (req, res) => {
 
     // Find the user in pendingJoinRequests
     const pendingUserIndex = trip.pendingJoinRequests.findIndex(
-      (request) => request.user.toString() === req.params.userId
+      (request) => request.toString() === req.params.userId
     );
 
     if (pendingUserIndex === -1) {
@@ -361,7 +359,7 @@ exports.leaveTrip = async (req, res) => {
 
     // Check if the authenticated user is a member of the trip
     const memberIndex = trip.members.findIndex(
-      (member) => member.user.toString() === req.user.id
+      (member) => member.toString() === req.user.id
     );
     if (memberIndex === -1) {
       return res.status(401).json({ msg: "Not authorized" });
@@ -393,7 +391,7 @@ exports.removeMember = async (req, res) => {
 
     // Check if the user is a member of the trip
     const memberIndex = trip.members.findIndex(
-      (member) => member.user.toString() === userId
+      (member) => member.toString() === userId
     );
     if (memberIndex === -1) {
       return res.status(401).json({ msg: "Not a member" });
@@ -447,7 +445,7 @@ exports.cancelJoinRequest = async (req, res) => {
 
     // Check if the user has a pending join request
     const requestIndex = trip.pendingJoinRequests.findIndex(
-      (request) => request.user.toString() === req.user.id
+      (request) => request.toString() === req.user.id
     );
     if (requestIndex === -1) {
       return res.status(400).json({ msg: "No pending join request found" });
