@@ -58,13 +58,40 @@ exports.getTrips = async (req, res) => {
     } else if (tripStatus === "completed") {
       trips = await Trip.find({ members: userId, isCompleted: true });
     } else if (tripStatus === "active") {
-      trips = await Trip.find({ members: userId });
       const currentTime = new Date();
-      trips = trips.filter((trip) => currentTime > new Date(trip.startDate));
+      trips = await Trip.find({
+        members: userId,
+        startDate: { $lte: currentTime }, // Trips that have already started
+        isCompleted: false, // Exclude completed trips
+      });
     } else if (tripStatus === "created") {
       trips = await Trip.find({ createdBy: userId });
     } else if (tripStatus === "new") {
-      trips = await Trip.find({ members: userId });
+      const currentTime = new Date();
+      trips = await Trip.aggregate([
+        {
+          $match: {
+            createdBy: { $ne: userId },
+            members: { $ne: userId },
+            pendingJoinRequests: { $ne: userId },
+            startDate: { $gt: currentTime },
+            isCompleted: false,
+          },
+        },
+        {
+          $lookup: {
+            from: "communities", // The name of the Community collection
+            localField: "community", // The field in Trip that refers to the Community
+            foreignField: "_id", // The field in Community that matches the _id in Trip
+            as: "community",
+          },
+        },
+        {
+          $match: {
+            "community.members": userId, // Ensure the user is a member of the community
+          },
+        },
+      ]);
     } else {
       trips = await Trip.find();
     }
