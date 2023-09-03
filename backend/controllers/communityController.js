@@ -69,10 +69,14 @@ exports.getCommunities = async (req, res) => {
       communities = await Community.find({ pendingJoinRequests: userId });
     } else if (communityStatus === "joined") {
       communities = await Community.find({ members: userId });
-    } else if (communityStatus === "new") {
-      communities = await Community.find({ members: userId });
     } else if (communityStatus === "created") {
       communities = await Community.find({ createdBy: userId });
+    } else if (communityStatus === "new") {
+      communities = await Community.find({
+        createdBy: { $ne: userId },
+        members: { $ne: userId },
+        pendingJoinRequests: { $ne: userId },
+      });
     } else {
       communities = await Community.find();
     }
