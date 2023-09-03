@@ -276,19 +276,40 @@ exports.getUserJoinedCommunities = async (req, res) => {
 // Remove a user from a community
 exports.leaveCommunity = async (req, res) => {
   try {
-    const community = await Community.findById(req.params.id);
+    const communityId = req.params.id;
+    const userId = req.user.id;
+    const community = await Community.findById(communityId);
 
     if (!community) {
       return res.status(404).json({ msg: "Community not found" });
     }
 
+    // Check if the authenticated user is the creator of the community
+    if (community.createdBy.toString() === userId) {
+      return res
+        .status(401)
+        .json({ msg: "You cannot leave a community you created" });
+    }
+
     // Check if the authenticated user is a member of the community
     const memberIndex = community.members.findIndex(
-      (member) => member.toString() === req.user.id
+      (member) => member.toString() === userId
     );
     if (memberIndex === -1) {
       return res.status(401).json({ msg: "Not authorized" });
     }
+
+    // Remove the user from all trips where they are a member
+    await Trip.updateMany(
+      { community: communityId, members: userId },
+      { $pull: { members: userId } }
+    );
+
+    // Remove the user from all trips where they have a pending request
+    await Trip.updateMany(
+      { community: communityId, pendingJoinRequests: userId },
+      { $pull: { pendingJoinRequests: userId } }
+    );
 
     community.members.splice(memberIndex, 1);
     await community.save();
@@ -315,6 +336,13 @@ exports.removeMember = async (req, res) => {
       return res.status(404).json({ msg: "Community not found" });
     }
 
+    // Check if the authenticated user is the creator of the community
+    if (community.createdBy.toString() === userId) {
+      return res
+        .status(401)
+        .json({ msg: "You cannot leave a community you created" });
+    }
+
     // Check if the user is a member of the community
     const memberIndex = community.members.findIndex(
       (member) => member.toString() === userId
@@ -322,6 +350,18 @@ exports.removeMember = async (req, res) => {
     if (memberIndex === -1) {
       return res.status(401).json({ msg: "Not a member" });
     }
+
+    // Remove the user from all trips where they are a member
+    await Trip.updateMany(
+      { community: communityId, members: userId },
+      { $pull: { members: userId } }
+    );
+
+    // Remove the user from all trips where they have a pending request
+    await Trip.updateMany(
+      { community: communityId, pendingJoinRequests: userId },
+      { $pull: { pendingJoinRequests: userId } }
+    );
 
     community.members.splice(memberIndex, 1);
     await community.save();
