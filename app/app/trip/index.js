@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { View, ScrollView, SafeAreaView } from "react-native";
 import { Stack, useRouter } from "expo-router";
 
@@ -11,14 +10,13 @@ import useFetch from "../../hooks/useFetch";
 const Trip = () => {
     const router = useRouter();
     const { user } = useAuth();
-    const [searchTerm, setSearchTerm] = useState("");
     const activeTab = "Trip";
 
     const fetchTripsByStatus = (status) => {
-        const { data: trips } = useFetch('trips', {
+        const { data } = useFetch('trips', {
             tripStatus: status,
         })
-        return trips;
+        return data;
     }
 
     return (
@@ -44,16 +42,8 @@ const Trip = () => {
                         padding: SIZES.medium
                     }}
                 >
-
                     <Welcome
                         welcomeMessage={"Trips around you"}
-                        searchTerm={searchTerm}
-                        setSearchTerm={setSearchTerm}
-                        handleClick={() => {
-                            if (searchTerm) {
-                                router.push(`/trip/${searchTerm}`)
-                            }
-                        }}
                         activeTab={activeTab}
                     />
 

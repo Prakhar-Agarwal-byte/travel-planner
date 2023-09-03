@@ -9,13 +9,13 @@ const CommunityCard = ({ community, selectedCommunity, handleNavigate }) => {
             style={styles.container(selectedCommunity, community)}
             onPress={handleNavigate}
         >
-            <TouchableOpacity style={styles.logoContainer(selectedCommunity, community)}>
+            <View style={styles.logoContainer(selectedCommunity, community)}>
                 <Image
                     source={icons.community}
                     resizeMode='contain'
                     style={styles.logoImage}
                 />
-            </TouchableOpacity>
+            </View>
 
             <Text style={styles.communityName}>{community.name}</Text>
 

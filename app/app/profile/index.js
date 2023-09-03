@@ -10,7 +10,7 @@ import {
 import { Stack, useRouter } from "expo-router";
 
 import { COLORS, icons } from "../../constants";
-import { CommunityList, ScreenHeaderBtn } from "../../components";
+import { ScreenHeaderBtn } from "../../components";
 import styles from "../../styles/profile";
 
 import { useAuth } from "../../context/auth";
@@ -27,27 +27,24 @@ const Profile = () => {
                 style={styles.tripContainer}
                 onPress={() => router.push(`/listtrips/${status}`)}
             >
-                <TouchableOpacity style={styles.logoContainer}>
+                <View style={styles.logoContainer}>
                     <Image
                         source={icons.trip}
                         resizeMode="contain"
                         style={styles.logoImage}
                     />
-                </TouchableOpacity>
+                </View>
 
                 <View style={styles.textContainer}>
                     <Text style={styles.tripStatus}>{status} Trips</Text>
                 </View>
-                <TouchableOpacity
-                    style={styles.logoContainer}
-                    onPress={() => router.push(`/listtrips/${status}`)}
-                >
+                <View style={styles.logoContainer}>
                     <Image
                         source={icons.chevronRight}
                         resizeMode="contain"
                         style={styles.logoImage}
                     />
-                </TouchableOpacity>
+                </View>
             </TouchableOpacity>
         );
     };
@@ -57,27 +54,24 @@ const Profile = () => {
                 style={styles.communityContainer}
                 onPress={() => router.push(`/listcommunities/${status}`)}
             >
-                <TouchableOpacity style={styles.logoContainer}>
+                <View style={styles.logoContainer}>
                     <Image
                         source={icons.community}
                         resizeMode='contain'
                         style={styles.logoImage}
                     />
-                </TouchableOpacity>
+                </View>
 
                 <View style={styles.textContainer}>
                     <Text style={styles.tripStatus}>{status} Communities</Text>
                 </View>
-                <TouchableOpacity
-                    style={styles.logoContainer}
-                    onPress={() => router.push(`/listcommunities/${status}`)}
-                >
+                <View style={styles.logoContainer} >
                     <Image
                         source={icons.chevronRight}
                         resizeMode='contain'
                         style={styles.logoImage}
                     />
-                </TouchableOpacity>
+                </View>
             </TouchableOpacity>
         )
     }
@@ -95,7 +89,6 @@ const Profile = () => {
         } else if (activeTab === 'Community') {
             return (
                 <View>
-                    <CommunityButton status='created' />
                     <CommunityButton status='joined' />
                     <CommunityButton status='requested' />
 

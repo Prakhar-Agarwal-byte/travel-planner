@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from 'react'
-import { ActivityIndicator, FlatList, Image, TouchableOpacity, View } from 'react-native'
-import { Stack, useRouter, useGlobalSearchParams } from 'expo-router'
+import { ActivityIndicator, FlatList, TextInput, View } from 'react-native'
+import { Stack, useRouter } from 'expo-router'
 import { Text, SafeAreaView } from 'react-native'
+import { createFilter } from 'react-native-search-filter';
 
-import { ScreenHeaderBtn } from '../../components'
-import { COLORS, icons, SIZES } from '../../constants'
-import styles from '../../styles/listcommunities'
-import CommunityCard from '../../components/common/cards/community/CommunityCard'
-import { axiosInstance } from '../../config/api'
-import { useAuth } from '../../context/auth'
+import { ScreenHeaderBtn } from '../../../components'
+import { COLORS, icons, SIZES } from '../../../constants'
+import styles from '../../../styles/searchcommunities'
+import CommunityCard from '../../../components/common/cards/community/CommunityCard'
+import { axiosInstance } from '../../../config/api'
+import { useAuth } from '../../../context/auth'
 
 
 const ListCommunities = () => {
-    const params = useGlobalSearchParams();
     const router = useRouter();
     const { user } = useAuth();
 
+    const [masterData, setMasterData] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
     const [searchResult, setSearchResult] = useState([]);
     const [searchLoader, setSearchLoader] = useState(false);
     const [searchError, setSearchError] = useState(null);
@@ -26,11 +28,8 @@ const ListCommunities = () => {
         setSearchResult([])
 
         try {
-            const response = await axiosInstance.get('/communities', {
-                params: {
-                    communityStatus: params.id,
-                },
-            })
+            const response = await axiosInstance.get('/communities')
+            setMasterData(response.data);
             setSearchResult(response.data);
         } catch (error) {
             setSearchError(error);
@@ -45,6 +44,20 @@ const ListCommunities = () => {
     useEffect(() => {
         handleSearch()
     }, [])
+
+    const searchFilterFunction = (searchQuery) => {
+        if (searchQuery) {
+            const flattenedData = masterData.flat();
+            const newData = flattenedData.filter(createFilter(searchQuery, ["name", "description", "location"], [{ fuzzy: true, sortResults: true }]));
+            setSearchResult(newData);
+        } else {
+            setSearchResult(masterData);
+        }
+    };
+
+    useEffect(() => {
+        searchFilterFunction(searchTerm);
+    }, [searchTerm]);
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
@@ -72,6 +85,17 @@ const ListCommunities = () => {
                 }}
             />
 
+            <View style={styles.searchContainer}>
+                <View style={styles.searchWrapper}>
+                    <TextInput
+                        value={searchTerm}
+                        style={styles.searchInput}
+                        onChangeText={(text) => setSearchTerm(text)}
+                        placeholder={`Search for communities`}
+                    />
+                </View>
+            </View>
+
             <FlatList
                 data={searchResult}
                 renderItem={({ item }) => (
@@ -89,8 +113,7 @@ const ListCommunities = () => {
                 ListHeaderComponent={() => (
                     <>
                         <View style={styles.container}>
-                            <Text style={styles.searchTitle}>{params.id + ' Communities'}</Text>
-                            <Text style={styles.noOfCommunities}>{params.id}</Text>
+                            <Text style={styles.searchTitle}>{'Search Result :'}</Text>
                         </View>
                         <View style={styles.loaderContainer}>
                             {searchLoader ? (
@@ -104,7 +127,7 @@ const ListCommunities = () => {
                 ListFooterComponent={() => (
                     <View style={styles.footerContainer}>
                         <Text style={styles.footerText}>
-                            Total {params.id} Communities: {searchResult.length}
+                            Total {searchTerm} Communities : {searchResult.length}
                         </Text>
                     </View>
                 )}

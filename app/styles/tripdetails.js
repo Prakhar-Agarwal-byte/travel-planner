@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
         margin: SIZES.medium,
         backgroundColor: COLORS.lightWhite,
     },
-    heading: {
+    tripName: {
         fontSize: SIZES.xxLarge,
         fontWeight: "bold",
         marginBottom: SIZES.large,

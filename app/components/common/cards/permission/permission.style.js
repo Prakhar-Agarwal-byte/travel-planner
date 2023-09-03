@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
         ...SHADOWS.medium,
         shadowColor: COLORS.white,
     },
-    permissionCard: {
+    profileContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         paddingBottom: 10,
@@ -22,8 +22,17 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         marginRight: SIZES.medium,
     },
-    approvalIcon:
-    {
+    buttonsContainer: {
+        flexDirection: 'row',
+        justifyContent: "space-between",
+    },
+    button: {
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        marginRight: SIZES.medium,
+    },
+    buttonIcon: {
         marginTop: 20,
         width: 40,
         height: 40,
@@ -44,11 +53,6 @@ const styles = StyleSheet.create({
         color: COLORS.gray,
         marginTop: 3,
     },
-    approvalButtonsArea:
-    {
-        flexDirection: 'row',
-        justifyContent: "space-between",
-    }
 });
 
 export default styles;

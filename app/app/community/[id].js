@@ -22,15 +22,12 @@ const CommunityDetails = () => {
     const params = useGlobalSearchParams();
     const router = useRouter()
     const { user } = useAuth();
-    const [joinButtonText, setJoinButtonText] = useState("Join Now");
     const handleJoinNow = async () => {
         try {
-            const response = await axiosInstance.post(`/communities/${params.id}/join`)
+            const response = await axiosInstance.patch(`/communities/${params.id}/join-request`)
             console.log('Join request sent successfully', response)
         } catch (error) {
             console.error('Error sending join request', error)
-        } finally {
-            setJoinButtonText("Request Sent");
         }
     };
 
@@ -59,8 +56,11 @@ const CommunityDetails = () => {
     const { data, isLoading, error } = useFetch(`communities/${params.id}`)
     console.log('Community details:', data);
     if (error) {
-        console.log(error);
+        console.error(error);
     }
+    const isMember = data.members?.some(member => member._id === user?._id)
+    const isAdmin = data.createdBy?._id === user?._id
+    const requestSent = data.pendingJoinRequests?.some(member => member._id === user?._id)
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
@@ -115,31 +115,31 @@ const CommunityDetails = () => {
                             </Text>
                         </View>
                         <View style={styles.buttonsContainer}>
-                            {data.members?.some(member => member._id === user?._id) ? (
+                            {isMember ? (
                                 <TouchableOpacity style={styles.joinedButton}>
                                     <Text style={styles.joinButtonText}>Joined</Text>
                                 </TouchableOpacity>
 
                             ) : (
-                                <TouchableOpacity onPress={handleJoinNow} style={styles.joinButton}>
-                                    <Text style={styles.joinButtonText}>{joinButtonText}</Text>
+                                <TouchableOpacity onPress={handleJoinNow} style={styles.joinButton} disabled={requestSent}>
+                                    <Text style={styles.joinButtonText}>{requestSent ? "Request Sent" : "Join Now"}</Text>
                                 </TouchableOpacity>
                             )}
-                            {(data.createdBy?._id === user?._id) ? (
+                            {isAdmin ? (
                                 <TouchableOpacity onPress={handleDelete} style={styles.deleteButton}>
                                     <Text style={styles.deleteButtonText}>Delete</Text>
                                     <Ionicons name="trash" size={23} color={COLORS.white} />
                                 </TouchableOpacity>
-                            ) : data.members?.some(member => member._id === user?._id) ? (
+                            ) : isMember ? (
                                 <TouchableOpacity onPress={handleLeave} style={styles.deleteButton}>
                                     <Text style={styles.deleteButtonText}>Leave</Text>
                                     <MaterialIcons name="logout" size={25} color={COLORS.white} />
                                 </TouchableOpacity>
                             ) : null}
                         </View>
-                        <CommunityMembersList id={params.id} members={data.members} isAdmin={data.createdBy?._id === user?._id} />
+                        <CommunityMembersList id={params.id} members={data.members} isAdmin={isAdmin} />
                         <TripList trips={data.trips} status="associated" />
-                        {(data.createdBy?._id === user?._id && data.pendingJoinRequests?.length > 0) && <CommunityPermissionList id={params.id} requests={data.pendingJoinRequests} />}
+                        {(isAdmin && data.pendingJoinRequests?.length > 0) && <CommunityPermissionList id={params.id} requests={data.pendingJoinRequests} />}
                     </View>
                 </ScrollView>
             )}

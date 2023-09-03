@@ -11,7 +11,7 @@ const TripPermissionList = ({ id, requests }) => {
 
     const handleApproval = async (userId) => {
         try {
-            const response = await axiosInstance.put(`/trips/${id}/accept-request/${userId}`)
+            const response = await axiosInstance.patch(`/trips/${id}/accept-request/${userId}`)
             console.log(response.data)
         } catch (error) {
             console.error(error)
@@ -22,7 +22,7 @@ const TripPermissionList = ({ id, requests }) => {
 
     const handleReject = async (userId) => {
         try {
-            const response = await axiosInstance.put(`/trips/${id}/decline-request/${userId}`)
+            const response = await axiosInstance.patch(`/trips/${id}/decline-request/${userId}`)
             console.log(response.data)
         } catch (error) {
             console.error(error)

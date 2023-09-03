@@ -12,7 +12,7 @@ const CommunityPermissionList = ({ id, requests }) => {
 
     const handleApproval = async (userId) => {
         try {
-            const response = await axiosInstance.put(`/communities/${id}/accept-request/${userId}`)
+            const response = await axiosInstance.patch(`/communities/${id}/accept-request/${userId}`)
             console.log(response.data)
         } catch (error) {
             console.error(error)
@@ -21,9 +21,9 @@ const CommunityPermissionList = ({ id, requests }) => {
         }
     }
 
-    const handleReject = async (userId) => {
+    const handleRejection = async (userId) => {
         try {
-            const response = await axiosInstance.put(`/communities/${id}/decline-request/${userId}`)
+            const response = await axiosInstance.patch(`/communities/${id}/decline-request/${userId}`)
             console.log(response.data)
         } catch (error) {
             console.error(error)
@@ -50,7 +50,7 @@ const CommunityPermissionList = ({ id, requests }) => {
                             key={`profile-${item?._id}`}
                             handleNavigate={() => router.push(`/profile/${item?._id}`)}
                             handleApproval={() => handleApproval(item?._id)}
-                            handleReject={() => handleReject(item?._id)}
+                            handleRejection={() => handleRejection(item?._id)}
                         />
                     )}
                     horizontal

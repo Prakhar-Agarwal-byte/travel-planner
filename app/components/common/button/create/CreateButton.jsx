@@ -11,7 +11,7 @@ const CreateButton = ({ activeTab }) => {
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity onPress={() => router.push(`/${String(activeTab).toLowerCase()}/create`)} style={styles.createButton}>
+            <TouchableOpacity onPress={() => router.push(`/${String(activeTab).toLowerCase()}/create`)} style={styles.button}>
                 <MaterialIcons name="add" size={50} color={COLORS.white} />
             </TouchableOpacity>
         </View>

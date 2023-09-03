@@ -23,17 +23,23 @@ const TripDetails = () => {
     const { user } = useAuth();
     const params = useGlobalSearchParams();
     const [estimatedPriceRange, setEstimatedPriceRange] = useState("Unknown");
-    const [joinButtonText, setJoinButtonText] = useState("Join Now");
     const handleJoinNow = async () => {
         try {
-            const response = await axiosInstance.post(`/trips/${params.id}/join`)
+            const response = await axiosInstance.patch(`/trips/${params.id}/join-request`)
             console.log('Join request sent successfully', response)
         } catch (error) {
             console.error('Error sending join request', error)
-        } finally {
-            setJoinButtonText("Request Sent");
         }
     };
+
+    const handleComplete = async () => {
+        try {
+            const response = await axiosInstance.patch(`/trips/${params.id}/complete`)
+            console.log('Trip marked as complete successfully', response)
+        } catch (error) {
+            console.error('Error marking trip as complete', error)
+        }
+    }
 
     const handleDelete = async () => {
         try {
@@ -59,6 +65,12 @@ const TripDetails = () => {
 
     const { data, isLoading, error } = useFetch(`trips/${params.id}`)
     console.log('Trip details:', data);
+    if (error) {
+        console.error(error);
+    }
+    const isMember = data.members?.some(member => member._id === user?._id)
+    const isAdmin = data.createdBy?._id === user?._id
+    const requestSent = data.pendingJoinRequests?.some(member => member._id === user?._id)
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
@@ -87,9 +99,13 @@ const TripDetails = () => {
             ) : (
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <View style={styles.container}>
-                        <Text style={styles.heading}>Trip Details</Text>
+                        <Text style={styles.tripName}>{data.title}</Text>
                         <View style={styles.detailsContainer}>
-                            <Text style={styles.label}>Trip Admin:</Text>
+                            <Text style={styles.label}>Description:</Text>
+                            <Text style={styles.value}>{data.description}</Text>
+                        </View>
+                        <View style={styles.detailsContainer}>
+                            <Text style={styles.label}>Admin:</Text>
                             <Text style={styles.value}>{data.createdBy?.name || 'Unknown'}</Text>
                         </View>
                         <View style={styles.detailsContainer}>
@@ -117,29 +133,33 @@ const TripDetails = () => {
                             <Text style={styles.value}>{estimatedPriceRange}</Text>
                         </View>)}
                         <View style={styles.buttonsContainer}>
-                            {data.members?.some(member => member._id === user?._id) ? (
+                            {isMember ? (
                                 <TouchableOpacity style={styles.joinedButton}>
                                     <Text style={styles.joinButtonText}>Joined</Text>
                                 </TouchableOpacity>
-
                             ) : (
-                                <TouchableOpacity onPress={handleJoinNow} style={styles.joinButton}>
-                                    <Text style={styles.joinButtonText}>{joinButtonText}</Text>
+                                <TouchableOpacity onPress={handleJoinNow} style={styles.joinButton} disabled={requestSent}>
+                                    <Text style={styles.joinButtonText}>{requestSent ? "Request Sent" : "Join Now"}</Text>
                                 </TouchableOpacity>
                             )}
-                            {(data.createdBy?._id === user?._id) ? (
+                            {isAdmin && (
+                                <TouchableOpacity onPress={handleComplete} style={styles.joinButton}>
+                                    <Text style={styles.joinButtonText}>Mark as Complete</Text>
+                                </TouchableOpacity>
+                            )}
+                            {isAdmin ? (
                                 <TouchableOpacity onPress={handleDelete} style={styles.deleteButton}>
                                     <Text style={styles.deleteButtonText}>Delete</Text>
                                     <Ionicons name="trash" size={23} color={COLORS.white} />
                                 </TouchableOpacity>
-                            ) : data.members?.some(member => member._id === user?._id) ? (
+                            ) : isMember ? (
                                 <TouchableOpacity onPress={handleLeave} style={styles.deleteButton}>
                                     <Text style={styles.deleteButtonText}>Leave</Text>
                                     <MaterialIcons name="logout" size={25} color={COLORS.white} />
                                 </TouchableOpacity>
                             ) : null}
                         </View>
-                        <TripMembersList id={params.id} members={data.members} isAdmin={data.createdBy?._id === user?._id} />
+                        <TripMembersList id={params.id} members={data.members} isAdmin={isAdmin} />
                         <View style={styles.header}>
                             <Text style={styles.headerTitle}>Associated Community</Text>
                         </View>
@@ -147,18 +167,16 @@ const TripDetails = () => {
                             style={styles.communityContainer}
                             onPress={() => router.push(`/community/${data.community?._id}`)}
                         >
-                            <TouchableOpacity style={styles.logoContainer} key={data.community?._id}>
+                            <View style={styles.logoContainer}>
                                 <Image
                                     source={icons.community}
                                     resizeMode='contain'
                                     style={styles.logoImage}
                                 />
-                            </TouchableOpacity>
-
+                            </View>
                             <Text style={styles.communityName}>{data.community?.name}</Text>
                         </TouchableOpacity>
-
-                        {(data.createdBy?._id === user?._id && data.pendingJoinRequests?.length > 0) && <TripPermissionList id={params.id} requests={data.pendingJoinRequests} />}
+                        {(isAdmin && data.pendingJoinRequests?.length > 0) && <TripPermissionList id={params.id} requests={data.pendingJoinRequests} />}
                     </View>
                 </ScrollView>
             )}

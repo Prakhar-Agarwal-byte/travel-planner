@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { View, ScrollView, SafeAreaView } from "react-native";
 import { Stack, useRouter } from "expo-router";
 
@@ -6,12 +5,20 @@ import { COLORS, icons, SIZES } from "../../constants";
 import { ScreenHeaderBtn, Welcome, CommunityList } from "../../components";
 import CreateButton from "../../components/common/button/create/CreateButton";
 import { useAuth } from "../../context/auth";
+import useFetch from "../../hooks/useFetch";
 
 const Community = () => {
     const router = useRouter()
     const { user } = useAuth();
-    const [searchTerm, setSearchTerm] = useState("")
     const activeTab = "Community"
+
+    const fetchCommunitiesByStatus = (status) => {
+        const { data } = useFetch('communities', {
+            communityStatus: status,
+        })
+        return data;
+    }
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
             <Stack.Screen
@@ -39,23 +46,15 @@ const Community = () => {
                         padding: SIZES.medium
                     }}
                 >
-
                     <Welcome
                         welcomeMessage={"Communities around you"}
-                        searchTerm={searchTerm}
-                        setSearchTerm={setSearchTerm}
-                        handleClick={() => {
-                            if (searchTerm) {
-                                router.push(`/community/${searchTerm}`)
-                            }
-                        }}
                         activeTab={activeTab}
                     />
 
-                    <CommunityList status="new" />
-                    <CommunityList status="created" />
-                    <CommunityList status="joined" />
-                    <CommunityList status="requested" />
+                    <CommunityList communities={fetchCommunitiesByStatus("new")} status="new" />
+                    <CommunityList communities={fetchCommunitiesByStatus("joined")} status="joined" />
+                    <CommunityList communities={fetchCommunitiesByStatus("requested")} status="requested" />
+
                 </View>
             </ScrollView>
             <CreateButton activeTab={activeTab} />
