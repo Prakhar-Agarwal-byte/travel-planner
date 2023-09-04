@@ -12,7 +12,31 @@ const styles = StyleSheet.create({
         color: COLORS.primary,
         textTransform: "capitalize",
     },
-    noOfCommunities: {
+    searchContainer: {
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "row",
+        marginTop: SIZES.large,
+        padding: SIZES.xSmall,
+        height: 70,
+    },
+    searchWrapper: {
+        flex: 1,
+        backgroundColor: COLORS.gray2,
+        marginRight: SIZES.small,
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: SIZES.medium,
+        height: "100%",
+    },
+    searchInput: {
+        fontFamily: FONT.regular,
+        width: "100%",
+        height: "100%",
+        paddingHorizontal: SIZES.medium,
+        fontSize: SIZES.medium,
+    },
+    noOfTrips: {
         marginTop: 2,
         fontFamily: FONT.medium,
         fontSize: SIZES.small,

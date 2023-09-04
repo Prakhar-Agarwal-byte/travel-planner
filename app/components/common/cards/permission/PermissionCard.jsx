@@ -9,35 +9,35 @@ const PermissionCard = ({ member, handleNavigate, handleApproval, handleRejectio
             style={styles.container}
             onPress={handleNavigate}
         >
-            <TouchableOpacity style={styles.permissionCard}>
+            <View style={styles.profileContainer}>
                 <Image
-                    source={{ uri: member?.profileImage }} // Replace with member's profile image URL
+                    source={{ uri: member?.profileImage }}
                     resizeMode='contain'
                     style={styles.profileImage}
                 />
-            </TouchableOpacity>
+            </View>
 
             <View style={styles.memberInfo}>
                 <Text style={styles.memberName}>{member?.name}</Text>
                 <Text style={styles.memberEmail}>{member?.email}</Text>
             </View>
-            <View style={styles.approvalButtonsArea}>
-                <TouchableOpacity style={styles.permissionCard}
+            <View style={styles.buttonsContainer}>
+                <TouchableOpacity style={styles.button}
                     onPress={handleRejection}
                 >
                     <Image
                         source={icons.cancel}
                         resizeMode='contain'
-                        style={styles.approvalIcon}
+                        style={styles.buttonIcon}
                     />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.permissionCard}
+                <TouchableOpacity style={styles.button}
                     onPress={handleApproval}
                 >
                     <Image
                         source={icons.approve}
                         resizeMode='contain'
-                        style={styles.approvalIcon}
+                        style={styles.buttonIcon}
                     />
                 </TouchableOpacity>
             </View>

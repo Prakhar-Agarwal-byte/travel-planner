@@ -36,13 +36,13 @@ const TripCard = ({ trip, selectedTrip, handleNavigate }) => {
             style={styles.container(selectedTrip, trip)}
             onPress={handleNavigate}
         >
-            <TouchableOpacity style={styles.logoContainer(selectedTrip, trip)}>
+            <View style={styles.logoContainer(selectedTrip, trip)}>
                 <Image
                     source={VehicleIcon(trip.modeOfTransport)}
                     resizeMode='contain'
                     style={styles.logoImage}
                 />
-            </TouchableOpacity>
+            </View>
 
             <Text style={styles.tripName} numberOfLines={1}>{trip.title}</Text>
 

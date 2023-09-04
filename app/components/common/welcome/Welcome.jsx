@@ -8,15 +8,11 @@ import {
 import { useRouter } from "expo-router";
 
 import styles from "./welcome.style";
-import { icons } from "../../../constants";
 
 const activeTabs = ["Community", "Trip"];
 
 const Welcome = ({
   welcomeMessage,
-  searchTerm,
-  setSearchTerm,
-  handleClick,
   activeTab,
 }) => {
   const router = useRouter();
@@ -28,20 +24,8 @@ const Welcome = ({
       </View>
 
       <View style={styles.searchContainer}>
-        <View style={styles.searchWrapper}>
-          <TextInput
-            style={styles.searchInput}
-            value={searchTerm}
-            onChangeText={(text) => setSearchTerm(text)}
-            placeholder={`Search for ${activeTab}`}
-          />
-        </View>
-        <TouchableOpacity style={styles.searchBtn} onPress={handleClick}>
-          <Image
-            source={icons.search}
-            resizeMode="contain"
-            style={styles.searchBtnImage}
-          />
+        <TouchableOpacity style={styles.searchButton} onPress={() => router.push(`/search/${activeTab.toLowerCase()}`)}>
+          <Text style={styles.searchInput}>Go to Search-{activeTab} page</Text>
         </TouchableOpacity>
       </View>
 
@@ -51,7 +35,7 @@ const Welcome = ({
             <TouchableOpacity
               style={styles.tab(activeTab, item)}
               onPress={() => {
-                router.replace(`/${item.toLowerCase()}`);
+                router.push(`/${item.toLowerCase()}`);
               }}
             >
               <Text style={styles.tabText(activeTab, item)}>{item}</Text>
