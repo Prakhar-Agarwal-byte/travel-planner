@@ -5,21 +5,22 @@
       "bundler": "metro"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+        }
+      ],
+      [
+        "@rnmapbox/maps",
+        {
+          "RNMapboxMapsImpl": "maplibre",
+          "RNMapboxMapsDownloadToken": "sk.ey...qg"
+        }
+      ]
     ],
     "name": "app",
-    "slug": "app",
-    "android": {
-      "config": {
-        "googleMaps": {
-          "apiKey": "YOUR_GOOGLE_API_KEY"
-        }
-      }
-    },
-    "ios": {
-      "config": {
-        "googleMapsApiKey": "YOUR_GOOGLE_API_KEY"
-      }
-    }
+    "slug": "app"
   }
 }
