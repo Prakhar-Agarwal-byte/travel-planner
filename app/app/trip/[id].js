@@ -71,6 +71,8 @@ const TripDetails = () => {
     const isMember = data.members?.some(member => member._id === user?._id)
     const isAdmin = data.createdBy?._id === user?._id
     const requestSent = data.pendingJoinRequests?.some(member => member._id === user?._id)
+    const tripStarted = new Date().toISOString() > data.startDate
+    const isCompleted = data.isCompleted
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
@@ -142,7 +144,7 @@ const TripDetails = () => {
                                     <Text style={styles.joinButtonText}>{requestSent ? "Request Sent" : "Join Now"}</Text>
                                 </TouchableOpacity>
                             )}
-                            {isAdmin && (
+                            {isAdmin && tripStarted && !isCompleted && (
                                 <TouchableOpacity onPress={handleComplete} style={styles.joinButton}>
                                     <Text style={styles.joinButtonText}>Mark as Complete</Text>
                                 </TouchableOpacity>
