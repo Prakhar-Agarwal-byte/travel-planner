@@ -53,6 +53,14 @@ const styles = StyleSheet.create({
         color: COLORS.gray,
         marginTop: 3,
     },
+    messageContainer: {
+        flex: 1,
+    },
+    messageText: {
+        fontSize: SIZES.medium,
+        fontFamily: "DMBold",
+        color: COLORS.primary,
+    },
 });
 
 export default styles;
