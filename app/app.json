@@ -15,12 +15,26 @@
       [
         "@rnmapbox/maps",
         {
-          "RNMapboxMapsImpl": "maplibre",
-          "RNMapboxMapsDownloadToken": "sk.ey...qg"
+          "RNMapboxMapsImpl": "mapbox",
+          "RNMapboxMapsDownloadToken": "sk.eyJ1IjoicHJha2hhcmExIiwiYSI6ImNsbTYzMTBlNTBlNGczY2xneGt4aTVxbzcifQ.iJl8n48yA5RprniMngtCTg"
         }
       ]
     ],
     "name": "app",
-    "slug": "app"
+    "slug": "app",
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "e4017851-fabe-40df-921e-613b86d7177c"
+      }
+    },
+    "android": {
+      "package": "com.travelplanner.app"
+    },
+    "ios": {
+      "bundleIdentifier": "com.travelplanner.app"
+    }
   }
 }
