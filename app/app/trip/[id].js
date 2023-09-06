@@ -42,7 +42,7 @@ const TripDetails = () => {
     }
     const handleSOS = async () => {
         try {
-            const response = await axiosInstance.patch(`/navigation`)
+            const response = await axiosInstance.patch(`/trips/${params.id}/emergency`)
             console.log('Trip marked as complete successfully', response)
         } catch (error) {
             console.error('Error marking trip as complete', error)
