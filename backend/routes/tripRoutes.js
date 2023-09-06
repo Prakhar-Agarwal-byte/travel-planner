@@ -96,4 +96,11 @@ router.patch(
 //   tripController.getPendingJoinRequests
 // );
 
+// for sending emergency mail
+router.post(
+  "/:id/emergency",
+  passport.authenticate("jwt", { session: false }),
+  tripController.emergencyMail
+);
+
 module.exports = router;
