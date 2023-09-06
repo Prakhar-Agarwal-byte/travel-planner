@@ -148,6 +148,8 @@ const TripDetails = () => {
                                 <TouchableOpacity onPress={handleComplete} style={styles.joinButton}>
                                     <Text style={styles.joinButtonText}>Mark as Complete</Text>
                                 </TouchableOpacity>
+                                
+
                             )}
                             {isAdmin ? (
                                 <TouchableOpacity onPress={handleDelete} style={styles.deleteButton}>
@@ -159,7 +161,13 @@ const TripDetails = () => {
                                     <Text style={styles.deleteButtonText}>Leave</Text>
                                     <MaterialIcons name="logout" size={25} color={COLORS.white} />
                                 </TouchableOpacity>
-                            ) : null}
+                            ) : tripStarted && !isCompleted && (
+                                <TouchableOpacity onPress={handleComplete} style={styles.sosButton}>
+                                    <Text style={styles.deleteButton}>SOS</Text>
+                                </TouchableOpacity>
+                                
+
+                            )}
                         </View>
                         <TripMembersList id={params.id} members={data.members} isAdmin={isAdmin} />
                         <View style={styles.header}>
