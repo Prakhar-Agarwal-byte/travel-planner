@@ -40,6 +40,14 @@ const TripDetails = () => {
             console.error('Error marking trip as complete', error)
         }
     }
+    const handleSOS = async () => {
+        try {
+            const response = await axiosInstance.patch(`/trips/${params.id}/emergency`)
+            console.log('Trip marked as complete successfully', response)
+        } catch (error) {
+            console.error('Error marking trip as complete', error)
+        }
+    }
 
     const handleDelete = async () => {
         try {
@@ -148,6 +156,8 @@ const TripDetails = () => {
                                 <TouchableOpacity onPress={handleComplete} style={styles.joinButton}>
                                     <Text style={styles.joinButtonText}>Mark as Complete</Text>
                                 </TouchableOpacity>
+                                
+
                             )}
                             {isAdmin ? (
                                 <TouchableOpacity onPress={handleDelete} style={styles.deleteButton}>
@@ -159,7 +169,13 @@ const TripDetails = () => {
                                     <Text style={styles.deleteButtonText}>Leave</Text>
                                     <MaterialIcons name="logout" size={25} color={COLORS.white} />
                                 </TouchableOpacity>
-                            ) : null}
+                            ) : tripStarted && !isCompleted && (
+                                <TouchableOpacity onPress={handleSOS} style={styles.sosButton}>
+                                    <Text style={styles.deleteButton}>SOS</Text>
+                                </TouchableOpacity>
+                                
+
+                            )}
                         </View>
                         <TripMembersList id={params.id} members={data.members} isAdmin={isAdmin} />
                         <View style={styles.header}>

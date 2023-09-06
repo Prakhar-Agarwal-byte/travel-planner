@@ -106,6 +106,14 @@ const styles = StyleSheet.create({
         fontFamily: "DMBold",
         color: COLORS.primary,
     },
+    sosButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor:"#ff0000",
+        paddingVertical: SIZES.medium,
+        paddingHorizontal: SIZES.large,
+        borderRadius: SIZES.medium,
+    },
 });
 
 export default styles;
