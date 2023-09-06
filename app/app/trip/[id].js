@@ -40,6 +40,14 @@ const TripDetails = () => {
             console.error('Error marking trip as complete', error)
         }
     }
+    const handleSOS = async () => {
+        try {
+            const response = await axiosInstance.patch(`/navigation`)
+            console.log('Trip marked as complete successfully', response)
+        } catch (error) {
+            console.error('Error marking trip as complete', error)
+        }
+    }
 
     const handleDelete = async () => {
         try {
@@ -162,7 +170,7 @@ const TripDetails = () => {
                                     <MaterialIcons name="logout" size={25} color={COLORS.white} />
                                 </TouchableOpacity>
                             ) : tripStarted && !isCompleted && (
-                                <TouchableOpacity onPress={handleComplete} style={styles.sosButton}>
+                                <TouchableOpacity onPress={handleSOS} style={styles.sosButton}>
                                     <Text style={styles.deleteButton}>SOS</Text>
                                 </TouchableOpacity>
                                 
