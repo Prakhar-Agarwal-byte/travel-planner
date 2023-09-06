@@ -541,3 +541,44 @@ exports.cancelJoinRequest = async (req, res) => {
     res.status(500).send("Server error");
   }
 };
+
+
+// Send email for emergency to trip members
+
+exports.emergencyMail = async (req, res) => {
+  try {
+    const trip = await Trip.findById(req.params.id).populate(
+      "members",
+      "email"
+    );
+
+    if (!trip) {
+      return res.status(404).json({ msg: "Trip not found" });
+    }
+
+    
+    // Mailing details
+    const subject = "There is an Emergency";
+    const text = "Text";
+    const html = `
+      <p>Hello There</p>
+      <p>THERE IS AN EMERGENCY<p>`;
+
+    // Iterate through trip.members and send email to each member
+    for (const member of trip.members) {
+      if (member.email) {
+        const response = await sendMail({
+          to: member.email,
+          subject,
+          html,
+          text,
+        });
+      }
+    }
+
+    return res.status(200).json({ msg: "All the Trip Members are alerted" });
+  } catch (error) {
+    console.error(error.message); // Change 'err' to 'error'
+    res.status(500).send(`Server error ${error.message}`); // Change 'err' to 'error'
+  }
+};
