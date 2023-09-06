@@ -5,21 +5,36 @@
       "bundler": "metro"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+        }
+      ],
+      [
+        "@rnmapbox/maps",
+        {
+          "RNMapboxMapsImpl": "mapbox",
+          "RNMapboxMapsDownloadToken": "sk.eyJ1IjoicHJha2hhcmExIiwiYSI6ImNsbTYzMTBlNTBlNGczY2xneGt4aTVxbzcifQ.iJl8n48yA5RprniMngtCTg"
+        }
+      ]
     ],
     "name": "app",
     "slug": "app",
-    "android": {
-      "config": {
-        "googleMaps": {
-          "apiKey": "YOUR_GOOGLE_API_KEY"
-        }
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "e4017851-fabe-40df-921e-613b86d7177c"
       }
     },
+    "android": {
+      "package": "com.travelplanner.app"
+    },
     "ios": {
-      "config": {
-        "googleMapsApiKey": "YOUR_GOOGLE_API_KEY"
-      }
+      "bundleIdentifier": "com.travelplanner.app"
     }
   }
 }
