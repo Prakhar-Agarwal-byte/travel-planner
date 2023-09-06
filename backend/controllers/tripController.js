@@ -52,9 +52,12 @@ exports.getTrips = async (req, res) => {
     const userId = req.user.id;
     let trips;
     if (tripStatus === "requested") {
-      trips = await Trip.find({ pendingJoinRequests: userId });
+      trips = await Trip.find({
+        pendingJoinRequests: userId,
+        isCompleted: false,
+      });
     } else if (tripStatus === "joined") {
-      trips = await Trip.find({ members: userId });
+      trips = await Trip.find({ members: userId, isCompleted: false });
     } else if (tripStatus === "completed") {
       trips = await Trip.find({ members: userId, isCompleted: true });
     } else if (tripStatus === "active") {
@@ -85,6 +88,9 @@ exports.getTrips = async (req, res) => {
             foreignField: "_id", // The field in Community that matches the _id in Trip
             as: "community",
           },
+        },
+        {
+          $unwind: "$community", // Deconstruct the community array
         },
         {
           $match: {
