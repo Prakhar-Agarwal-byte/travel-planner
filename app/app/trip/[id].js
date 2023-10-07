@@ -210,34 +210,18 @@ const TripDetails = () => {
                   <Text style={styles.joinButtonText}>Mark as Complete</Text>
                 </TouchableOpacity>
               )}
-              {isAdmin ? (
-                <TouchableOpacity
-                  onPress={handleDelete}
-                  style={styles.deleteButton}
-                >
-                  <Text style={styles.deleteButtonText}>Delete</Text>
-                  <Ionicons name="trash" size={23} color={COLORS.white} />
-                </TouchableOpacity>
-              ) : isMember ? (
-                <TouchableOpacity
-                  onPress={handleLeave}
-                  style={styles.deleteButton}
-                >
-                  <Text style={styles.deleteButtonText}>Leave</Text>
-                  <MaterialIcons name="logout" size={25} color={COLORS.white} />
-                </TouchableOpacity>
-              ) : null}
+              
               {isMember && tripStarted && !isCompleted && (
                 <TouchableOpacity onPress={handleSOS} style={styles.sosButton}>
-                  <Text style={styles.deleteButton}>SOS</Text>
+                  <Text style={styles.joinButtonText}>SOS</Text>
                 </TouchableOpacity>
               )}
               {isMember && tripStarted && !isCompleted && (
                 <TouchableOpacity
                   onPress={handleTrack}
-                  style={styles.sosButton}
+                  style={styles.trackButton}
                 >
-                  <Text style={styles.deleteButton}>Track</Text>
+                  <Text style={styles.joinButtonText}>Track</Text>
                 </TouchableOpacity>
               )}
             </View>
@@ -268,6 +252,25 @@ const TripDetails = () => {
                 requests={data.pendingJoinRequests}
               />
             )}
+            <View style={styles.buttonsContainer}>
+            {isAdmin ? (
+                <TouchableOpacity
+                  onPress={handleDelete}
+                  style={styles.deleteButton}
+                >
+                  <Text style={styles.deleteButtonText}>Delete</Text>
+                  <Ionicons name="trash" size={23} color={COLORS.white} />
+                </TouchableOpacity>
+              ) : isMember ? (
+                <TouchableOpacity
+                  onPress={handleLeave}
+                  style={styles.deleteButton}
+                >
+                  <Text style={styles.deleteButtonText}>Leave</Text>
+                  <MaterialIcons name="logout" size={25} color={COLORS.white} />
+                </TouchableOpacity>
+              ) : null}
+              </View>
           </View>
         </ScrollView>
       )}

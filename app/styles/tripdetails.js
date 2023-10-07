@@ -30,9 +30,12 @@ const styles = StyleSheet.create({
         textTransform: "capitalize",
     },
     buttonsContainer: {
-        flexDirection: "row",
-        justifyContent: "space-between",
+        flexDirection: 'row',
+        flexWrap: 'wrap', // Allow buttons to wrap onto the next line
+        alignItems: 'center', // Align items to the center vertically
+        justifyContent: 'center', // Center buttons horizontally
         marginBottom: SIZES.medium,
+        marginTop:SIZES.medium,
     },
     joinButton: {
         flexDirection: 'row',
@@ -41,6 +44,7 @@ const styles = StyleSheet.create({
         paddingVertical: SIZES.medium,
         paddingHorizontal: SIZES.large,
         borderRadius: SIZES.medium,
+        marginLeft:SIZES.medium,
     },
     joinedButton: {
         flexDirection: 'row',
@@ -49,6 +53,7 @@ const styles = StyleSheet.create({
         paddingVertical: SIZES.medium,
         paddingHorizontal: SIZES.large,
         borderRadius: SIZES.medium,
+        marginLeft:SIZES.medium,
     },
     joinButtonText: {
         color: COLORS.white,
@@ -60,11 +65,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: "#FF0000",
         paddingVertical: SIZES.medium,
-        paddingHorizontal: SIZES.large,
+        paddingHorizontal: SIZES.medium,
         borderRadius: SIZES.medium,
     },
     deleteButtonText: {
         color: COLORS.white,
+        textAlign:'center',
         fontWeight: "bold",
         fontSize: SIZES.medium,
     },
@@ -109,10 +115,22 @@ const styles = StyleSheet.create({
     sosButton: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor:"#ff0000",
+        backgroundColor: "#FF0000",
         paddingVertical: SIZES.medium,
         paddingHorizontal: SIZES.large,
         borderRadius: SIZES.medium,
+        marginTop:SIZES.medium,
+        marginLeft:SIZES.medium,
+    },
+    trackButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: COLORS.primary,
+        paddingVertical: SIZES.medium,
+        paddingHorizontal: SIZES.large,
+        borderRadius: SIZES.medium,
+        marginTop:SIZES.medium,
+        marginLeft:SIZES.medium,
     },
 });
 
