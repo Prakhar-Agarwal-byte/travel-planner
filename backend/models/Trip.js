@@ -60,6 +60,7 @@ const tripSchema = new mongoose.Schema({
       ref: "User", // Reference to the User model
     },
   ],
+  flightPriceData: {},
   createdAt: {
     type: Date,
     default: Date.now,
