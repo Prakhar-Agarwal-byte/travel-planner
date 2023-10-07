@@ -16,9 +16,20 @@ const Navigation = () => {
   const { fromCoordinates, toCoordinates } = useLocalSearchParams();
   const router = useRouter();
   const { user } = useAuth();
-
-  const startCoords = fromCoordinates;
-  const destinationCoords = toCoordinates;
+  console.log(
+    "typeof ",
+    typeof fromCoordinates.split(",").map((e) => parseFloat(e))
+  );
+  console.log(
+    "from in navigation: ",
+    fromCoordinates.split(",").map((e) => parseFloat(e))
+  );
+  console.log(
+    "to in navigation: ",
+    toCoordinates.split(",").map((e) => parseFloat(e))
+  );
+  const startCoords = fromCoordinates.split(",").map((e) => parseFloat(e));
+  const destinationCoords = toCoordinates.split(",").map((e) => parseFloat(e));
   const [routeDirections, setRouteDirections] = useState(null);
 
   async function createRouterLine(coords, routeProfile) {

@@ -214,7 +214,7 @@ const CreateTrip = () => {
               placeholder="From Destination"
               accessToken={process.env.EXPO_PUBLIC_MAPBOX_TOKEN} // MAPBOX_PUBLIC_TOKEN is stored in .env root project folder
               onPlaceSelect={(data) => {
-                setFromDestination(place_name);
+                setFromDestination(data.place_name);
                 setFromCoordinates(data.center);
               }}
               onClearInput={({ id }) => {
@@ -236,7 +236,7 @@ const CreateTrip = () => {
               placeholder="To Destination"
               accessToken={process.env.EXPO_PUBLIC_MAPBOX_TOKEN} // MAPBOX_PUBLIC_TOKEN is stored in .env root project folder
               onPlaceSelect={(data) => {
-                setToDestination(place_name);
+                setToDestination(data.place_name);
                 setToCoordinates(data.center);
               }}
               onClearInput={({ id }) => {
