@@ -1,3 +1,4 @@
+const User = require("../models/User");
 const Trip = require("../models/Trip");
 const Community = require("../models/Community");
 const { sendMail } = require("../config/nodemailer")
