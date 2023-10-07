@@ -5,6 +5,7 @@ import { Stack, useRouter } from "expo-router";
 import { ScreenHeaderBtn } from "../../components";
 import { useAuth } from "../../context/auth";
 import Mapbox from "@rnmapbox/maps";
+import { useLocalSearchParams } from "expo-router";
 
 const APIKEY = process.env.EXPO_PUBLIC_MAPBOX_TOKEN;
 
@@ -12,11 +13,12 @@ Mapbox.setAccessToken(APIKEY);
 Mapbox.setWellKnownTileServer("Mapbox");
 
 const Navigation = () => {
+  const { fromCoordinates, toCoordinates } = useLocalSearchParams();
   const router = useRouter();
   const { user } = useAuth();
 
-  const startCoords = [82.984386, 25.262505];
-  const destinationCoords = [82.987994, 25.26693];
+  const startCoords = fromCoordinates;
+  const destinationCoords = toCoordinates;
   const [routeDirections, setRouteDirections] = useState(null);
 
   async function createRouterLine(coords, routeProfile) {

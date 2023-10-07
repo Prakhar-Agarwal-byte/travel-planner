@@ -32,6 +32,8 @@ const tripSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  fromCoordinates: [{ type: Number }],
+  toCoordinates: [{ type: Number }],
   startDate: {
     type: Date,
     required: true,
