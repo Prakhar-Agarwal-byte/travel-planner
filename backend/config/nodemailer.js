@@ -12,7 +12,7 @@ let transporter = nodemailer.createTransport({
 
 exports.sendMail = async function ({to, subject, text, html}){
     let info = await transporter.sendMail({
-        from: '"Travel-Planner" <travelplanner@gmail.com>', // sender address
+        from: '"Travel-Planner" <plannertravel60@gmail.com>', // sender address
         to,
         subject,
         text,
