@@ -15,6 +15,7 @@ exports.createTrip = async (req, res) => {
     startDate,
     capacity,
     communityId,
+    flightPriceData,
   } = req.body;
 
   try {
@@ -33,6 +34,7 @@ exports.createTrip = async (req, res) => {
       community: communityId,
       pendingJoinRequests: [],
       members: [req.user.id],
+      flightPriceData,
     });
 
     await newTrip.save();
