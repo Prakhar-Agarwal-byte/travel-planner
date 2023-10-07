@@ -1,18 +1,16 @@
 const nodemailer = require('nodemailer');
 
 let transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false, // true for 465, false for other ports
+  service: 'gmail',
   auth: {
-    user: process.env.GMAIL_USER, // gmail
-    pass: process.env.GMAIL_PASSWORD, // pass
+    user: "adarsh14304@gmail.com",
+    pass: "hxyqsqhgibuvkcco"
   },
 });
 
 exports.sendMail = async function ({to, subject, text, html}){
     let info = await transporter.sendMail({
-        from: '"Travel-Planner" <plannertravel60@gmail.com>', // sender address
+        from: "Travel-Planner", // sender address
         to,
         subject,
         text,
