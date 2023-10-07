@@ -7,7 +7,6 @@ import {
   SafeAreaView,
   ScrollView,
   ActivityIndicator,
-  processColor,
 } from "react-native";
 import { Stack, useRouter } from "expo-router";
 import { COLORS, icons, SIZES } from "../../constants";
@@ -32,7 +31,7 @@ const CreateTrip = () => {
   const [startDate, setStartDate] = useState("");
   const [startTime, setStartTime] = useState("");
   const [modeOfTransport, setModeOfTransport] = useState("");
-  const [estimatedPriceRange, setEstimatedPriceRange] = useState("");
+  const [flightPriceData, setFlightPriceData] = useState({});
   const [capacity, setCapacity] = useState();
   const [isOpen, setIsOpen] = useState(false);
   const [isTransportOpen, setIsTransportOpen] = useState(false);
@@ -49,33 +48,32 @@ const CreateTrip = () => {
     { label: "Bicycle", value: "bicycle" },
     { label: "Ferry", value: "ferry" },
   ];
+  const fetchData = async () => {
+    try {
+      const userId = user._id;
+      const communitiesJoinedByUser = await axiosInstance.get(
+        `/communities/user/${userId}/joined`
+      );
+
+      console.log(
+        "Communities joined by user:",
+        communitiesJoinedByUser.data
+      );
+
+      const options = communitiesJoinedByUser.data.map((d) => ({
+        label: d.name,
+        value: d._id,
+      }));
+
+      setCommunityOptions(options);
+      console.log("Community options:", options);
+    } catch (error) {
+      console.error("Error fetching communities:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const userId = user._id;
-        const communitiesJoinedByUser = await axiosInstance.get(
-          `/communities/user/${userId}/joined`
-        );
-
-        console.log(
-          "Communities joined by user:",
-          communitiesJoinedByUser.data
-        );
-
-        const options = communitiesJoinedByUser.data.map((d) => ({
-          label: d.name,
-          value: d._id,
-        }));
-
-        setCommunityOptions(options);
-        console.log("Community options:", options);
-      } catch (error) {
-        console.error("Error fetching communities:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchData();
   }, []);
 
@@ -103,17 +101,9 @@ const CreateTrip = () => {
 
     try {
       const response = await axios.request(options);
-      console.log("Flight price data:", response.data);
-      var lowerPrice =
-        response.data.data?.flights[0].purchaseLinks[0].totalPricePerPassenger;
-      var higherPrice =
-        response.data.data?.flights[response.data.data?.flights.length - 1]
-          .purchaseLinks[
-          response.data.data?.flights[0].purchaseLinks.length - 1
-        ].totalPricePerPassenger;
-      var currency = response.data.data?.flights[0].purchaseLinks[0].currency;
-      setEstimatedPriceRange(`${lowerPrice} - ${higherPrice} ${currency}`);
-      console.log("Estimated price range:", estimatedPriceRange);
+      console.log("Flight price data:", response.data.data);
+      setFlightPriceData(response.data.data);
+      return response.data.data;
     } catch (error) {
       console.error(error);
     }
@@ -123,10 +113,12 @@ const CreateTrip = () => {
     setLoading(true);
     const dateTimeString = `${startDate} ${startTime}`;
     const formattedDate = new Date(dateTimeString);
+    let resp;
     if (modeOfTransport === "flight") {
-      fetchFlightPriceData(fromDestination, toDestination, startDate);
+      resp = await fetchFlightPriceData(fromDestination, toDestination, startDate);
     }
     try {
+      console.log(resp)
       const response = await axiosInstance.post("/trips", {
         title,
         description,
@@ -136,6 +128,7 @@ const CreateTrip = () => {
         toCoordinates,
         startDate: formattedDate,
         modeOfTransport,
+        flightPriceData: resp,
         capacity,
         communityId: currentCommunityId,
       });
@@ -155,7 +148,7 @@ const CreateTrip = () => {
       setModeOfTransport("");
       setCapacity("");
       setCurrentCommunityId("Select Community");
-      setEstimatedPriceRange("");
+      setFlightPriceData({});
       router.push("/trip");
     }
   };
@@ -209,72 +202,6 @@ const CreateTrip = () => {
               value={description}
               onChangeText={setDescription}
             />
-            <MapboxPlacesAutocomplete
-              id="origin"
-              placeholder="From Destination"
-              accessToken={process.env.EXPO_PUBLIC_MAPBOX_TOKEN} // MAPBOX_PUBLIC_TOKEN is stored in .env root project folder
-              onPlaceSelect={(data) => {
-                setFromDestination(data.place_name);
-                setFromCoordinates(data.center);
-              }}
-              onClearInput={({ id }) => {
-                id === "origin" &&
-                  setFromDestination("") &&
-                  setFromCoordinates([]);
-              }}
-              countryId="in"
-              containerStyle={{
-                borderWidth: 2,
-                marginVertical: SIZES.small,
-                borderColor: COLORS.gray2,
-                borderRadius: SIZES.small,
-                height: 60,
-              }}
-            />
-            <MapboxPlacesAutocomplete
-              id="origin"
-              placeholder="To Destination"
-              accessToken={process.env.EXPO_PUBLIC_MAPBOX_TOKEN} // MAPBOX_PUBLIC_TOKEN is stored in .env root project folder
-              onPlaceSelect={(data) => {
-                setToDestination(data.place_name);
-                setToCoordinates(data.center);
-              }}
-              onClearInput={({ id }) => {
-                id === "origin" && setToDestination("") && setToCoordinates([]);
-              }}
-              countryId="in"
-              containerStyle={{
-                borderWidth: 2,
-                marginVertical: SIZES.small,
-                borderColor: COLORS.gray2,
-                borderRadius: SIZES.small,
-                height: 60,
-              }}
-            />
-            {/* <TextInput
-              style={styles.input}
-              placeholder="From Destination"
-              value={fromDestination}
-              onChangeText={setFromDestination}
-            /> */}
-            {/* <TextInput
-              style={styles.input}
-              placeholder="To Destination"
-              value={toDestination}
-              onChangeText={setToDestination}
-            /> */}
-            <TextInput
-              style={styles.input}
-              placeholder="Date (YYYY-MM-DD)"
-              value={startDate}
-              onChangeText={setStartDate}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Time (HH:MM)"
-              value={startTime}
-              onChangeText={setStartTime}
-            />
             <DropDownPicker
               items={transportOptions}
               open={isTransportOpen}
@@ -286,6 +213,73 @@ const CreateTrip = () => {
               containerStyle={styles.dropdownContainer}
               style={styles.dropdownStyle}
               listMode="SCROLLVIEW"
+            />
+            {modeOfTransport === "flight" ? (<><TextInput
+              style={styles.input}
+              placeholder="Source Airport Code"
+              value={fromDestination}
+              onChangeText={setFromDestination}
+            />
+              <TextInput
+                style={styles.input}
+                placeholder="Destination Airport Code"
+                value={toDestination}
+                onChangeText={setToDestination}
+              /></>) :
+              (<><MapboxPlacesAutocomplete
+                id="origin"
+                placeholder="Source"
+                accessToken={process.env.EXPO_PUBLIC_MAPBOX_TOKEN} // MAPBOX_PUBLIC_TOKEN is stored in .env root project folder
+                onPlaceSelect={(data) => {
+                  setFromDestination(data.place_name);
+                  setFromCoordinates(data.center);
+                }}
+                onClearInput={({ id }) => {
+                  id === "origin" &&
+                    setFromDestination("") &&
+                    setFromCoordinates([]);
+                }}
+                countryId="in"
+                containerStyle={{
+                  borderWidth: 2,
+                  marginVertical: SIZES.small,
+                  borderColor: COLORS.gray2,
+                  borderRadius: SIZES.small,
+                  height: 60,
+                }}
+              />
+                <MapboxPlacesAutocomplete
+                  id="origin"
+                  placeholder="Destination"
+                  accessToken={process.env.EXPO_PUBLIC_MAPBOX_TOKEN} // MAPBOX_PUBLIC_TOKEN is stored in .env root project folder
+                  onPlaceSelect={(data) => {
+                    setToDestination(data.place_name);
+                    setToCoordinates(data.center);
+                  }}
+                  onClearInput={({ id }) => {
+                    id === "origin" && setToDestination("") && setToCoordinates([]);
+                  }}
+                  countryId="in"
+                  containerStyle={{
+                    borderWidth: 2,
+                    marginVertical: SIZES.small,
+                    borderColor: COLORS.gray2,
+                    borderRadius: SIZES.small,
+                    height: 60,
+                  }}
+                /></>)}
+
+            <TextInput
+              style={styles.input}
+              placeholder="Date (YYYY-MM-DD)"
+              value={startDate}
+              onChangeText={setStartDate}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Time (HH:MM)"
+              value={startTime}
+              onChangeText={setStartTime}
             />
             <TextInput
               style={styles.input}

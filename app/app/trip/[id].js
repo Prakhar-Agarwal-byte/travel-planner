@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Stack, useRouter, useGlobalSearchParams } from "expo-router";
 import {
   View,
@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   ScrollView,
   ActivityIndicator,
+  Dimensions,
 } from "react-native";
 
 import { COLORS, icons } from "../../constants";
@@ -16,9 +17,9 @@ import styles from "../../styles/tripdetails";
 import TripMembersList from "../../components/trip/memberlist/MemberList";
 import TripPermissionList from "../../components/trip/permissionlist/PermissionList";
 import { useAuth } from "../../context/auth";
-import useFetch from "../../hooks/useFetch";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { axiosInstance } from "../../config/api";
+import { LineChart } from "react-native-chart-kit";
 
 const formatDateTime = (dateString) => {
   const date = new Date(dateString);
@@ -35,8 +36,11 @@ const formatDateTime = (dateString) => {
 const TripDetails = () => {
   const router = useRouter();
   const { user } = useAuth();
+  const [tripData, setTripData] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [flights, setFlights] = useState([]);
   const params = useGlobalSearchParams();
-  const [estimatedPriceRange, setEstimatedPriceRange] = useState("Unknown");
   const handleJoinNow = async () => {
     try {
       const response = await axiosInstance.patch(
@@ -73,13 +77,13 @@ const TripDetails = () => {
     router.push({
       pathname: "/navigation",
       params: {
-        fromCoordinates: data.fromCoordinates,
-        toCoordinates: data.toCoordinates,
+        fromCoordinates: tripData.fromCoordinates,
+        toCoordinates: tripData.toCoordinates,
       },
     });
     console.log("data: ", data);
-    console.log("fromCoordinates: ", data.fromCoordinates);
-    console.log("toCoordinates: ", data.toCoordinates);
+    console.log("fromCoordinates: ", tripData.fromCoordinates);
+    console.log("toCoordinates: ", tripData.toCoordinates);
   };
 
   const handleDelete = async () => {
@@ -104,18 +108,51 @@ const TripDetails = () => {
     }
   };
 
-  const { data, isLoading, error } = useFetch(`trips/${params.id}`);
-  console.log("Trip details:", data);
-  if (error) {
-    console.error(error);
+  const fetchData = async () => {
+    try {
+      const response = await axiosInstance.get(`/trips/${params.id}`)
+      setTripData(response.data)
+      setFlights(response.data.flightPriceData.flights)
+      setIsLoading(false)
+    } catch (error) {
+      setError(error)
+      alert('There is an error')
+    } finally {
+      setIsLoading(false)
+    }
   }
-  const isMember = data.members?.some((member) => member._id === user?._id);
-  const isAdmin = data.createdBy?._id === user?._id;
-  const requestSent = data.pendingJoinRequests?.some(
+  useEffect(() => {
+    fetchData()
+  }, [])
+
+  const isMember = tripData.members?.some((member) => member._id === user?._id);
+  const isAdmin = tripData.createdBy?._id === user?._id;
+  const requestSent = tripData.pendingJoinRequests?.some(
     (member) => member._id === user?._id
   );
-  const tripStarted = new Date().toISOString() > data.startDate;
-  const isCompleted = data.isCompleted;
+  const tripStarted = new Date().toISOString() > tripData.startDate;
+  const isCompleted = tripData.isCompleted;
+
+  console.log("Trip details:", tripData);
+  console.log("flightPriceData: ", tripData.flightPriceData);
+
+  const flightData = {
+    labels: [],
+    datasets: [
+      {
+        data: [],
+      },
+    ],
+  };
+
+  flights.forEach((flight) => {
+    flight.purchaseLinks.forEach((purchaseLink) => {
+      flightData.labels.push(purchaseLink.providerId);
+      flightData.datasets[0].data.push(purchaseLink.totalPricePerPassenger);
+    });
+  });
+
+  console.log("flightData: ", flightData);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
@@ -149,43 +186,66 @@ const TripDetails = () => {
       ) : (
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.container}>
-            <Text style={styles.tripName}>{data.title}</Text>
+            <Text style={styles.tripName}>{tripData.title}</Text>
             <View style={styles.detailsContainer}>
               <Text style={styles.label}>Description:</Text>
-              <Text style={styles.value}>{data.description}</Text>
+              <Text style={styles.value}>{tripData.description}</Text>
             </View>
             <View style={styles.detailsContainer}>
               <Text style={styles.label}>Admin:</Text>
               <Text style={styles.value}>
-                {data.createdBy?.name || "Unknown"}
+                {tripData.createdBy?.name || "Unknown"}
               </Text>
             </View>
             <View style={styles.detailsContainer}>
               <Text style={styles.label}>Source:</Text>
-              <Text style={styles.value}>{data.fromDestination}</Text>
+              <Text style={styles.value}>{tripData.fromDestination}</Text>
             </View>
             <View style={styles.detailsContainer}>
               <Text style={styles.label}>Destination</Text>
-              <Text style={styles.value}>{data.toDestination}</Text>
+              <Text style={styles.value}>{tripData.toDestination}</Text>
             </View>
             <View style={styles.detailsContainer}>
               <Text style={styles.label}>Date:</Text>
-              <Text style={styles.value}>{formatDateTime(data.startDate)}</Text>
+              <Text style={styles.value}>{formatDateTime(tripData.startDate)}</Text>
             </View>
             <View style={styles.detailsContainer}>
               <Text style={styles.label}>Vacant Seats:</Text>
-              <Text style={styles.value}>{data.capacity}</Text>
+              <Text style={styles.value}>{tripData.capacity}</Text>
             </View>
             <View style={styles.detailsContainer}>
               <Text style={styles.label}>Mode of Transportation:</Text>
-              <Text style={styles.value}>{data.modeOfTransport}</Text>
+              <Text style={styles.value}>{tripData.modeOfTransport}</Text>
             </View>
-            {data.modeOfTransport === "flight" && (
-              <View style={styles.detailsContainer}>
-                <Text style={styles.label}>Estimated Price Range:</Text>
-                <Text style={styles.value}>{estimatedPriceRange}</Text>
-              </View>
-            )}
+            <LineChart
+              data={flightData}
+              width={Dimensions.get("window").width}
+              height={220}
+              yAxisLabel="$"
+              yAxisSuffix=""
+              yAxisInterval={1}
+              chartConfig={{
+                backgroundColor: COLORS.lightWhite,
+                backgroundGradientFrom: COLORS.primary,
+                backgroundGradientTo: COLORS.gray,
+                decimalPlaces: 2,
+                color: (opacity = 1) => `rgba(255,119,84, ${opacity})`,
+                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                style: {
+                  borderRadius: 16
+                },
+                propsForDots: {
+                  r: "6",
+                  strokeWidth: "2",
+                  stroke: COLORS.lightWhite
+                }
+              }}
+              bezier
+              style={{
+                marginVertical: 8,
+                borderRadius: 16
+              }}
+            />
             <View style={styles.buttonsContainer}>
               {isMember ? (
                 <TouchableOpacity style={styles.joinedButton}>
@@ -243,7 +303,7 @@ const TripDetails = () => {
             </View>
             <TripMembersList
               id={params.id}
-              members={data.members}
+              members={tripData.members}
               isAdmin={isAdmin}
             />
             <View style={styles.header}>
@@ -251,7 +311,7 @@ const TripDetails = () => {
             </View>
             <TouchableOpacity
               style={styles.communityContainer}
-              onPress={() => router.push(`/community/${data.community?._id}`)}
+              onPress={() => router.push(`/community/${tripData.community?._id}`)}
             >
               <View style={styles.logoContainer}>
                 <Image
@@ -260,12 +320,12 @@ const TripDetails = () => {
                   style={styles.logoImage}
                 />
               </View>
-              <Text style={styles.communityName}>{data.community?.name}</Text>
+              <Text style={styles.communityName}>{tripData.community?.name}</Text>
             </TouchableOpacity>
-            {isAdmin && data.pendingJoinRequests?.length > 0 && (
+            {isAdmin && tripData.pendingJoinRequests?.length > 0 && (
               <TripPermissionList
                 id={params.id}
-                requests={data.pendingJoinRequests}
+                requests={tripData.pendingJoinRequests}
               />
             )}
           </View>
