@@ -1,6 +1,6 @@
 const Trip = require("../models/Trip");
 const Community = require("../models/Community");
-const {sendMail} = require("../config/nodemailer")
+const { sendMail } = require("../config/nodemailer")
 
 exports.createTrip = async (req, res) => {
   const {
@@ -548,6 +548,7 @@ exports.cancelJoinRequest = async (req, res) => {
 
 exports.emergencyMail = async (req, res) => {
   try {
+    const user = await User.findById(req.user.id);
     const trip = await Trip.findById(req.params.id).populate(
       "members",
       "email"
@@ -557,13 +558,35 @@ exports.emergencyMail = async (req, res) => {
       return res.status(404).json({ msg: "Trip not found" });
     }
 
-    
+
     // Mailing details
     const subject = "There is an Emergency";
     const text = "Text";
     const html = `
-      <p>Hello There</p>
-      <p>THERE IS AN EMERGENCY<p>`;
+    <p>Hello There</p>
+    
+    <p> I hope this message finds you all as quickly as possible, as we are facing a serious emergency situation during our trip ${trip.title}. It is of utmost importance that you read this message and take immediate action.</p>
+
+<p>Instructions:</p>
+
+<p>Safety First: Ensure your own safety and the safety of others.
+Contact Emergency Services: If you haven't already, dial the local emergency number 100 or 112.
+Share Location: Share your precise location using GPS coordinates or any available map application.
+Stay Calm: Keep calm and try to reassure others, especially those directly affected by the emergency.
+Communication: Use this email thread to provide updates on the situation and your location.
+Gather Supplies: Collect any necessary supplies or equipment to assist with the emergency.
+Emergency Contacts in India:</p>
+
+<p>Police Emergency (All over India): 100</p>
+<p>Medical Emergency (All over India): 108 or 102 </p>
+<p>Fire Emergency (All over India): 101</p>
+<p>Please respond to this email as soon as you can to confirm that you have received this message and to provide any updates on your situation. We need to maintain clear communication during this crisis.</p>
+
+<p>Our priority is your safety and well-being. Please follow the instructions carefully and stay in touch. We will continue to provide updates as the situation develops.</p>
+
+<p>Stay strong, stay safe, and let's support each other during this challenging time.
+</p>
+<p>Regards, <p>${user.name}</p></p>`;
 
     // Iterate through trip.members and send email to each member
     for (const member of trip.members) {
