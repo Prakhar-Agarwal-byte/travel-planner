@@ -1,39 +1,24 @@
 const nodemailer = require('nodemailer');
 
-let transporter = nodemailer.createTransport({
-  service: 'gmail',
+const transporter = nodemailer.createTransport({
+  service: "hotmail",
   auth: {
-    user: "adarsh14304@gmail.com",
-    pass: "hxyqsqhgibuvkcco"
-  },
-});
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_PASSWORD
+  }
+})
 
-exports.sendMail = async function ({to, subject, text, html}){
-    let info = await transporter.sendMail({
-        from: "Travel-Planner", // sender address
-        to,
-        subject,
-        text,
-        html
-      });
-    return info;  
-}
-
-// example call for this function 
-
-// mail 
-// const link = `EMERGENCY_LINK`;
-// const subject = "There is an Emergency";
-// const text = `text`;
-// const html = `
-//   <p>Hello There</p>
-//   <p>THEREIS AN EMERGENCY<p>`;
-
-// if (email) {
-//   const response = await sendMail({
-//       to: email,
-//       subject,
-//       html,
-//       text
-//   });
-// }
+exports.sendMail = async ({ to, subject, text, html }) => {
+  try {
+    return await transporter.sendMail({
+      from: '"Travel-Planner" <travel-planner-sos@hotmail.com>',
+      to,
+      subject,
+      text,
+      html
+    })
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
