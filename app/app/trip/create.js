@@ -7,15 +7,17 @@ import {
   SafeAreaView,
   ScrollView,
   ActivityIndicator,
+  processColor,
 } from "react-native";
 import { Stack, useRouter } from "expo-router";
-import { COLORS, icons } from "../../constants";
+import { COLORS, icons, SIZES } from "../../constants";
 import DropDownPicker from "react-native-dropdown-picker";
 import styles from "../../styles/createtrip";
 import { ScreenHeaderBtn } from "../../components";
 import { axiosInstance } from "../../config/api";
 import { useAuth } from "../../context/auth";
-import axios from 'axios';
+import axios from "axios";
+import MapboxPlacesAutocomplete from "react-native-mapbox-places-autocomplete";
 
 const CreateTrip = () => {
   const router = useRouter();
@@ -24,7 +26,9 @@ const CreateTrip = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [fromDestination, setFromDestination] = useState("");
+  const [fromCoordinates, setFromCoordinates] = useState([]);
   const [toDestination, setToDestination] = useState("");
+  const [toCoordinates, setToCoordinates] = useState([]);
   const [startDate, setStartDate] = useState("");
   const [startTime, setStartTime] = useState("");
   const [modeOfTransport, setModeOfTransport] = useState("");
@@ -77,38 +81,43 @@ const CreateTrip = () => {
 
   const fetchFlightPriceData = async (source, destination, date) => {
     const options = {
-      method: 'GET',
-      url: 'https://tripadvisor16.p.rapidapi.com/api/v1/flights/searchFlights',
+      method: "GET",
+      url: "https://tripadvisor16.p.rapidapi.com/api/v1/flights/searchFlights",
       params: {
         sourceAirportCode: source,
         destinationAirportCode: destination,
         date: date,
-        itineraryType: 'ONE_WAY',
-        sortOrder: 'PRICE',
-        numAdults: '1',
-        numSeniors: '0',
-        classOfService: 'ECONOMY',
-        pageNumber: '1',
-        currencyCode: 'USD'
+        itineraryType: "ONE_WAY",
+        sortOrder: "PRICE",
+        numAdults: "1",
+        numSeniors: "0",
+        classOfService: "ECONOMY",
+        pageNumber: "1",
+        currencyCode: "USD",
       },
       headers: {
-        'X-RapidAPI-Key': '7764ebe318mshaff88aa323487aap1d5bf4jsnd5861ae22850',
-        'X-RapidAPI-Host': 'tripadvisor16.p.rapidapi.com'
-      }
+        "X-RapidAPI-Key": "7764ebe318mshaff88aa323487aap1d5bf4jsnd5861ae22850",
+        "X-RapidAPI-Host": "tripadvisor16.p.rapidapi.com",
+      },
     };
 
     try {
       const response = await axios.request(options);
-      console.log('Flight price data:', response.data);
-      var lowerPrice = response.data.data?.flights[0].purchaseLinks[0].totalPricePerPassenger;
-      var higherPrice = response.data.data?.flights[response.data.data?.flights.length - 1].purchaseLinks[response.data.data?.flights[0].purchaseLinks.length - 1].totalPricePerPassenger;
+      console.log("Flight price data:", response.data);
+      var lowerPrice =
+        response.data.data?.flights[0].purchaseLinks[0].totalPricePerPassenger;
+      var higherPrice =
+        response.data.data?.flights[response.data.data?.flights.length - 1]
+          .purchaseLinks[
+          response.data.data?.flights[0].purchaseLinks.length - 1
+        ].totalPricePerPassenger;
       var currency = response.data.data?.flights[0].purchaseLinks[0].currency;
       setEstimatedPriceRange(`${lowerPrice} - ${higherPrice} ${currency}`);
-      console.log('Estimated price range:', estimatedPriceRange);
+      console.log("Estimated price range:", estimatedPriceRange);
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   const handleCreateTrip = async () => {
     setLoading(true);
@@ -123,6 +132,8 @@ const CreateTrip = () => {
         description,
         fromDestination,
         toDestination,
+        fromCoordinates,
+        toCoordinates,
         startDate: formattedDate,
         modeOfTransport,
         capacity,
@@ -137,6 +148,8 @@ const CreateTrip = () => {
       setDescription("");
       setFromDestination("");
       setToDestination("");
+      setFromCoordinates([]);
+      setToCoordinates([]);
       setStartDate("");
       setStartTime("");
       setModeOfTransport("");
@@ -163,7 +176,7 @@ const CreateTrip = () => {
           headerRight: () => (
             <ScreenHeaderBtn
               iconUrl={{
-                uri: user?.profileImage
+                uri: user?.profileImage,
               }}
               dimension="100%"
               handlePress={() => router.push("/profile")}
@@ -178,7 +191,10 @@ const CreateTrip = () => {
           <Text>Loading...</Text>
         </View>
       ) : (
-        <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          nestedScrollEnabled={true}
+        >
           <View style={styles.container}>
             <Text style={styles.title}>Create Trip</Text>
             <TextInput
@@ -193,18 +209,60 @@ const CreateTrip = () => {
               value={description}
               onChangeText={setDescription}
             />
-            <TextInput
+            <MapboxPlacesAutocomplete
+              id="origin"
+              placeholder="From Destination"
+              accessToken={process.env.EXPO_PUBLIC_MAPBOX_TOKEN} // MAPBOX_PUBLIC_TOKEN is stored in .env root project folder
+              onPlaceSelect={(data) => {
+                setFromDestination(place_name);
+                setFromCoordinates(data.center);
+              }}
+              onClearInput={({ id }) => {
+                id === "origin" &&
+                  setFromDestination("") &&
+                  setFromCoordinates([]);
+              }}
+              countryId="in"
+              containerStyle={{
+                borderWidth: 2,
+                marginVertical: SIZES.small,
+                borderColor: COLORS.gray2,
+                borderRadius: SIZES.small,
+                height: 60,
+              }}
+            />
+            <MapboxPlacesAutocomplete
+              id="origin"
+              placeholder="To Destination"
+              accessToken={process.env.EXPO_PUBLIC_MAPBOX_TOKEN} // MAPBOX_PUBLIC_TOKEN is stored in .env root project folder
+              onPlaceSelect={(data) => {
+                setToDestination(place_name);
+                setToCoordinates(data.center);
+              }}
+              onClearInput={({ id }) => {
+                id === "origin" && setToDestination("") && setToCoordinates([]);
+              }}
+              countryId="in"
+              containerStyle={{
+                borderWidth: 2,
+                marginVertical: SIZES.small,
+                borderColor: COLORS.gray2,
+                borderRadius: SIZES.small,
+                height: 60,
+              }}
+            />
+            {/* <TextInput
               style={styles.input}
               placeholder="From Destination"
               value={fromDestination}
               onChangeText={setFromDestination}
-            />
-            <TextInput
+            /> */}
+            {/* <TextInput
               style={styles.input}
               placeholder="To Destination"
               value={toDestination}
               onChangeText={setToDestination}
-            />
+            /> */}
             <TextInput
               style={styles.input}
               placeholder="Date (YYYY-MM-DD)"

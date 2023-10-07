@@ -1,7 +1,7 @@
 const User = require("../models/User");
 const Trip = require("../models/Trip");
 const Community = require("../models/Community");
-const { sendMail } = require("../config/nodemailer")
+const { sendMail } = require("../config/nodemailer");
 
 exports.createTrip = async (req, res) => {
   const {
@@ -10,6 +10,8 @@ exports.createTrip = async (req, res) => {
     modeOfTransport,
     fromDestination,
     toDestination,
+    fromCoordinates,
+    toCoordinates,
     startDate,
     capacity,
     communityId,
@@ -23,6 +25,8 @@ exports.createTrip = async (req, res) => {
       modeOfTransport,
       fromDestination,
       toDestination,
+      fromCoordinates,
+      toCoordinates,
       startDate,
       capacity,
       createdBy: req.user.id,
@@ -544,7 +548,6 @@ exports.cancelJoinRequest = async (req, res) => {
   }
 };
 
-
 // Send email for emergency to trip members
 
 exports.emergencyMail = async (req, res) => {
@@ -558,7 +561,6 @@ exports.emergencyMail = async (req, res) => {
     if (!trip) {
       return res.status(404).json({ msg: "Trip not found" });
     }
-
 
     // Mailing details
     const subject = "There is an Emergency";
