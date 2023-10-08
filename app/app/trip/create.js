@@ -113,12 +113,24 @@ const CreateTrip = () => {
     setLoading(true);
     const dateTimeString = `${startDate} ${startTime}`;
     const formattedDate = new Date(dateTimeString);
-    let resp;
+    let resp = {
+      "flights": [
+        {
+          "purchaseLinks": [
+            {
+              "providerId": "",
+              "currency": "",
+              "totalPricePerPassenger": 0,
+            }
+          ]
+        }
+      ]
+    };
     if (modeOfTransport === "flight") {
       resp = await fetchFlightPriceData(fromDestination, toDestination, startDate);
     }
     try {
-      console.log(resp)
+      console.log("flight price data", resp)
       const response = await axiosInstance.post("/trips", {
         title,
         description,

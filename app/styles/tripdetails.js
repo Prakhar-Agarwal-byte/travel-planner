@@ -132,6 +132,22 @@ const styles = StyleSheet.create({
         marginTop:SIZES.medium,
         marginLeft:SIZES.medium,
     },
+    graphTitle: {
+        marginTop: SIZES.large,
+        alignSelf: "center",
+        fontSize: SIZES.xLarge,
+        fontFamily: "DMBold",
+        marginBottom: 10,
+        color: COLORS.primary,
+    },
+    graphTitle: {
+        marginTop: SIZES.large,
+        alignSelf: "center",
+        fontSize: SIZES.xLarge,
+        fontFamily: "DMBold",
+        marginBottom: 10,
+        color: COLORS.primary,
+    },
 });
 
 export default styles;
