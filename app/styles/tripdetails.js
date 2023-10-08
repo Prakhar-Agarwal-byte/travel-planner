@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
         alignItems: 'center', // Align items to the center vertically
         justifyContent: 'center', // Center buttons horizontally
         marginBottom: SIZES.medium,
-        marginTop:SIZES.medium,
+        marginTop: SIZES.medium,
     },
     joinButton: {
         flexDirection: 'row',
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
         paddingVertical: SIZES.medium,
         paddingHorizontal: SIZES.large,
         borderRadius: SIZES.medium,
-        marginLeft:SIZES.medium,
+        marginLeft: SIZES.medium,
     },
     joinedButton: {
         flexDirection: 'row',
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
         paddingVertical: SIZES.medium,
         paddingHorizontal: SIZES.large,
         borderRadius: SIZES.medium,
-        marginLeft:SIZES.medium,
+        marginLeft: SIZES.medium,
     },
     joinButtonText: {
         color: COLORS.white,
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     },
     deleteButtonText: {
         color: COLORS.white,
-        textAlign:'center',
+        textAlign: 'center',
         fontWeight: "bold",
         fontSize: SIZES.medium,
     },
@@ -119,8 +119,8 @@ const styles = StyleSheet.create({
         paddingVertical: SIZES.medium,
         paddingHorizontal: SIZES.large,
         borderRadius: SIZES.medium,
-        marginTop:SIZES.medium,
-        marginLeft:SIZES.medium,
+        marginTop: SIZES.medium,
+        marginLeft: SIZES.medium,
     },
     trackButton: {
         flexDirection: 'row',
@@ -129,8 +129,8 @@ const styles = StyleSheet.create({
         paddingVertical: SIZES.medium,
         paddingHorizontal: SIZES.large,
         borderRadius: SIZES.medium,
-        marginTop:SIZES.medium,
-        marginLeft:SIZES.medium,
+        marginTop: SIZES.medium,
+        marginLeft: SIZES.medium,
     },
     graphTitle: {
         marginTop: SIZES.large,
@@ -145,8 +145,11 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         fontSize: SIZES.xLarge,
         fontFamily: "DMBold",
-        marginBottom: 10,
         color: COLORS.primary,
+    },
+    graphContainer: {
+        alignSelf: "center",
+        marginTop: SIZES.xSmall,
     },
 });
 
