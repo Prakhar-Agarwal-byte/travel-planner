@@ -8,7 +8,6 @@ import {
   SafeAreaView,
   ScrollView,
   ActivityIndicator,
-  Dimensions,
 } from "react-native";
 
 import { COLORS, icons } from "../../constants";
@@ -19,7 +18,7 @@ import TripPermissionList from "../../components/trip/permissionlist/PermissionL
 import { useAuth } from "../../context/auth";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { axiosInstance } from "../../config/api";
-import { LineChart } from "react-native-chart-kit";
+import BarGraph from "../../components/common/graph/bargraph/Bargraph";
 
 const formatDateTime = (dateString) => {
   const date = new Date(dateString);
@@ -122,6 +121,7 @@ const TripDetails = () => {
     }
   }
   useEffect(() => {
+    setIsLoading(true)
     fetchData()
   }, [])
 
@@ -134,25 +134,15 @@ const TripDetails = () => {
   const isCompleted = tripData.isCompleted;
 
   console.log("Trip details:", tripData);
-  console.log("flightPriceData: ", tripData.flightPriceData);
 
-  const flightData = {
-    labels: [],
-    datasets: [
-      {
-        data: [],
-      },
-    ],
-  };
-
-  flights.forEach((flight) => {
-    flight.purchaseLinks.forEach((purchaseLink) => {
-      flightData.labels.push(purchaseLink.providerId);
-      flightData.datasets[0].data.push(purchaseLink.totalPricePerPassenger);
+  const flightData = flights.map((flight) => {
+    return flight.purchaseLinks.map((purchaseLink) => {
+      return {
+        providerId: purchaseLink.providerId,
+        totalPricePerPassenger: purchaseLink.totalPricePerPassenger,
+      };
     });
-  });
-
-  console.log("flightData: ", flightData);
+  }).flat();
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
@@ -217,35 +207,11 @@ const TripDetails = () => {
               <Text style={styles.label}>Mode of Transportation:</Text>
               <Text style={styles.value}>{tripData.modeOfTransport}</Text>
             </View>
-            <LineChart
-              data={flightData}
-              width={Dimensions.get("window").width}
-              height={220}
-              yAxisLabel="$"
-              yAxisSuffix=""
-              yAxisInterval={1}
-              chartConfig={{
-                backgroundColor: COLORS.lightWhite,
-                backgroundGradientFrom: COLORS.primary,
-                backgroundGradientTo: COLORS.gray,
-                decimalPlaces: 2,
-                color: (opacity = 1) => `rgba(255,119,84, ${opacity})`,
-                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                style: {
-                  borderRadius: 16
-                },
-                propsForDots: {
-                  r: "6",
-                  strokeWidth: "2",
-                  stroke: COLORS.lightWhite
-                }
-              }}
-              bezier
-              style={{
-                marginVertical: 8,
-                borderRadius: 16
-              }}
-            />
+            {tripData.modeOfTransport == "flight" ? (flights &&
+              <>
+                <Text style={styles.graphTitle}>Flight Prices:</Text>
+                <BarGraph data={flightData} />
+              </>) : null}
             <View style={styles.buttonsContainer}>
               {isMember ? (
                 <TouchableOpacity style={styles.joinedButton}>
