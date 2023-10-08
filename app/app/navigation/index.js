@@ -1,11 +1,12 @@
-import { View, SafeAreaView, StyleSheet } from "react-native";
+import { View, SafeAreaView, Text, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
-import { COLORS, icons } from "../../constants";
 import { Stack, useRouter } from "expo-router";
 import { ScreenHeaderBtn } from "../../components";
 import { useAuth } from "../../context/auth";
 import Mapbox from "@rnmapbox/maps";
 import { useLocalSearchParams } from "expo-router";
+import { icons, COLORS } from "../../constants";
+import styles from "../../styles/navigation";
 
 const APIKEY = process.env.EXPO_PUBLIC_MAPBOX_TOKEN;
 
@@ -16,18 +17,6 @@ const Navigation = () => {
   const { fromCoordinates, toCoordinates } = useLocalSearchParams();
   const router = useRouter();
   const { user } = useAuth();
-  console.log(
-    "typeof ",
-    typeof fromCoordinates.split(",").map((e) => parseFloat(e))
-  );
-  console.log(
-    "from in navigation: ",
-    fromCoordinates.split(",").map((e) => parseFloat(e))
-  );
-  console.log(
-    "to in navigation: ",
-    toCoordinates.split(",").map((e) => parseFloat(e))
-  );
   const startCoords = fromCoordinates.split(",").map((e) => parseFloat(e));
   const destinationCoords = toCoordinates.split(",").map((e) => parseFloat(e));
   const [routeDirections, setRouteDirections] = useState(null);
@@ -75,7 +64,7 @@ const Navigation = () => {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
+    <SafeAreaView style={styles.container}>
       <Stack.Screen
         options={{
           headerStyle: { backgroundColor: COLORS.lightWhite },
@@ -99,7 +88,12 @@ const Navigation = () => {
           headerTitle: "",
         }}
       />
-      <View style={styles.container}>
+      <View style={styles.titleContainer}>
+        <TouchableOpacity style={styles.titleButton} disabled>
+          <Text style={styles.title}>Track Your Trip</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.mapContainer}>
         {startCoords && (
           <Mapbox.MapView
             style={styles.map}
@@ -121,8 +115,10 @@ const Navigation = () => {
                 <Mapbox.LineLayer
                   id="routerLine01"
                   style={{
-                    lineColor: "#FA9E14",
-                    lineWidth: 4,
+                    lineColor: "#07a3ff",
+                    lineWidth: 1.8,
+                    lineGapWidth: 1.8,
+
                   }}
                 />
               </Mapbox.ShapeSource>
@@ -156,16 +152,5 @@ const Navigation = () => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-
-  map: {
-    flex: 1,
-  },
-});
 
 export default Navigation;

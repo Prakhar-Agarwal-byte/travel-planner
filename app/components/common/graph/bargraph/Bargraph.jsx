@@ -9,7 +9,7 @@ const BarGraph = ({ data }) => {
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <View style={styles.container}>
                 {data.map(item => (
-                    <View key={item.providerId} style={styles.barContainer}>
+                    <View style={styles.barContainer}>
                         <View
                             style={[
                                 styles.bar,

@@ -80,7 +80,7 @@ const TripDetails = () => {
         toCoordinates: tripData.toCoordinates,
       },
     });
-    console.log("data: ", data);
+    console.log("data: ", tripData);
     console.log("fromCoordinates: ", tripData.fromCoordinates);
     console.log("toCoordinates: ", tripData.toCoordinates);
   };
@@ -207,10 +207,12 @@ const TripDetails = () => {
               <Text style={styles.label}>Mode of Transportation:</Text>
               <Text style={styles.value}>{tripData.modeOfTransport}</Text>
             </View>
-            {tripData.modeOfTransport == "flight" ? (flights &&
+            {tripData.modeOfTransport == "flight" ? (flightData && !isCompleted &&
               <>
                 <Text style={styles.graphTitle}>Flight Prices:</Text>
-                <BarGraph data={flightData} />
+                <ScrollView style={styles.graphContainer}>
+                  <BarGraph data={flightData} />
+                </ScrollView>
               </>) : null}
             <View style={styles.buttonsContainer}>
               {isMember ? (
@@ -236,13 +238,13 @@ const TripDetails = () => {
                   <Text style={styles.joinButtonText}>Mark as Complete</Text>
                 </TouchableOpacity>
               )}
-              
+
               {isMember && tripStarted && !isCompleted && (
                 <TouchableOpacity onPress={handleSOS} style={styles.sosButton}>
                   <Text style={styles.joinButtonText}>SOS</Text>
                 </TouchableOpacity>
               )}
-              {isMember && tripStarted && !isCompleted && (
+              {isMember && tripStarted && !isCompleted && tripData.modeOfTransport !== "flight" && (
                 <TouchableOpacity
                   onPress={handleTrack}
                   style={styles.trackButton}
@@ -279,7 +281,7 @@ const TripDetails = () => {
               />
             )}
             <View style={styles.buttonsContainer}>
-            {isAdmin ? (
+              {isAdmin ? (
                 <TouchableOpacity
                   onPress={handleDelete}
                   style={styles.deleteButton}
@@ -296,7 +298,7 @@ const TripDetails = () => {
                   <MaterialIcons name="logout" size={25} color={COLORS.white} />
                 </TouchableOpacity>
               ) : null}
-              </View>
+            </View>
           </View>
         </ScrollView>
       )}
