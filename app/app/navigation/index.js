@@ -7,6 +7,8 @@ import Mapbox from "@rnmapbox/maps";
 import { useLocalSearchParams } from "expo-router";
 import { icons, COLORS } from "../../constants";
 import styles from "../../styles/navigation";
+import { MaterialIcons } from "@expo/vector-icons";
+
 
 const APIKEY = process.env.EXPO_PUBLIC_MAPBOX_TOKEN;
 
@@ -15,6 +17,7 @@ Mapbox.setWellKnownTileServer("Mapbox");
 
 const Navigation = () => {
   const { fromCoordinates, toCoordinates } = useLocalSearchParams();
+  const [locate, setLocate] = useState(false);
   const router = useRouter();
   const { user } = useAuth();
   const startCoords = fromCoordinates.split(",").map((e) => parseFloat(e));
@@ -89,8 +92,10 @@ const Navigation = () => {
         }}
       />
       <View style={styles.titleContainer}>
-        <TouchableOpacity style={styles.titleButton} disabled>
-          <Text style={styles.title}>Track Your Trip</Text>
+        <Text style={styles.title}>Track Your Trip</Text>
+        <TouchableOpacity style={styles.locateButton} onPress={() => (setLocate(!locate))}>
+          {!locate && <MaterialIcons name="my-location" size={40} color="lightblue" />}
+          {locate && <MaterialIcons name="location-disabled" size={40} color="lightblue" />}
         </TouchableOpacity>
       </View>
       <View style={styles.mapContainer}>
@@ -129,6 +134,7 @@ const Navigation = () => {
               androidRenderMode={"gps"}
               showsUserHeadingIndicator={true}
               minDisplacement={1}
+              visible={locate}
             />
 
             {startCoords && (
