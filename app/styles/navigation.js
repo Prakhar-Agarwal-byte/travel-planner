@@ -7,21 +7,28 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.lightWhite,
     },
     titleContainer: {
-        alignItems: "center",
+        flexDirection: "row",
         backgroundColor: COLORS.primary,
         borderRadius: 10,
         marginBottom: 4,
         marginHorizontal: 6,
         ...SHADOWS.medium,
     },
-    titleButton: {
-        padding: 10,
-    },
     title: {
         fontSize: SIZES.xxLarge,
+        marginLeft: SIZES.small,
         marginBottom: SIZES.xSmall / 2,
         fontFamily: FONT.bold,
         color: COLORS.white,
+        padding: SIZES.xSmall,
+    },
+    locateButton: {
+        alignSelf: "center",
+        marginLeft: SIZES.xxLarge * 1.5,
+        backgroundColor: COLORS.secondary,
+        borderRadius: 50,
+        padding: SIZES.xSmall / 2,
+        ...SHADOWS.medium,
     },
     mapContainer: {
         flex: 1,
